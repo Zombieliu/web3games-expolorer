@@ -266,8 +266,9 @@ const Blocks=()=>{
                                                         Copy("by");
                                                     }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
                                                     </button>
-                                                    <a href={token.aby} className="text-blue-400" id="by">
-                                                        {token.by}</a>
+                                                    <Link href={token.aby}>
+                                                    <a  className="text-blue-400" id="by">
+                                                        {token.by}</a></Link>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
                                                     {token.fee}

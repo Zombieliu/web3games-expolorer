@@ -7,6 +7,7 @@ import Tail from '../../../components/tail';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import Sort from '../../../components/sort';
+import Link from "next/link";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -151,14 +152,18 @@ const Transfers=()=>{
                   {trades.map(item=>(
                     <tr key={item.id} className="hover:bg-gray-200" >
                       <td className="px-6 py-4 whitespace-nowrap text-sm  text-blue-400  ">
-                        <a href={item.asignature}  className="">
+                        <Link href={item.asignature}>
+                         <a   className="">
                             {item.signature}
                         </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 ">
-                        <a href={item.ablock}>
+                        <Link href={item.ablock}>
+                        <a>
                           {item.block}
                         </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
                         {item.time}
@@ -166,9 +171,10 @@ const Transfers=()=>{
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
 
                       <div className="text-gray-800 flex" id="from">
-                       <a href={item.afrom} id="from" className="mr-1 text-blue-400">
+                        <Link href={item.afrom}>
+                       <a  id="from" className="mr-1 text-blue-400">
                          {item.from}
-                       </a> <button onClick={() => {
+                       </a> </Link><button onClick={() => {
                         // @ts-ignore
                         Copy("from");
                       }}> <i className="fa fa-clone mt-1" aria-hidden="true"></i></button>

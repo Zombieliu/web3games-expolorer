@@ -1,6 +1,7 @@
 import Header from "../../../components/header";
 import React  from "react";
 import NFTHeader from "../../../components/NFT-header";
+import Link from 'next/link';
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -146,13 +147,14 @@ const Collections=()=>{
                                                 {item.id}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium flex">
-                                                <a href={item.href} className="flex">
+
+                                                <Link href={item.href} ><a className="flex">
                                                     <img className="-ml-2 w-8 h-8 rounded-full"
                                                          src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png" alt=""/>
                                                     <div className="mt-2 ml-2">
                                                         {item.name}
                                                     </div>
-                                                </a>
+                                                </a></Link>
                                             </td>
                                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
                                                 {item.items}
@@ -169,16 +171,18 @@ const Collections=()=>{
                                             </td>
                                             <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
                                                 <div>
-                                                {item.lasttrade} <a href="" className="text-blue-400">
-                                                    <i className="fa fa-arrow-right" aria-hidden="true"></i></a>
+                                                {item.lasttrade}
+                                                    <Link href=""><a className="text-blue-400">
+                                                    <i className="fa fa-arrow-right" aria-hidden="true"></i></a></Link>
                                                 </div>
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex">
                                                 {item.traded.map(item=>(
 
-                                                    <a key={item.id} href={item.href} className="mr-.05">
-                                                <img className="w-8 h-8 rounded-lg" src={item.img} alt=""/></a>
+                                                  <Link key={item.id} href={item.href}>
+                                                    <a className="mr-.05">
+                                                <img className="w-8 h-8 rounded-lg" src={item.img} alt=""/></a></Link>
                                                 ))}
                                             </td>
 

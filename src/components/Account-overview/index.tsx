@@ -173,7 +173,8 @@ const AccountOverview=()=>{
                         <div className="relative  bg-white px-1 py-2 lg:p-4 ">
                           <div className="flex justify-items-start py-2 lg:p-2 border-b hover:bg-gray-200">
 
-                            <a href="" className="flex w-1/3 mr-1 ">
+                            <Link href="">
+                            <a  className="flex w-1/3 mr-1 ">
                               <div>
                               <img className='w-7 h-7 lg:w-8 lg:h-8 ' src='/web3gsmall.png' alt='' />
                               </div>
@@ -186,9 +187,8 @@ const AccountOverview=()=>{
                                   $0.00229394
                                 </div>
                               </div>
-
-
                             </a>
+                            </Link>
                             <div className="mt-1 w-1/3">
                               125
                             </div>
@@ -200,7 +200,8 @@ const AccountOverview=()=>{
                           {overview.map((item) => (
                             <div key={item.href} className="flex justify-items-start py-2 lg:p-2 border-b hover:bg-gray-200">
 
-                              <a href="" className="flex w-1/3 mr-1">
+                              <Link href=''>
+                              <a  className="flex w-1/3 mr-1">
                                 <div>
                                   <img className='w-7 h-7 lg:w-8 lg:h-8 ' src={item.img} alt='' />
                                 </div>
@@ -210,9 +211,8 @@ const AccountOverview=()=>{
                                     {item.name}
                                   </div>
                                 </div>
-
-
                               </a>
+                              </Link>
                               <div className="mt-1 w-1/3">
                                 {item.amount}
                               </div>

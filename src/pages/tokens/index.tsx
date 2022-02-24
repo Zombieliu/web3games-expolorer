@@ -513,14 +513,15 @@ const Token=()=>{
                                                     {token.id}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium flex">
-                                                    
-                                                    <a href={token.href} className="flex">
+                                                    <Link  href={token.href}>
+                                                    <a className="flex">
                                                         <img className="-ml-2 w-8 h-8 rounded-full"
                                                             src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png" alt=""/>
                                                        <div className="mt-2 ml-2">
                                                            {token.name}
                                                        </div>
                                                     </a>
+                                                    </Link>
                                                 </td>
                                                 <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
                                                     {token.holders}

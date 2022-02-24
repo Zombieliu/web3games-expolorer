@@ -102,15 +102,18 @@ const Account=()=>{
                   {collections.map(item=>(
                     <tr key={item.id} className="hover:bg-gray-200" >
                       <td className="px-6 py-4 whitespace-nowrap text-blue-400 text-sm font-medium  ">
-                        <a href=''>
+                        <Link href=''>
+                        <a >
                           {item.signature}
-                        </a>
+                        </a></Link>
 
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
-                        <a href='' className="">
+                        <Link href='' >
+                        <a  className="">
                             {item.block}
                         </a>
+                        </Link>
                       </td>
                       <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
                         {item.time}

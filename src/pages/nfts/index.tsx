@@ -2,6 +2,7 @@ import Header from "../../components/header";
 import React, {Fragment, useState} from "react";
 import NFTHeader from "../../components/NFT-header";
 import Sort from "../../components/sort";
+import Link from "next/link";
 
 
 const allnfts=[
@@ -98,10 +99,12 @@ const NFTs=()=>{
                             <div key={item.title} className="rounded-lg border my-3 mx-auto lg:m-3 ">
 
                                 <div className="">
-                                    <a href={item.atitle}>
+                                    <Link  href={item.atitle}>
+                                    <a>
                                 <img className="w-72 h-72 rounded-t"
                                      src={item.img} alt=""/>
                                     </a>
+                                    </Link>
                                     </div>
                                 <div className="p-3">
                                 <div className="flex text-blue-400 font-semibold justify-between">
@@ -110,18 +113,22 @@ const NFTs=()=>{
                                             {item.title}
                                         </a>
                                     </div>
-                                    <a href={item.aicon}>
+                                    <Link href={item.aicon}>
+                                    <a>
                                     <i className="fa fa-asterisk" aria-hidden="true"></i>
                                     </a>
+                                    </Link>
                                 </div>
                                 <div className="flex">
                                     <div className="text-gray-400 mr-1">
                                         Sold on:
                                     </div>
                                     <div className="text-blue-400  ">
-                                        <a href={item.asoldon}>
+                                        <Link href={item.asoldon}>
+                                        <a>
                                             {item.soldon}
                                         </a>
+                                        </Link>
                                     </div>
 
                                 </div>

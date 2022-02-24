@@ -300,8 +300,10 @@ const Extrinsics=()=>{
                                                     {/*    Copy("by");*/}
                                                     {/*}}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
                                                     {/*</button>*/}
-                                                    <a href="/account" className="text-blue-400" id="by">
+                                                    <Link href="/account" >
+                                                    <a className="text-blue-400" id="by">
                                                         {Events.by}</a>
+                                                    </Link>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
                                                     {Events.fee}

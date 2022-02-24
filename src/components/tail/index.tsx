@@ -1,3 +1,5 @@
+import Link from "next/link"
+import React from "react"
 
 
 
@@ -89,9 +91,11 @@ const Tail=()=>{
                         {end.content.map(item=>(
                     <div key={item.h1} className="my-3 text-gray-500 text-sm transition  duration-300 transform hover:translate-x-2 dark:text-gray-400">
 
-                        <a  href={item.href}>
+                        <Link href={item.href}>
+                        <a>
                             {item.h1}
                         </a>
+                        </Link>
                     </div>))}
                     </div>
                     ))}
@@ -106,8 +110,9 @@ const Tail=()=>{
                     <div className="flex justify-center md:justify-start mt-10">
                         {participate.map(item=>(
                     <div key={item.icon} className="mr-5">
-                        <a href={item.href} className="text-gray-500 hover:text-gray-500">
-                        <i className={item.icon} aria-hidden="true"></i></a>
+                        <Link href={item.href}>
+                        <a  className="text-gray-500 hover:text-gray-500">
+                        <i className={item.icon} aria-hidden="true"></i></a></Link>
 
                     </div> ))}
                     </div>

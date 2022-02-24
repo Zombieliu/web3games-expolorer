@@ -480,7 +480,8 @@ const Home=()=>{
                                         {project.map(item=>(
 
 
-                                        <a key={item.img} href={item.a}>
+                                          <Link  key={item.img} href={item.a}>
+                                        <a>
                                         <div className="flex justify-between pb-2">
                                             <div className="flex">
                                             <img className="w-10 h-10" src={item.img} alt=""/>
@@ -505,7 +506,7 @@ const Home=()=>{
                                                 </div>
                                             </div>
                                         </div>
-                                        </a>
+                                        </a></Link>
                                         ))}
 
 
@@ -594,9 +595,9 @@ const Home=()=>{
                                     </div>
                                     <div className=" xl:w-80">
                                         <div className="dark:bg-gray-600">
-                                            <a className="twitter-timeline" data-width="600" data-height="600"
-                                               href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">A
-                                                Twitter List by web3games</a>
+                                            <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
+                                            <a className="twitter-timeline" data-width="600" data-height="600">
+                                                A Twitter List by web3games</a></Link>
                                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8"></Script>
                                         </div>
 

@@ -2,6 +2,7 @@ import Header from "../../../components/header";
 import React, {Fragment, useState} from "react";
 import NFTHeader from "../../../components/NFT-header";
 import Sort from "../../../components/sort";
+import Link from "next/link";
 
 
 const newnfts=[
@@ -68,21 +69,27 @@ const newNFT=()=>{
                                     <div key={item.title} className="rounded-lg border my-3 mx-auto lg:m-3 ">
 
                                         <div className="">
-                                            <a href={item.atitle}>
+                                            <Link href={item.atitle}>
+                                            <a>
                                                 <img className="w-72 h-72 rounded-t"
                                                      src={item.img} alt=""/>
                                             </a>
+                                            </Link>
                                         </div>
                                         <div className="p-3">
                                             <div className="flex text-blue-400 font-semibold justify-between">
                                                 <div>
-                                                    <a href={item.atitle}>
+                                                    <Link href={item.atitle}>
+                                                    <a >
                                                         {item.title}
                                                     </a>
+                                                    </Link>
                                                 </div>
-                                                <a href={item.aicon}>
+                                                <Link href={item.aicon}>
+                                                <a>
                                                     <i className="fa fa-asterisk" aria-hidden="true"></i>
                                                 </a>
+                                                </Link>
                                             </div>
                                             <div className="flex justify-between mt-3">
                                                 <div className="flex">
@@ -96,9 +103,11 @@ const newNFT=()=>{
                                                         {item.time}
                                                     </div>
                                                     <div className="text-blue-400 ml-2">
-                                                        <a href={item.atime}>
+                                                        <Link href={item.atime}>
+                                                        <a>
                                                         <i className="fa fa-arrow-right" aria-hidden="true"></i>
                                                         </a>
+                                                        </Link>
                                                     </div>
                                                 </div>
                                             </div>

@@ -269,13 +269,13 @@ const Header=()=>{
                                 <div className="py-6 ">
                                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-center ">
                                         {navigation.map((item) => (
+                                          <Link key={item.name} href={item.href}>
                                             <a
-                                                key={item.name}
-                                                href={item.href}
                                                 className="text-base font-medium text-gray-900  dark:text-white   transition duration-700 "
                                             >
                                                 {item.name}
                                             </a>
+                                          </Link>
                                         ))}
                                     </div>
 
