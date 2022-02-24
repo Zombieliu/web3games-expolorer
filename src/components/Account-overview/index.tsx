@@ -174,20 +174,20 @@ const AccountOverview=()=>{
                           <div className="flex justify-items-start py-2 lg:p-2 border-b hover:bg-gray-200">
 
                             <Link href="">
-                            <a  className="flex w-1/3 mr-1 ">
-                              <div>
-                              <img className='w-7 h-7 lg:w-8 lg:h-8 ' src='/web3gsmall.png' alt='' />
-                              </div>
-
-                              <div className="ml-2 ">
-                              <div className="-mt-0.5 text-sm font-semibold">
-                                XSB
-                              </div>
-                                <div className="text-xs">
-                                  $0.00229394
+                              <a  className="flex w-1/3 mr-1 ">
+                                <div>
+                                <img className='w-7 h-7 lg:w-8 lg:h-8 ' src='/web3gsmall.png' alt='' />
                                 </div>
-                              </div>
-                            </a>
+
+                                <div className="ml-2 ">
+                                <div className="-mt-0.5 text-sm font-semibold">
+                                  XSB
+                                </div>
+                                  <div className="text-xs">
+                                    $0.00229394
+                                  </div>
+                                </div>
+                              </a>
                             </Link>
                             <div className="mt-1 w-1/3">
                               125
@@ -201,17 +201,17 @@ const AccountOverview=()=>{
                             <div key={item.href} className="flex justify-items-start py-2 lg:p-2 border-b hover:bg-gray-200">
 
                               <Link href=''>
-                              <a  className="flex w-1/3 mr-1">
-                                <div>
-                                  <img className='w-7 h-7 lg:w-8 lg:h-8 ' src={item.img} alt='' />
-                                </div>
-
-                                <div className="ml-2 ">
-                                  <div className="mt-1.5 text-sm font-semibold">
-                                    {item.name}
+                                <a  className="flex w-1/3 mr-1">
+                                  <div>
+                                    <img className='w-7 h-7 lg:w-8 lg:h-8 ' src={item.img} alt='' />
                                   </div>
-                                </div>
-                              </a>
+
+                                  <div className="ml-2 ">
+                                    <div className="mt-1.5 text-sm font-semibold">
+                                      {item.name}
+                                    </div>
+                                  </div>
+                                </a>
                               </Link>
                               <div className="mt-1 w-1/3">
                                 {item.amount}

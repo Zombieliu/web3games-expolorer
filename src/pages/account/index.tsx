@@ -1,12 +1,7 @@
-
-
 import Header from "../../components/header";
 import React, { Fragment, useState } from 'react';
-import NFTHeader from "../../components/NFT-header";
 import Link from 'next/link';
 import Tail from '../../components/tail';
-import { Dialog, Transition } from '@headlessui/react';
-import { CheckCircleIcon } from '@heroicons/react/solid';
 import Sort from '../../components/sort';
 import AccountOverview from '../../components/Account-overview';
 function classNames(...classes) {
@@ -70,7 +65,6 @@ const collections=[
 ]
 
 const Account=()=>{
-
   return(
     <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
       <Header></Header>
