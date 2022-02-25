@@ -563,7 +563,7 @@ const Home=()=>{
                                                         <tr key={block.blockHeight} className="hover:bg-gray-200" >
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
 
-                                                                <Link href="/blocks"><a>
+                                                                <Link href="/blocksdetails"><a>
                                                                     {block.blockHeight}
                                                                 </a></Link>
                                                             </td>

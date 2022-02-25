@@ -62,7 +62,7 @@ const overview=[
     }
 ]
 
-const Blocks=()=>{
+const BlocksDetails=()=>{
     let [isOpen, setIsOpen] = useState(false)
     const Copy=(span)=>{
 
@@ -345,4 +345,4 @@ const Blocks=()=>{
         </div>
     )
 }
-export default Blocks
+export default BlocksDetails

@@ -1,4 +1,4 @@
-import {Dialog, Listbox, Popover, Tab, Transition, } from "@headlessui/react";
+import { Dialog, Disclosure, Listbox, Popover, Tab, Transition } from '@headlessui/react';
 import Link from "next/link";
 import { Switch } from '@headlessui/react'
 import {MenuIcon, XIcon} from "@heroicons/react/outline";
@@ -14,6 +14,16 @@ const navigation = [
     { id:3 ,name: 'NFTs', href: '/nfts' },
     { id:4 ,name: 'Faucet', href: '/faucet' },
 
+]
+const blockchain=[
+    {
+        name:"Transactions",
+        href:"/transactions",
+    },
+    {
+        name:"Blocks",
+        href:"/blocks",
+    },
 ]
 
 const publishingOptions = [
@@ -103,6 +113,53 @@ const Header=()=>{
                                 </Link>
                                 </Tab.List>
                             ))}
+                            <Disclosure>
+
+                                {({ open }) => (
+                                  <>
+                                      <div className="relative">
+
+                                          <div className="flex  ">
+                                              <Disclosure.Button  className='w-full py-2.5 text-sm leading-5  rounded-lg text-base font-medium text-black  dark:text-white flex focus: ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60'>
+                                                  Blickchain
+                                                  <ChevronDownIcon
+                                                    className={` w-5  `}
+                                                    aria-hidden="true"
+                                                  />
+
+                                              </Disclosure.Button>
+                                          </div>
+                                          <Transition
+                                            as={Fragment}
+                                            enter="transition ease-out duration-100"
+                                            enterFrom="opacity-0 translate-y-1"
+                                            enterTo="opacity-100 translate-y-0"
+                                            leave="transition ease-in duration-100"
+                                            leaveFrom="opacity-100 translate-y-0"
+                                            leaveTo="opacity-0 translate-y-1"
+                                          >
+                                              <Disclosure.Panel className="absolute bg-white w-36 shadow-2xl rounded-lg  py-2 px-3">
+                                                  {blockchain.map(item=>(
+                                                    <a key={item.name} href={item.href} className="flex text-base hover:bg-gray-100 hover:text-black rounded-md dark:border-gray-500   mb-2" >
+                                                        <div className="  w-48">
+                                                            <div className="px-2">
+                                                                {item.name}
+                                                            </div>
+
+                                                        </div>
+                                                    </a>
+                                                  ))}
+
+                                              </Disclosure.Panel>
+                                          </Transition>
+
+
+                                      </div>
+                                  </>
+
+                                )}
+                            </Disclosure>
+
 
 
 
