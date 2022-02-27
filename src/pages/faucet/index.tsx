@@ -100,7 +100,7 @@ export default function Faucet() {
                       <h1 className="text-2xl text-black text-center mb-5 dark:text-gray-400">How to fund</h1>
                       <h2 className="text-gray-600 text-sm mb-5">This faucet is running on the Octopus testnet. To prevent malicious actors from exhausting all funds, requests are tied to Twitter social network accounts. Anyone having a Twitter account may request funds within the permitted limits.</h2>
                       <h3 className="text-gray-600 text-sm mb-5">To request funds via Twitter, make a tweet with your W3G account pasted into the contents.</h3>
-                      <h4 className="text-gray-600 text-sm mb-5">Copy-paste the tweets URL into the above input box and get your OCT(or USDC). Each account can get 10 OCT(or USDC) every 24 hours.</h4>
+                      <h4 className="text-gray-600 text-sm mb-5">Copy-paste the tweets URL into the above input box and get your W3G. Each account can get 100 W3G every 24 hours.</h4>
 
                   </div>
               </div>

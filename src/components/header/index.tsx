@@ -17,8 +17,8 @@ const navigation = [
 ]
 const blockchain=[
     {
-        name:"Transactions",
-        href:"/transactions",
+        name:"Extrinsic",
+        href:"/extrinsic",
     },
     {
         name:"Blocks",
@@ -121,7 +121,7 @@ const Header=()=>{
 
                                           <div className="flex  ">
                                               <Disclosure.Button  className='w-full py-2.5 text-sm leading-5  rounded-lg text-base font-medium text-black  dark:text-white flex focus: ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60'>
-                                                  Blickchain
+                                                  Blockchain
                                                   <ChevronDownIcon
                                                     className={` w-5  `}
                                                     aria-hidden="true"

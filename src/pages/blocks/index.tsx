@@ -12,56 +12,48 @@ function classNames(...classes) {
 
 const tokenstitle=[
   {
-    title:"Extrinsic ID"
+    title:"Block"
   },
   {
-    title:"Hash"
+    title:"Block Hash "
   },
   {
     title:"Time",
     i:"fa fa-clock-o ml-1"
   },
   {
+    title:"Extrinsic"
+  },
+  {
+    title:"Event"
+  },
+  {
     title:"Result"
   },
-  {
-    title:"Signer By"
-  },
-  {
-    title:"Weight (W3G)"
-  },
+
 ]
 const extrinsic=[
   {
     id:"QjBU7PxTTGnGuQGpm7KC18aMQ.....",
     aid:"/extrinsics",
-    hash:"0xa2285..e6b7b8238e",
+    hash:"1",
     time:"13 minutes ago",
     result:"Success",
-    by:"System",
+    by:"1",
     aby:"#",
-    weight:"0.0005",
+    weight:"1",
   },
   {
-    id:"QjBU7PxTTGnGuQGpm7KC18wMQ.....",
-    aid:"#",
-    hash:"0xa2285..e6b7b8238e",
+    id:"78  BU7PxTTGnGuQGpm7KC18aMQ.....",
+    aid:"/extrinsics",
+    hash:"2",
     time:"13 minutes ago",
     result:"Success",
-    by:"System",
-    aby:"##",
-    weight:"0.0005",
+    by:"1",
+    aby:"#",
+    weight:"1",
   },
-  {
-    id:"QjBU7PxTTGnGuQGpm7KC11wMQ.....",
-    aid:"#",
-    hash:"0xa2285..e6b7b8238e",
-    time:"13 minutes ago",
-    result:"Success",
-    by:"System",
-    aby:"###",
-    weight:"0.0005",
-  },
+
 ]
 
 const Blocks=()=>{
@@ -103,7 +95,7 @@ const Blocks=()=>{
           <div className="mx-auto lg:flex justify-between ">
 
             <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
-              Block
+              Blocks
             </div>
             <div className="flex ">
               <input type="text"
@@ -123,7 +115,7 @@ const Blocks=()=>{
                 <div className="flex my-5 text-xl font-semibold text-gray-700">
 
                   <div>
-                    Extrinsic
+                    blocks
                   </div>
 
                 </div>
@@ -145,38 +137,40 @@ const Blocks=()=>{
                     <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
                     {extrinsic.map(item=>(
                       <tr key={item.id} className="hover:bg-gray-200" >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                          <Link href={item.aid}>
-
-                            <a>{item.id}</a>
-                          </Link>
-
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium font-medium ">
-                          {item.hash}
-                        </td>
-                        <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
-                          {item.time}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {item.result}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-base ">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium font-medium"  >
 
                           <button onClick={() => {
                             // @ts-ignore
-                            Copy("by");
+                            Copy(item.id);
                           }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
                           </button>
 
-                            <a href={item.aby} className="text-blue-400" id="by">
-                              {item.by}</a>
+                          {item.id}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium" >
+
+                          <Link href={item.aid}>
+
+                            <a id={item.id}>   {item.hash}</a>
+
+                          </Link>
+
+                        </td>
+
+                        <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                          {item.time}
+
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+
+                            {item.by}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
                           {item.weight}
                         </td>
-
-
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {item.result}
+                        </td>
                       </tr>
                     ))}
                     </tbody>

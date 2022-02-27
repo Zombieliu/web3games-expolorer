@@ -103,7 +103,7 @@ const Transactions=()=>{
           <div className="mx-auto lg:flex justify-between ">
 
             <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
-              Transactions
+              Extrinsic
             </div>
             <div className="flex ">
               <input type="text"
