@@ -1,7 +1,7 @@
 import React, {Fragment, useState} from 'react'
 import Header from"../../components/header"
 import Tail from '../../components/tail'
-import { Listbox, Transition } from '@headlessui/react';
+import { Listbox, Dialog,Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -12,9 +12,22 @@ const types = [
 
 ]
 
+
 export default function Faucet() {
     const [selected, setSelected] = useState(types[0])
+    const[openload ,setOpenload]=useState(false)
 
+
+    function sendtoken(){
+        setOpenload(true);
+        setTimeout(()=>{
+            setOpenload(false);
+        },3000)
+    }
+
+    function alwaystrue(){
+        return true
+    }
     return (
       <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
             <Header></Header>
@@ -88,13 +101,12 @@ export default function Faucet() {
                           </div>
                           <p className="flex justify-center text-center text-base font-medium text-gray-500">
 
-                              <button  className="mt-10 xl:mt-0 xl:ml-10  px-5 py-3 dark:bg-gray-700 dark:text-gray-400 rounded-lg font-bold text-gray-600 text-base font-normal border border-black transition duration-500 hover:bg-gray-700  hover:text-white "
+                              <button  onClick={sendtoken} className="mt-10 xl:mt-0 xl:ml-10  px-5 py-3 dark:bg-gray-700 dark:text-gray-400 rounded-lg font-bold text-gray-600 text-base font-normal border border-black transition duration-500 hover:bg-gray-700  hover:text-white "
                               >
                                   Give me W3G
                               </button>
                           </p>
                       </div>
-
                   </div>
                   <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
                       <h1 className="text-2xl text-black text-center mb-5 dark:text-gray-400">How to fund</h1>
@@ -105,6 +117,54 @@ export default function Faucet() {
                   </div>
               </div>
               <Tail></Tail>
+          <Transition.Root show={openload} as={Fragment}>
+              <Dialog as="div" className="fixed z-20 inset-0 overflow-y-auto "  onClose={alwaystrue}>
+                  <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                      <Transition.Child
+                          as={Fragment}
+                          enter="ease-out duration-300"
+                          enterFrom="opacity-0"
+                          enterTo="opacity-100"
+                          leave="ease-in duration-200"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                      >
+                          <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                      </Transition.Child>
+
+                      {/* This element is to trick the browser into centering the modal contents. */}
+                      <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
+          </span>
+                      <Transition.Child
+                          as={Fragment}
+                          enter="ease-out duration-300"
+                          enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                          enterTo="opacity-100 translate-y-0 sm:scale-100"
+                          leave="ease-in duration-200"
+                          leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                          leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                      >
+                          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                              <div>
+                                  <div className="mx-auto flex items-center justify-center h-12 animate-spin w-12 text-5xl ">
+                                      <i className="fa fa-spinner" aria-hidden="true"></i>
+
+                                  </div>
+                                  <div className="mt-3 text-center sm:mt-5">
+                                      <Dialog.Title as="h3" className=" text-lg leading-6 font-medium text-gray-900">
+                                          Loading.......
+                                      </Dialog.Title>
+                                      <div className="mt-2">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div className="mt-5 sm:mt-6">
+                              </div>
+                          </div>
+                      </Transition.Child>
+                  </div>
+              </Dialog>
+          </Transition.Root>
         </div>
 
     )
