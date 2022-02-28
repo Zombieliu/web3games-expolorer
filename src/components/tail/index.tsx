@@ -80,7 +80,7 @@ const participate=[
 ]
 const Tail=()=>{
     return(
-        <div className="border-t border-gray-400 pt-12 pb-1 px-10   ">
+        <div className="border-t border-gray-400 pt-12 pb-1 px-10  2xl:pt-32 ">
             <div className="md:flex justify-between  max-w-7xl mx-auto">
                 <div className="text-center md:flex justify-between mb-10">
                     {ends.map(end=>(

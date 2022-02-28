@@ -10,8 +10,6 @@ function classNames(...classes) {
 }
 const navigation = [
     { id:1 ,name: 'Home', href: '/home' },
-    { id:2 ,name: 'Tokens', href: '/tokens' },
-    { id:3 ,name: 'NFTs', href: '/nfts' },
     { id:4 ,name: 'Faucet', href: '/faucet' },
 
 ]
@@ -166,11 +164,58 @@ const Header=()=>{
                         </Tab.Group>
                     </div>
                     {/*切换*/}
+                    <div className="hidden lg:flex w-full justify-end md:flex-1 ">
+                        {/*<div>*/}
+                        {/*    <button onClick={login} className="bg-gray-900 dark:bg-gray-600 transition duration-700  w-36 p-3 text-gray-100 dark:text-gray-300 rounded-lg mr-10 flex justify-center">*/}
+                        {/*        Connect Wallet*/}
+                        {/*    </button>*/}
+                        {/*</div>*/}
+
+                        <div className="flex justify-center mt-3 ">
+
+                            <Switch
+                                checked={enabled}
+                                onChange={dartchange}
+                                className={classNames(
+                                    enabled ? 'bg-gray-600' : 'bg-gray-200',
+                                    'relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200   '
+                                )}
+                            >
+                                <span className="sr-only">Use setting</span>
+
+                                <span
+                                    aria-hidden="true"
+                                    className={classNames(
+                                        enabled ? 'translate-x-5' : 'translate-x-0',
+                                        'pointer-events-none inline-block h-5 w-5 rounded-full    transform ring-0 transition ease-in-out duration-200'
+                                    )}
+                                >
+
+                                    <div className="flex justify-center text-center ml-0.5 px-2.5 p-0.5 bg-white dark:bg-gray-700 dark:text-yellow-400 rounded-full  text-lg">
+
+                                <i className={enabled?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>
+                            </div>
+
+                                </span>
+                            </Switch>
+                        </div>
+
+                        {/*<select*/}
+                        {/*    id="location"*/}
+                        {/*    name="location"*/}
+                        {/*    className="mt-2 block dark:bg-black h-8 dark:text-gray-200 font-medium  text-base text-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"*/}
+                        {/*    defaultValue="English"*/}
+                        {/*>*/}
+                        {/*    <option>English</option>*/}
+
+                        {/*</select>*/}
+
+                    </div>
                     <Listbox value={selected} onChange={setSelected}>
                         {({ open }) => (
                             <>
                                 <Listbox.Label className="sr-only">Change published status</Listbox.Label>
-                                <div className="relative mr-2">
+                                <div className="relative  mt-2.5">
                                     <div className="inline-flex  rounded-md ">
                                         <div className="relative z-0 inline-flex   rounded-md  ">
 
@@ -179,7 +224,7 @@ const Header=()=>{
 
                                                 <div className="relative  items-center bg-indigo-500 text-center   rounded-lg  text-white">
                                                     <img
-                                                        className="w-14 h-10 rounded-lg"
+                                                        className="w-12 h-10 rounded-lg"
                                                         src="/web3g1.png"
                                                         alt=""
                                                     />
@@ -239,53 +284,7 @@ const Header=()=>{
                     </div>
 
 
-                    <div className="hidden lg:flex w-full justify-end md:flex-1 ">
-                        <div>
-                            <button onClick={login} className="bg-gray-900 dark:bg-gray-600 transition duration-700  w-36 p-3 text-gray-100 dark:text-gray-300 rounded-lg mr-10 flex justify-center">
-                                Connect Wallet
-                            </button>
-                        </div>
 
-                        <div className="flex justify-center mt-3 mr-2">
-
-                        <Switch
-                            checked={enabled}
-                            onChange={dartchange}
-                            className={classNames(
-                                enabled ? 'bg-gray-600' : 'bg-gray-200',
-                                'relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200   '
-                            )}
-                        >
-                            <span className="sr-only">Use setting</span>
-
-                            <span
-                                aria-hidden="true"
-                                className={classNames(
-                                    enabled ? 'translate-x-5' : 'translate-x-0',
-                                    'pointer-events-none inline-block h-5 w-5 rounded-full    transform ring-0 transition ease-in-out duration-200'
-                                )}
-                            >
-
-                                    <div className="flex justify-center text-center ml-0.5 px-2.5 p-0.5 bg-white dark:bg-gray-700 dark:text-yellow-400 rounded-full  text-lg">
-
-                                <i className={enabled?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>
-                            </div>
-
-                                </span>
-                        </Switch>
-                        </div>
-
-                        <select
-                            id="location"
-                            name="location"
-                            className="mt-2 block dark:bg-black h-8 dark:text-gray-200 font-medium  text-base text-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                            defaultValue="English"
-                        >
-                            <option>English</option>
-
-                        </select>
-
-                    </div>
 
 
                 </div>
@@ -340,23 +339,23 @@ const Header=()=>{
                                 </div>
                                 <div className="flex justify-center p-5 items-center">
                                     <div className=" w-full   ">
-                                        <div className="flex justify-center ">
-                                            <button  className="bg-black w-36 p-2 text-center text-white rounded-lg   ">
-                                                Connect Wallet
-                                            </button>
-                                        </div>
+                                        {/*<div className="flex justify-center ">*/}
+                                        {/*    <button  className="bg-black w-36 p-2 text-center text-white rounded-lg   ">*/}
+                                        {/*        Connect Wallet*/}
+                                        {/*    </button>*/}
+                                        {/*</div>*/}
 
                                         <div className="flex justify-between">
 
-                                        <select
-                                            id="location"
-                                            name="location"
-                                            className="mt-1 block   font-medium  text-base text-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                            defaultValue="English"
-                                        >
-                                            <option>English</option>
+                                        {/*<select*/}
+                                        {/*    id="location"*/}
+                                        {/*    name="location"*/}
+                                        {/*    className="mt-1 block   font-medium  text-base text-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"*/}
+                                        {/*    defaultValue="English"*/}
+                                        {/*>*/}
+                                        {/*    <option>English</option>*/}
 
-                                        </select>
+                                        {/*</select>*/}
                                             <Switch
                                               checked={enabled}
                                               onChange={dartchange}
