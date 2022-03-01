@@ -5,7 +5,7 @@
   "author": "henryliu",
   "license": "GPL3",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 3001",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
