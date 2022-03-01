@@ -6,6 +6,9 @@ import Script from 'next/script'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
 import {useQuery} from "graphql-hooks";
+import {router} from "next/client";
+import {useRouter} from "next/router";
+
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -183,11 +186,12 @@ function DataDiff (blocktime) {
     if (minutes % 60 >=1){
         return seconds % 60 + 60 - 18
     }else {
-        return seconds % 60 - 18
+        return seconds % 60
     }
 }
 
 const Home=()=>{
+    const router = useRouter()
     const [selected, setSelected] = useState(types[0])
     const [enabled, setEnabled] = useState(true)
     const move=()=>{
@@ -202,7 +206,10 @@ const Home=()=>{
 
     // console.log(data)
 
-
+    const GetBlock = (props) => {
+        const value = props.target.innerHTML;
+        router.push(`/blocksdetails/${value}`)
+    }
     if(!data){
         return(
             <div>
@@ -562,10 +569,9 @@ const Home=()=>{
                                                     {blocks.map(block=>(
                                                         <tr key={block.blockHeight} className="hover:bg-gray-200" >
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-
-                                                                <Link href="/blocksdetails"><a>
-                                                                    {block.blockHeight}
-                                                                </a></Link>
+                                                                    <button onClick={GetBlock}>
+                                                                        {block.blockHeight}
+                                                                    </button>
                                                             </td>
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                                 {DataDiff(block.timestamp)} Second ago
