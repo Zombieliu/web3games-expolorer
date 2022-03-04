@@ -11,7 +11,7 @@ import {createClient} from "graphql-ws"
 
 const client = new GraphQLClient({
     // url: 'https://api.subquery.network/sq/Zombieliu/devnet-webe3games',
-    url: 'https://api.subquery.network/sq/Zombieliu/web3games-dev-net',
+    url: 'http://localhost:3000',
     // cache:memCache(),
     // subscriptionClient:()=>
     //   createClient({
