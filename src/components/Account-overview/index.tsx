@@ -11,27 +11,27 @@ const navigation = [
 ]
 const overview = [
   {
-    img:"/web3gsmall.png",
-    name: 'DbKZitpBR',
+    img:"/solana.png",
+    name: 'SOL',
     amount: '1',
-    value:"",
-    href: '',
+    value:"$92.0149",
+    href: 'https://solana.com/',
 
   },
   {
-    img:"/web3gsmall.png",
-    name: 'DbKZitpBR',
-    amount: '5',
-    value:"",
-    href: '',
+    img:"/icp.png",
+    name: 'ICP',
+    amount: '1',
+    value:"$18.8330",
+    href: 'https://dfinity.org/',
 
   },
   {
-    img:"/web3gsmall.png",
-    name: 'DbKZitpBR',
+    img:"/near.png",
+    name: 'Near',
     amount: '1',
-    value:"",
-    href: '',
+    value:"$11.3020",
+    href: 'https://near.org/',
   },
 ]
 
@@ -67,18 +67,18 @@ const AccountOverview=()=>{
         <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
           Account
         </div>
-        <div className="flex ">
-          <input type="text"
-                 className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"
-                 placeholder="Search transactions, blocks, programs and token"
-          />
-          <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">
-            <i className="fa fa-search" aria-hidden="true"></i></div>
-        </div>
+        {/*<div className="flex ">*/}
+        {/*  <input type="text"*/}
+        {/*         className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"*/}
+        {/*         placeholder="Search transactions, blocks, programs and token"*/}
+        {/*  />*/}
+        {/*  <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
+        {/*    <i className="fa fa-search" aria-hidden="true"></i></div>*/}
+        {/*</div>*/}
       </div>
       <div className="flex">
         <div id="account" className="text-xs mt-2 lg:text-base mr-2">
-          8QLfmTYxnws98ogFfxdpvRSfSR7U9HLcighZHNfFNQwT
+          5GQXPhYodnaWLk4MxSsFqjCYhrZwwkbbiSU8fpDRdBU6V7bT
         </div>
         <div>
           <button onClick={() => {
@@ -99,7 +99,7 @@ const AccountOverview=()=>{
               W3G Balance
             </div>
             <div className='mb-3'>
-              W3G Token Balance
+              FT Token Balance
             </div>
           </div>
 
@@ -109,7 +109,7 @@ const AccountOverview=()=>{
             </div>
             <div>
               <div className="flex mb-3">
-               <div className="font-semibold mr-1"> 4 SPL tokens </div>
+               <div className="font-semibold mr-1"> 4 FT tokens </div>
                 <div className="text-gray-600">($0.28)</div>
               </div>
             </div>
@@ -130,7 +130,7 @@ const AccountOverview=()=>{
                         <img className='w-8 h-8 ' src='/web3gsmall.png' alt='' />
 
                         <div className="mt-1 ml-2">
-                          XSB
+                          W3G
                         </div>
                       </div>
                       <div className="mt-1">
@@ -200,7 +200,7 @@ const AccountOverview=()=>{
                           {overview.map((item) => (
                             <div key={item.href} className="flex justify-items-start py-2 lg:p-2 border-b hover:bg-gray-200">
 
-                              <Link href=''>
+                              <Link href={item.href}>
                                 <a  className="flex w-1/3 mr-1">
                                   <div>
                                     <img className='w-7 h-7 lg:w-8 lg:h-8 ' src={item.img} alt='' />
@@ -244,17 +244,17 @@ const AccountOverview=()=>{
                 W3G Balance
               </div>
               <div className='mb-3'>
-                W3G Token Balance
+                FT Tokens Value
               </div>
             </div>
 
             <div className="">
               <div className="flex mb-3">
-                <div className="font-semibold mr-1 "> 282</div>
+                <div className="font-semibold mr-1 "> 282 W3G</div>
               </div>
               <div>
                 <div className="flex mb-3">
-                  <div className="font-semibold mr-1"> 0 W3G</div>
+                  <div className="font-semibold mr-1"> ~= 0 W3G</div>
                 </div>
               </div>
             </div>

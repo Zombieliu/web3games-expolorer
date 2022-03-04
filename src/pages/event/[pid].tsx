@@ -78,16 +78,16 @@ const Events=()=>{
                         <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
                             Event Details
                         </div>
-                        <div className="flex ">
-                            <input type="text"
-                                   className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"
-                                   placeholder="Search transactions, blocks, programs and token"
-                            />
-                            <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">
-                                <i className="fa fa-search" aria-hidden="true"></i></div>
+                        {/*<div className="flex ">*/}
+                        {/*    <input type="text"*/}
+                        {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"*/}
+                        {/*           placeholder="Search transactions, blocks, programs and token"*/}
+                        {/*    />*/}
+                        {/*    <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
+                        {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
 
 
-                        </div>
+                        {/*</div>*/}
 
                     </div>
                     <div className="mt-5">

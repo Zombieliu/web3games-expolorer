@@ -8,19 +8,23 @@ import Tail from "../../components/tail";
 import {useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
+import { useManualQuery } from 'graphql-hooks'
 
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 const types = [
-    { id: 1, name: 'All Filters' },
-    { id: 2, name: 'Tokens' },
-    { id: 3, name: 'Accounts' },
-    { id: 4, name: 'Contract' },
-    { id: 5, name: 'Txn ID' },
-    { id: 6, name: 'Blocks' },
-    { id: 7, name: 'Websites' },
+    { id: 1, name: 'Block' },
+    { id: 2, name: 'BlockHash' },
+    { id: 3, name: 'ExtrinsicHash' },
+    // { id: 1, name: 'All Filters' },
+    // { id: 2, name: 'Tokens' },
+    // { id: 3, name: 'Accounts' },
+    // { id: 4, name: 'Contract' },
+    // { id: 5, name: 'Txn ID' },
+    // { id: 6, name: 'Blocks' },
+    // { id: 7, name: 'Websites' },
 ]
 const hotsearch=[
     {
@@ -165,12 +169,28 @@ const StateStyles={
 
 const Blcok_Info = `
  query HomePage($first: Int) {
-  blockInfos(first:$first,orderBy:BLOCK_HEIGHT_DESC){
+  blockInfos(first:$first,orderBy:TIMESTAMP_DESC){
     nodes{
+      id
       blockHeight
       extrinsicNumber
       eventNumber
       timestamp
+    }
+  }
+}
+`
+
+
+const GET_USER_QUERY = `
+ query QueryPage($ctx: String) {
+  blockInfos(filter:{
+    blockHeight:{
+      equalTo:$ctx
+    }
+  }){
+    nodes{
+      id
     }
   }
 }
@@ -194,6 +214,7 @@ const Home=()=>{
     const router = useRouter()
     const [selected, setSelected] = useState(types[0])
     const [enabled, setEnabled] = useState(true)
+
     const move=()=>{
         setEnabled(!enabled)
     }
@@ -204,12 +225,69 @@ const Home=()=>{
         }
     })
 
-    // console.log(data)
+    const [fetchUser] = useManualQuery(GET_USER_QUERY)
+
+    const fetchUserThenSomething = async (query_data:string) => {
+        const block = await fetchUser({
+            variables: { ctx: query_data }
+        })
+        return block
+    }
 
     const GetBlock = (props) => {
-        const value = props.target.innerHTML;
+        const value = props.target.id;
         router.push(`/blocksdetails/${value}`)
     }
+
+    const DataCheck = async (props) =>{
+        const key_code = props.nativeEvent.keyCode
+        if (key_code == 13){
+            // console.log(selected.name)
+            if (selected.name == 'Block'){
+                const value = props.target.value
+                const block = await fetchUserThenSomething(value)
+                if (block.data.blockInfos.nodes.length == 0){
+                    alert("no this block")
+                }else{
+                    const hash = block.data.blockInfos.nodes[0].id
+                    await router.push(`/blocksdetails/${hash}`)
+                }
+            }
+            else if (selected.name == 'BlockHash'){
+                const value = props.target.value
+                await router.push(`/blocksdetails/${value}`)
+            }
+            else if (selected.name == 'ExtrinsicHash'){
+                const value = props.target.value
+                await router.push(`/extrinsics/${value}`)
+            }else {
+                alert("fuck you")
+            }
+        }
+    }
+
+    const ButtonDataCheck = async () =>{
+        const value = (document.getElementById("homeinput") as HTMLInputElement).value
+        if (selected.name == 'Block'){
+            const block = await fetchUserThenSomething(value)
+            if (block.data.blockInfos.nodes.length == 0){
+                alert("no this block")
+            }else{
+                const hash = block.data.blockInfos.nodes[0].id
+                await router.push(`/blocksdetails/${hash}`)
+            }
+        }
+        else if (selected.name == 'BlockHash'){
+             await router.push(`/blocksdetails/${value}`)
+        }
+        else if (selected.name == 'ExtrinsicHash'){
+            await router.push(`/extrinsics/${value}`)
+        }else {
+            alert("no data")
+        }
+    }
+
+
     if(!data){
         return(
             <div>
@@ -218,6 +296,7 @@ const Home=()=>{
         )
 
     }
+    console.log(data)
     const blocks = data.blockInfos.nodes
     return(
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
@@ -229,10 +308,15 @@ const Home=()=>{
                         <div className="text-5xl text-black font-medium">
                         <div className="mt-5  justify-center hidden xl:flex">
                             <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -mr-11">
-                                <i className="fa fa-search" aria-hidden="true"></i></div>
+                                <button onClick={ButtonDataCheck}>
+                                    <i className="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
                             <input type="text"
+                                   id="homeinput"
                                    className="bg-gray-200 text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
-                                   placeholder="Search by Address/Txn ID/Token/Block"
+                                   placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
+                                   onKeyDown={DataCheck}
                             />
                             <div className="-ml-44 -my-2 flex">
 
@@ -567,9 +651,9 @@ const Home=()=>{
                                                     </thead>
                                                     <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
                                                     {blocks.map(block=>(
-                                                        <tr key={block.blockHeight} className="hover:bg-gray-200" >
+                                                        <tr key={block.id} className="hover:bg-gray-200" >
                                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                    <button onClick={GetBlock}>
+                                                                    <button id={block.id} onClick={GetBlock}>
                                                                         {block.blockHeight}
                                                                     </button>
                                                             </td>

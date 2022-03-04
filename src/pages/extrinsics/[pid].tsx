@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Header from "../../components/header";
 import Tail from "../../components/tail";
 import Sort from "../../components/sort";
@@ -6,6 +6,9 @@ import Sort from "../../components/sort";
 import Link from 'next/link'
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from '@heroicons/react/solid';
+import {router} from "next/client";
+import {useQuery} from "graphql-hooks";
+import {useRouter} from "next/router";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -21,59 +24,100 @@ const tokenstitle=[
     {
         title:"Signer By"
     },
-    {
-        title:"Weight (W3G)"
-    },
 ]
-const Events=[
-    {
-        eventid:"1",
-        action:"tokenNonFungible.TokenCreated",
-        by:"Alice",
-        fee:"0.0005",
 
-    },
-]
-const overview=[
-    {
-        extrinsic:"tokenNonFungible.createToken",
-        id:"0",
-        name:'usdt',
-        symbol:'usdt',
-        baseUri:'usdt',
-        signature:"57jhBBbH98QEPDaRY8nrSPXitHJQv9YU1PmToKA4XZm4",
-        extrinsic_hash:"6TkKqq15wXjqEjNg9zqTKADwuVATR9dW3rkNnsYme1ea",
-        lifetime:"#13 to #77",
-        reward:"0.0029575 W3G ($0.2510)",
-        events:"2",
-        parameters:[
-            {
-                name:"id",
-                type:"u32",
-                value:"0"
-            },
-            {
-                name:"id",
-                type:"u32",
-                value:"0"
-            },
-            {
-                name:"id",
-                type:"u32",
-                value:"0"
-            },
-            {
-                name:"id",
-                type:"u32",
-                value:"0"
-            },
 
-        ]
+const Extrinsics_Info = `
+ query HomePage($Extrinsics: String) {
+  eventInfos(filter:{
+    extrinsicHashId:{
+      equalTo:$Extrinsics
     }
-]
+  }){
+    nodes{
+      eventID
+      method
+      section
+      meta
+      data
+      extrinsicHash{
+        id
+        signer
+      } 
+    }
+  }
+}
+`
+// const Events=[
+//     {x
+//         eventid:"1",
+//         action:"tokenNonFungible.TokenCreated",
+//         by:"Alice",
+//         fee:"0.0005",
+//     },
+// ]
+
+class EventInfo {
+    private eventid: string;
+    private action: string;
+    private by: string;
+    private fee: string;
+
+    constructor(
+        eventid:string,
+        action:string,
+        by:string,
+        fee:string,
+    ) {
+        this.eventid = eventid
+        this.action = action
+        this.by = by
+        this.fee = fee
+    }
+}
+
+function weight_check(data: any){
+    let len = data.eventInfos.nodes.length - 1;
+    let result = JSON.parse(data.eventInfos.nodes[len].data)[0].weight
+    return `${result}`
+
+}
+
+
+function data_list(data: any){
+    let times = data.eventInfos.nodes.length;
+    let data_list = [];
+    for (let i = 0;i < times;i++){
+        let result = new EventInfo(
+            data.eventInfos.nodes[i].eventID,
+            `${data.eventInfos.nodes[i].section}.${data.eventInfos.nodes[i].method}`,
+            "alice",
+            "0.005"
+        )
+        data_list.push(result)
+    }
+    return data_list
+}
 
 const Extrinsics=()=>{
+    const router = useRouter()
     let [isOpen, setIsOpen] = useState(false)
+    const [Extrinsics,changeExtrinsics] = useState('0x80ff7d00383ed974f87490259f589ad1e3e1c03ae36612b50167c378b416ec85')
+
+    useEffect(()=>{
+        if (router.isReady) {
+            const pid = router.query.pid
+            changeExtrinsics(`${pid}`)
+        }
+    },[router.isReady])
+
+    const{loading,error,data}: any = useQuery(Extrinsics_Info,{
+        variables:{
+            Extrinsics
+        }
+    })
+
+
     const Copy=(span)=>{
 
         const spanText = document.getElementById(span).innerText;
@@ -90,6 +134,7 @@ const Extrinsics=()=>{
             setIsOpen(true)
         }
     }
+
     function closeModal() {
         setIsOpen(false)
     }
@@ -97,6 +142,65 @@ const Extrinsics=()=>{
     function openModal() {
         setIsOpen(true)
     }
+
+    const GetEvent = (props) => {
+        const value = props.target.innerHTML;
+        router.push(`/event/${value}`)
+    }
+
+    if (loading){
+        return(
+            <div>
+                {loading}
+            </div>
+        )
+    }
+
+    if(error){
+        return(
+            <div>
+                {error}
+            </div>
+        )
+
+    }
+    if (data){
+        // data.eventInfos.nodes[0].extrinsicInfo.extrinsic_Hash
+        console.log(data)
+        const weight = weight_check(data)
+        const Events = data_list(data)
+        const overview=[
+            {
+                extrinsic:"tokenNonFungible.createToken",
+                signature:data.eventInfos.nodes[0].extrinsicHash.signer,
+                extrinsic_hash:data.eventInfos.nodes[0].extrinsicHash.id,
+                weight,
+                events:data.eventInfos.nodes.length,
+                parameters:[
+                    {
+                        name:"id",
+                        type:"u32",
+                        value:"0"
+                    },
+                    {
+                        name:"id",
+                        type:"u32",
+                        value:"0"
+                    },
+                    {
+                        name:"id",
+                        type:"u32",
+                        value:"0"
+                    },
+                    {
+                        name:"id",
+                        type:"u32",
+                        value:"0"
+                    },
+
+                ]
+            }
+        ]
     return(
 
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
@@ -109,17 +213,14 @@ const Extrinsics=()=>{
                         <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
                             Extrinsics Details
                         </div>
-                        <div className="flex ">
-                            <input type="text"
-                                   className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"
-                                   placeholder="Search transactions, blocks, programs and token"
-                            />
-                            <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">
-                                <i className="fa fa-search" aria-hidden="true"></i></div>
-
-
-                        </div>
-
+                        {/*<div className="flex ">*/}
+                        {/*    <input type="text"*/}
+                        {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"*/}
+                        {/*           placeholder="Search transactions, blocks, programs and token"*/}
+                        {/*    />*/}
+                        {/*    <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
+                        {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
+                        {/*</div>*/}
                     </div>
                     <div className="mt-5">
                         <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
@@ -163,18 +264,10 @@ const Extrinsics=()=>{
                                             </div>
                                             <div className="md:flex  my-3">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                    lifetime
-                                                </div>
-                                                <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                    {item.lifetime}
-                                                </div>
-                                            </div>
-                                            <div className="md:flex  my-3">
-                                                <div className="font-semibold lg:font-medium w-60 mr-32">
                                                     Weight
                                                 </div>
                                                 <div className="text-gray-800">
-                                                    {item.reward}
+                                                    {item.weight}
                                                 </div>
                                             </div>
                                             <div className="md:flex   my-3">
@@ -288,11 +381,13 @@ const Extrinsics=()=>{
                                         <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
                                         {Events.map(Events=>(
                                             <tr key={Events.eventid} className="hover:bg-gray-200" >
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium font-medium">
-                                                    {Events.eventid}
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-medium font-medium">
+                                                    <button onClick={GetEvent}>
+                                                        {Events.eventid}
+                                                    </button>
                                                 </td>
-                                                <td className="px-6 py-6 whitespace-nowrap text-sm text-blue-400 text-gray-500">
-                                                    <Link href="/event">{Events.action}</Link>
+                                                <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                                                    {Events.action}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-base ">
                                                     {/*<button onClick={() => {*/}
@@ -304,9 +399,6 @@ const Extrinsics=()=>{
                                                     <a className="text-blue-400" id="by">
                                                         {Events.by}</a>
                                                     </Link>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
-                                                    {Events.fee}
                                                 </td>
                                             </tr>
                                         ))}
@@ -385,9 +477,8 @@ const Extrinsics=()=>{
                     </div>
                 </Dialog>
             </Transition>
-
-
         </div>
-    )
+        )
+    }
 }
 export default Extrinsics
