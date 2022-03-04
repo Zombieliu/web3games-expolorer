@@ -5,18 +5,10 @@ import "../css/font-awesome.css"
 import store from '../app/store';
 import { appWithTranslation } from 'next-i18next';
 import { GraphQLClient, ClientContext } from 'graphql-hooks'
-import memCache from "graphql-hooks-memcache"
-import {createClient} from "graphql-ws"
 
 
 const client = new GraphQLClient({
-    // url: 'https://api.subquery.network/sq/Zombieliu/devnet-webe3games',
     url: 'http://47.242.8.196:3000',
-    // cache:memCache(),
-    // subscriptionClient:()=>
-    //   createClient({
-    //       url:"ws://localhost:3000/"
-    //   })
 })
 
 
