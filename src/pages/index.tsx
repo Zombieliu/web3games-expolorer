@@ -19,7 +19,7 @@ const IndexPage: NextPage = () => {
           <Home></Home>
           {/*<Link*/}
           {/*    href='/'*/}
-          {/*    locale={router.locale === 'en' ? 'de' : 'en'}*/}
+          {/*    locale={route.locale === 'en' ? 'de' : 'en'}*/}
           {/*>*/}
           {/*    <footer>*/}
           {/*        <p>{t('description')}</p>*/}

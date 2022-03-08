@@ -66,7 +66,7 @@ const Block_Info = `
     nodes{
       id
       extrinsicHeight
-      signer
+      signerId
       success
       nonce
       blockHash{
@@ -139,18 +139,31 @@ class extrinsicInfo {
 }
 
 function data_list(data: any){
+        console.log(data)
         let times = data.extrinsicInfos.nodes.length;
         let data_list = [];
         for (let i = 0;i < times;i++){
-            let result = new extrinsicInfo(
-                data.extrinsicInfos.nodes[i].extrinsicHeight,
-                data.extrinsicInfos.nodes[i].id,
-                data.extrinsicInfos.nodes[i].nonce,
-                data.extrinsicInfos.nodes[i].success,
-                "System",
-                "",
-            )
-            data_list.push(result)
+            if (data.extrinsicInfos.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
+                let result = new extrinsicInfo(
+                    data.extrinsicInfos.nodes[i].extrinsicHeight,
+                    data.extrinsicInfos.nodes[i].id,
+                    data.extrinsicInfos.nodes[i].nonce,
+                    data.extrinsicInfos.nodes[i].success,
+                    "system",
+                    data.extrinsicInfos.nodes[i].signerId,
+                )
+                data_list.push(result)
+            }else{
+                let result = new extrinsicInfo(
+                    data.extrinsicInfos.nodes[i].extrinsicHeight,
+                    data.extrinsicInfos.nodes[i].id,
+                    data.extrinsicInfos.nodes[i].nonce,
+                    data.extrinsicInfos.nodes[i].success,
+                    data.extrinsicInfos.nodes[i].signerId,
+                    data.extrinsicInfos.nodes[i].signerId,
+                )
+                data_list.push(result)
+            }
         }
         return data_list
 }
@@ -159,7 +172,7 @@ function data_list(data: any){
 
 const BlocksDetails=()=>{
     const router = useRouter()
-    const [Block,changeBlock] = useState('0x2340c482f0c790758b5fc7a0b1ef140e233a6e8e963d7a45e6552adca06feaae')
+    const [Block,changeBlock] = useState('0xa5f01bf449536de62bb9719134ca7e28a90a8c837fe07cc2b81733fe163049d1')
     let [isOpen, setIsOpen] = useState(false)
 
 
@@ -210,7 +223,12 @@ const BlocksDetails=()=>{
         return `${start}`
     }
 
+    async function getAccount(e){
+       await router.push(`/account/${e.target.id}`)
+    }
+
     const Copy=(span)=>{
+        console.log(span)
             const spanText = document.getElementById(span).innerText;
             const oInput = document.createElement('input');
             oInput.value = spanText;
@@ -467,16 +485,18 @@ const BlocksDetails=()=>{
                                                         {token.state ? "success" : "fail"}
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-base ">
-
-                                                        <button onClick={() => {
+                                                        <button  onClick={() => {
                                                             // @ts-ignore
-                                                            Copy("by");
+                                                            Copy(token.address);
                                                         }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
                                                         </button>
-                                                        <Link href={token.address}>
-                                                            <a  className="text-blue-400" id="by">
-                                                                {token.by}</a>
-                                                        </Link>
+                                                        <button onClick={getAccount} className="text-blue-400" id={token.address}>
+                                                            {token.by}
+                                                        </button>
+                                                        {/*<Link href={token.address}>*/}
+                                                        {/*    <a  className="text-blue-400" id="by">*/}
+                                                        {/*        {token.by}</a>*/}
+                                                        {/*</Link>*/}
                                                     </td>
                                                 </tr>
                                             ))}

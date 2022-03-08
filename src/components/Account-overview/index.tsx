@@ -1,42 +1,63 @@
 import Link from 'next/link';
-import React, { Fragment, useState } from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import { Dialog, Popover, Transition } from '@headlessui/react';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/solid';
+import {useAtom} from "jotai";
+import {AccountBalanceValue, AccountValue} from "../../jotai";
+import {useRouter} from "next/router";
 
-const navigation = [
 
-  { id:1 ,name: 'Transactions ', href:'/account' },
-  { id:2 ,name: 'W3G Transfers', href:'/account/transfers' },
-
-]
 const overview = [
-  {
-    img:"/solana.png",
-    name: 'SOL',
-    amount: '1',
-    value:"$92.0149",
-    href: 'https://solana.com/',
-
-  },
-  {
-    img:"/icp.png",
-    name: 'ICP',
-    amount: '1',
-    value:"$18.8330",
-    href: 'https://dfinity.org/',
-
-  },
-  {
-    img:"/near.png",
-    name: 'Near',
-    amount: '1',
-    value:"$11.3020",
-    href: 'https://near.org/',
-  },
+  // {
+  //   img:"/solana.png",
+  //   name: 'SOL',
+  //   amount: '1',
+  //   value:"$92.0149",
+  //   href: 'https://solana.com/',
+  //
+  // },
+  // {
+  //   img:"/icp.png",
+  //   name: 'ICP',
+  //   amount: '1',
+  //   value:"$18.8330",
+  //   href: 'https://dfinity.org/',
+  //
+  // },
+  // {
+  //   img:"/near.png",
+  //   name: 'Near',
+  //   amount: '1',
+  //   value:"$11.3020",
+  //   href: 'https://near.org/',
+  // },
 ]
 
 const AccountOverview=()=>{
-  let [isOpen, setIsOpen] = useState(false)
+  const router  = useRouter();
+  const [account,] = useAtom(AccountValue);
+  const [balance,setBalance] = useAtom(AccountBalanceValue);
+  let [isOpen, setIsOpen] = useState(false);
+
+
+  function insertStr(source, start, newStr){
+    return source.slice(0, start) + newStr + source.slice(start);
+  }
+
+
+  useEffect(()=>{
+      if (Number(balance) >= 100000000){
+        const result = insertStr(balance,9,'.')
+        setBalance(result)
+      }
+  },[])
+
+  const navigation = [
+    { id:1 ,name: 'Extrinsics ', href:`/account/${account}` },
+    { id:2 ,name: 'W3G Transfers', href:`/account/transfers/${account}` },
+  ]
+
+
   const Copy=(span)=>{
 
     const spanText = document.getElementById(span).innerText;
@@ -50,7 +71,6 @@ const AccountOverview=()=>{
     document.body.removeChild(oInput);
     if(oInput){
       setIsOpen(true)
-
     }
   }
 
@@ -78,7 +98,7 @@ const AccountOverview=()=>{
       </div>
       <div className="flex">
         <div id="account" className="text-xs mt-2 lg:text-base mr-2">
-          5GQXPhYodnaWLk4MxSsFqjCYhrZwwkbbiSU8fpDRdBU6V7bT
+          {account}
         </div>
         <div>
           <button onClick={() => {
@@ -98,21 +118,21 @@ const AccountOverview=()=>{
             <div className="mb-3">
               W3G Balance
             </div>
-            <div className='mb-3'>
-              FT Token Balance
-            </div>
+            {/*<div className='mb-3'>*/}
+            {/*  FT Token Balance*/}
+            {/*</div>*/}
           </div>
 
           <div className="">
             <div className="flex mb-3">
-            <div className="font-semibold mr-1 "> 0.6795615 W3G </div> <div className="text-gray-600">($55.2)</div>
+            <div className="font-semibold mr-1 "> {balance} W3G </div> <div className="text-gray-600">($55.2)</div>
             </div>
-            <div>
-              <div className="flex mb-3">
-               <div className="font-semibold mr-1"> 4 FT tokens </div>
-                <div className="text-gray-600">($0.28)</div>
-              </div>
-            </div>
+            {/*<div>*/}
+            {/*  <div className="flex mb-3">*/}
+            {/*   <div className="font-semibold mr-1"> 4 FT tokens </div>*/}
+            {/*    <div className="text-gray-600">($0.28)</div>*/}
+            {/*  </div>*/}
+            {/*</div>*/}
           </div>
           </div>
           <div className="w-full    top-16">
@@ -134,10 +154,10 @@ const AccountOverview=()=>{
                         </div>
                       </div>
                       <div className="mt-1">
-                        125
+                        {balance}
                       </div>
                       <div className="mt-1">
-                        $0.28
+                        $55.2
                       </div>
                     <ChevronDownIcon
                       className={`${open ? '' : 'text-opacity-70'}
@@ -181,7 +201,7 @@ const AccountOverview=()=>{
 
                                 <div className="ml-2 ">
                                 <div className="-mt-0.5 text-sm font-semibold">
-                                  XSB
+                                  W3G
                                 </div>
                                   <div className="text-xs">
                                     $0.00229394
@@ -190,7 +210,7 @@ const AccountOverview=()=>{
                               </a>
                             </Link>
                             <div className="mt-1 w-1/3">
-                              125
+                              {balance}
                             </div>
                             <div className="mt-1 w-1/3">
                               $0.28
@@ -243,20 +263,20 @@ const AccountOverview=()=>{
               <div className="mb-3">
                 W3G Balance
               </div>
-              <div className='mb-3'>
-                FT Tokens Value
-              </div>
+              {/*<div className='mb-3'>*/}
+              {/*  FT Tokens Value*/}
+              {/*</div>*/}
             </div>
 
             <div className="">
               <div className="flex mb-3">
-                <div className="font-semibold mr-1 "> 282 W3G</div>
+                <div className="font-semibold mr-1 "> {balance} W3G</div>
               </div>
-              <div>
-                <div className="flex mb-3">
-                  <div className="font-semibold mr-1"> ~= 0 W3G</div>
-                </div>
-              </div>
+              {/*<div>*/}
+              {/*  <div className="flex mb-3">*/}
+              {/*    <div className="font-semibold mr-1"> ~= 0 W3G</div>*/}
+              {/*  </div>*/}
+              {/*</div>*/}
             </div>
           </div>
 

@@ -42,7 +42,7 @@ const Block_Info = `
       timestamp
       nonce
       success
-      signer
+      signerId
     }
   }
 }
@@ -55,6 +55,7 @@ class extrinsicInfo {
   private nonce: string;
   private state: string;
   private by: string;
+  private address : string;
 
   constructor(
       id:string,
@@ -63,6 +64,7 @@ class extrinsicInfo {
       nonce:string,
       state:string,
       by:string,
+      address:string
   ) {
     this.extrinsicHeight = extrinsicHeight
     this.id = id
@@ -70,6 +72,7 @@ class extrinsicInfo {
     this.nonce = nonce
     this.state = state
     this.by = by
+    this.address = address
   }
 }
 
@@ -82,15 +85,29 @@ function data_list(data: any){
   let times = data.extrinsicInfos.nodes.length;
   let data_list = [];
   for (let i = 0;i < times;i++){
-    let result = new extrinsicInfo(
-        data.extrinsicInfos.nodes[i].extrinsicHeight,
-        data.extrinsicInfos.nodes[i].id,
-        GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
-        data.extrinsicInfos.nodes[i].nonce,
-        data.extrinsicInfos.nodes[i].success,
-        "alice"
-    )
-    data_list.push(result)
+    if (data.extrinsicInfos.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
+      let result = new extrinsicInfo(
+          data.extrinsicInfos.nodes[i].extrinsicHeight,
+          data.extrinsicInfos.nodes[i].id,
+          GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
+          data.extrinsicInfos.nodes[i].nonce,
+          data.extrinsicInfos.nodes[i].success,
+          "system",
+          data.extrinsicInfos.nodes[i].signerId,
+      )
+      data_list.push(result)
+    }else{
+      let result = new extrinsicInfo(
+          data.extrinsicInfos.nodes[i].extrinsicHeight,
+          data.extrinsicInfos.nodes[i].id,
+          GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
+          data.extrinsicInfos.nodes[i].nonce,
+          data.extrinsicInfos.nodes[i].success,
+          data.extrinsicInfos.nodes[i].signerId,
+          data.extrinsicInfos.nodes[i].signerId,
+      )
+      data_list.push(result)
+    }
   }
   return data_list
 }
@@ -133,6 +150,9 @@ const Transactions=()=> {
     router.push(`/extrinsics/${value}`)
   }
 
+  async function getAccount(e){
+    await router.push(`/account/${e.target.id}`)
+  }
 
   if (loading) {
     return (
@@ -152,9 +172,8 @@ const Transactions=()=> {
   }
 
   if (data) {
-    // console.log(data)
+    console.log(data)
     const extrinsic = data_list(data)
-    console.log(extrinsic)
     // const extrinsic=[
     //   {
     //     id:"QjBU7PxTTGnGuQGpm7KC18aMQ.....",
@@ -256,12 +275,13 @@ const Transactions=()=> {
 
                               <button onClick={() => {
                                 // @ts-ignore
-                                Copy("by");
+                                Copy(item.address);
                               }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
                               </button>
 
-                              <a href={item.aby} className="text-blue-400" id="by">
-                                {item.by}</a>
+                              <button onClick={getAccount} className="text-blue-400" id={item.address}>
+                                {item.by}
+                              </button>
                             </td>
                           </tr>
                       ))}

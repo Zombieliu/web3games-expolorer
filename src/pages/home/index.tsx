@@ -1,6 +1,6 @@
 import { Listbox, Transition,Popover, Disclosure } from '@headlessui/react'
 import {CheckIcon, ChevronDownIcon, ChevronUpIcon, SelectorIcon} from '@heroicons/react/solid'
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Script from 'next/script'
 import Header from "../../components/header";
@@ -18,6 +18,7 @@ const types = [
     { id: 1, name: 'Block' },
     { id: 2, name: 'BlockHash' },
     { id: 3, name: 'ExtrinsicHash' },
+    { id: 4, name: 'Account' },
     // { id: 1, name: 'All Filters' },
     // { id: 2, name: 'Tokens' },
     // { id: 3, name: 'Accounts' },
@@ -215,9 +216,13 @@ const Home=()=>{
     const [selected, setSelected] = useState(types[0])
     const [enabled, setEnabled] = useState(true)
 
+
     const move=()=>{
         setEnabled(!enabled)
     }
+
+
+
 
     const{loading,error,data} = useQuery(Blcok_Info,{
         variables:{
@@ -260,7 +265,12 @@ const Home=()=>{
             else if (selected.name == 'ExtrinsicHash'){
                 const value = props.target.value
                 await router.push(`/extrinsics/${value}`)
-            }else {
+            }
+            else if (selected.name == 'Account'){
+                const value = props.target.value
+                await router.push(`/account/${value}`)
+            }
+            else {
                 alert("fuck you")
             }
         }
@@ -282,7 +292,11 @@ const Home=()=>{
         }
         else if (selected.name == 'ExtrinsicHash'){
             await router.push(`/extrinsics/${value}`)
-        }else {
+        }
+        else if (selected.name == 'Account'){
+            await router.push(`/account/${value}`)
+        }
+        else {
             alert("no data")
         }
     }
@@ -296,7 +310,6 @@ const Home=()=>{
         )
 
     }
-    console.log(data)
     const blocks = data.blockInfos.nodes
     return(
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">

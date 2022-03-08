@@ -28,7 +28,7 @@ const Block_Info = `
 
 
 const Test = () =>{
-    // const router = useRouter()
+    // const route = useRouter()
     // const [fetchUserBlockInfo] = useManualQuery(Block_Info)
     // const fetchBlock = async (Block) => {
     //     const{data} = await fetchUserBlockInfo({
@@ -40,11 +40,11 @@ const Test = () =>{
     //
     //
     // useEffect(()=>{
-    //     if (router.isReady) {
-    //         const pid = router.query.pid
+    //     if (route.isReady) {
+    //         const pid = route.query.pid
     //         changeBlock(`${pid}`)
     //     }
-    // },[router.isReady])
+    // },[route.isReady])
 
 
 

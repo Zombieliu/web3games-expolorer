@@ -21,9 +21,6 @@ const tokenstitle=[
     {
         title:"Action",
     },
-    {
-        title:"Signer By"
-    },
 ]
 
 
@@ -42,7 +39,8 @@ const Extrinsics_Info = `
       data
       extrinsicHash{
         id
-        signer
+        signerId
+        meta
       } 
     }
   }
@@ -88,6 +86,28 @@ function data_list(data: any){
     let times = data.eventInfos.nodes.length;
     let data_list = [];
     for (let i = 0;i < times;i++){
+        // if (data.extrinsicInfos.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
+        //     let result = new extrinsicInfo(
+        //         data.extrinsicInfos.nodes[i].extrinsicHeight,
+        //         data.extrinsicInfos.nodes[i].id,
+        //         data.extrinsicInfos.nodes[i].nonce,
+        //         data.extrinsicInfos.nodes[i].success,
+        //         "system",
+        //         data.extrinsicInfos.nodes[i].signerId,
+        //     )
+        //     data_list.push(result)
+        // }else{
+        //     let result = new extrinsicInfo(
+        //         data.extrinsicInfos.nodes[i].extrinsicHeight,
+        //         data.extrinsicInfos.nodes[i].id,
+        //         data.extrinsicInfos.nodes[i].nonce,
+        //         data.extrinsicInfos.nodes[i].success,
+        //         data.extrinsicInfos.nodes[i].signerId,
+        //         data.extrinsicInfos.nodes[i].signerId,
+        //     )
+        //     data_list.push(result)
+        // }
+
         let result = new EventInfo(
             data.eventInfos.nodes[i].eventID,
             `${data.eventInfos.nodes[i].section}.${data.eventInfos.nodes[i].method}`,
@@ -171,8 +191,8 @@ const Extrinsics=()=>{
         const Events = data_list(data)
         const overview=[
             {
-                extrinsic:"tokenNonFungible.createToken",
-                signature:data.eventInfos.nodes[0].extrinsicHash.signer,
+                extrinsic:`${JSON.parse(data.eventInfos.nodes[0].extrinsicHash.meta).name}`,
+                signature:data.eventInfos.nodes[0].extrinsicHash.signerId,
                 extrinsic_hash:data.eventInfos.nodes[0].extrinsicHash.id,
                 weight,
                 events:data.eventInfos.nodes.length,
@@ -388,17 +408,6 @@ const Extrinsics=()=>{
                                                 </td>
                                                 <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
                                                     {Events.action}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base ">
-                                                    {/*<button onClick={() => {*/}
-                                                    {/*    // @ts-ignore*/}
-                                                    {/*    Copy("by");*/}
-                                                    {/*}}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
-                                                    {/*</button>*/}
-                                                    <Link href="/account" >
-                                                    <a className="text-blue-400" id="by">
-                                                        {Events.by}</a>
-                                                    </Link>
                                                 </td>
                                             </tr>
                                         ))}
