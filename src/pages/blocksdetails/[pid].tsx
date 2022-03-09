@@ -347,7 +347,7 @@ const BlocksDetails=()=>{
                                     <div className="text-gray-400 text-sm ">
                                         {overview.map(item=>(
                                             <div key={item.block}>
-                                                <div className="md:flex   my-3 ">
+                                                <div className="md:flex justify-between lg:justify-start  my-3 ">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Block
                                                     </div>
@@ -358,16 +358,16 @@ const BlocksDetails=()=>{
                                                     }}> <i className="fa fa-clone mt-1" aria-hidden="true"></i></button>
                                                     </div>
                                                 </div>
-                                                <div className="md:flex   my-3">
+                                                <div className="md:flex  justify-between lg:justify-start my-3">
                                                     <div className="font-semibold justify-between lg:font-medium  w-60 mr-32">
                                                         Timestamp
                                                     </div>
-                                                    <div className="md:flex">
-                                                        <div className="text-gray-800">
+                                                    <div className="h-auto  lg:flex">
+                                                        <div className="text-gray-800 ">
                                                             {item.timestamp}
                                                         </div>
                                                         <div className="flex">
-                                                            <div className="mx-3 hidden md:inline-block">
+                                                            <div className="mx-3 hidden lg:inline-block">
                                                                 |
                                                             </div>
                                                             <div className="md:flex">
@@ -378,51 +378,76 @@ const BlocksDetails=()=>{
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="md:flex  my-3 ">
+                                                <div className=" md:flex justify-between lg:justify-start my-3 ">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Block Hash
                                                     </div>
-                                                    <div className="text-gray-800 text-xs lg:text-sm    ">
-                                                        {item.blockHash}
+                                                    <div id={item.blockHash} className="text-gray-800 text-xs lg:text-sm   break-words ">
+                                                        {item.blockHash} &nbsp;
+                                                        <button onClick={() => {
+                                                        // @ts-ignore
+                                                        Copy(`${item.blockHash}`);}}>
+                                                        <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="md:flex  my-3">
+                                                <div className="md:flex justify-between lg:justify-start my-3">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Parent Block Hash
                                                     </div>
-                                                    <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                        {item.parentBlockHash}
+                                                    <div id={item.parentBlockHash} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                                        {item.parentBlockHash} &nbsp;
+                                                        <button onClick={() => {
+                                                            // @ts-ignore
+                                                            Copy(`${item.parentBlockHash}`);}}>
+                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="md:flex  my-3">
+                                                <div className="md:flex justify-between lg:justify-start my-3">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Extrinsics Hash
                                                     </div>
-                                                    <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                        {item.extrinsicsHash}
+                                                    <div id={item.extrinsicsHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                                        {item.extrinsicsHash} &nbsp;
+                                                        <button onClick={() => {
+                                                            // @ts-ignore
+                                                            Copy(`${item.extrinsicsHash}`);}}>
+                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="md:flex  my-3">
+                                                <div className="md:flex justify-between lg:justify-start my-3 ">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Content Hash
                                                     </div>
-                                                    <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                        {item.contentHash}
+                                                    <div id={item.contentHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                                        {item.contentHash} &nbsp;
+                                                        <button onClick={() => {
+                                                            // @ts-ignore
+                                                            Copy(`${item.contentHash}`);}}>
+                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="md:flex  my-3">
+                                                <div className="md:flex justify-between lg:justify-start my-3">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         State Hash
                                                     </div>
-                                                    <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                        {item.State}
+                                                    <div id={item.State} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                                        {item.State} &nbsp;
+                                                        <button onClick={() => {
+                                                            // @ts-ignore
+                                                            Copy(`${item.State}`);}}>
+                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                <div className="md:flex   my-3">
+                                                <div className="md:flex  justify-between lg:justify-start my-3">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Extrinsics
                                                     </div>
-                                                    <div className="md:flex text-gray-800">
+                                                    <div className="md:flex justify-between lg:justify-start text-gray-800">
 
                                                         <div className="flex ">
                                                             <div>Total</div>
@@ -484,19 +509,10 @@ const BlocksDetails=()=>{
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                         {token.state ? "success" : "fail"}
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-base ">
-                                                        <button  onClick={() => {
-                                                            // @ts-ignore
-                                                            Copy(token.address);
-                                                        }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
-                                                        </button>
+                                                    <td  className="px-6 py-4 whitespace-nowrap text-base ">
                                                         <button onClick={getAccount} className="text-blue-400" id={token.address}>
                                                             {token.by}
                                                         </button>
-                                                        {/*<Link href={token.address}>*/}
-                                                        {/*    <a  className="text-blue-400" id="by">*/}
-                                                        {/*        {token.by}</a>*/}
-                                                        {/*</Link>*/}
                                                     </td>
                                                 </tr>
                                             ))}

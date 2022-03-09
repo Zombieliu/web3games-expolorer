@@ -16,6 +16,9 @@
   "dependencies": {
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
+    "@polkadot/keyring": "^8.4.1",
+    "@polkadot/util": "^8.4.1",
+    "@polkadot/util-crypto": "^8.4.1",
     "antd": "^4.19.1",
     "axios": "^0.26.0",
     "bignumber.js": "^9.0.2",

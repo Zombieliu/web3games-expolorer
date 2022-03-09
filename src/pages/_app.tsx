@@ -6,7 +6,8 @@ import { GraphQLClient, ClientContext } from 'graphql-hooks'
 
 
 const client = new GraphQLClient({
-    url: 'http://localhost:3000',
+    url: 'http://47.242.8.196:3000',
+    // url: 'http://localhost:3000',
 })
 
 

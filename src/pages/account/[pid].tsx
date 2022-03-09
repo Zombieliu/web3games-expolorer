@@ -110,6 +110,10 @@ function GetBlockData(blockTime) {
   return `${start}`
 }
 
+function insertStr(source, start, newStr){
+  return source.slice(0, start) + newStr + source.slice(start);
+}
+
 const Account=()=>{
   const [account,setAccount] = useAtom(AccountValue)
   const [,setBalance] = useAtom(AccountBalanceValue)
@@ -118,10 +122,15 @@ const Account=()=>{
     if (router.isReady){
       const {pid} = router.query;
       setAccount(`${pid}`)
-      axios.get(`http://localhost:3002/api/get/get_balance?account=${pid}`, {
+      axios.get(`http://47.242.8.196:3003/api/get/get_balance?account=${pid}`, {
       })
           .then(function (response) {
-            setBalance(response.data.data)
+            if (Number(response.data.data) >= 100000000){
+              const result = insertStr(response.data.data,9,'.')
+              setBalance(result)
+            }else{
+              setBalance(response.data.data)
+            }
           })
           .catch(function (error) {
             console.log(error);
@@ -158,38 +167,6 @@ const Account=()=>{
 
   if (data) {
     const collections = data_list(data)
-    // const collections=[
-    //   {
-    //     id:"1",
-    //     signature:'5Q7Dg7iuF29gKZFEpj8zQiGwYwg',
-    //     block:"#122238261",
-    //     time:"41 minutes ago",
-    //     instructions:"Vote",
-    //     by:"This account",
-    //     fee:"0.000005",
-    //
-    //   },
-    //   {
-    //     id:"2",
-    //     signature:'5Q7Dg7iuF29gKZFEpj8zQiGwYwg',
-    //     block:"#122238261",
-    //     time:"41 minutes ago",
-    //     instructions:"Vote",
-    //     by:"This account",
-    //     fee:"0.000005",
-    //
-    //   },
-    //   {
-    //     id:"3",
-    //     signature:'5Q7Dg7iuF29gKZFEpj8zQiGwYwg',
-    //     block:"#122238261",
-    //     time:"41 minutes ago",
-    //     instructions:"Vote",
-    //     by:"This account",
-    //     fee:"0.000005",
-    //
-    //   },
-    // ]
 
     return (
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
@@ -221,14 +198,14 @@ const Account=()=>{
                       {collections.map(item => (
                           <tr key={item.id} className="hover:bg-gray-200">
                             <td className="px-6 py-4 whitespace-nowrap text-blue-400 text-sm font-medium  ">
-                              <Link href='##'>
+                              <Link href={`/extrinsics/${item.extrinsicHash}`}>
                                 <a>
                                   {item.extrinsicHash}
                                 </a></Link>
 
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
-                              <Link href='##'>
+                              <Link href={`/extrinsics/${item.extrinsicHash}`}>
                                 <a className="">
                                   {item.blockHeight}
                                 </a>

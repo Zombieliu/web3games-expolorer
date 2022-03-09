@@ -33,7 +33,6 @@ const publishingOptions = [
 const Header=()=>{
 
 
-    const [opentrue, setOpentrue] = useState(false)
     //
     //黑夜
     const [enabled, setEnabled] = useState(false)
@@ -56,10 +55,7 @@ const Header=()=>{
         message.success('This is a normal message');
     };
 
-    const login =() => {
-        setOpentrue(true)
 
-    }
     let net
   const  getNet=()=>{
         net =document.getElementById("NET").innerHTML
@@ -217,18 +213,16 @@ const Header=()=>{
                                 <Listbox.Label className="sr-only">Change published status</Listbox.Label>
                                 <div className="relative  mt-2.5">
                                     <div className="inline-flex  rounded-md ">
-                                        <div className="relative z-0 inline-flex   rounded-md  ">
+                                        <div className="relative z-0 inline-flex   rounded-full  ">
+                                            <Listbox.Button className="">
 
-
-                                            <Listbox.Button className="pt-1">
-
-                                                <div className="relative  items-center bg-indigo-500 text-center   rounded-lg  text-white">
+                                                <div className="relative rounded-lg   text-center     ">
                                                     <img
-                                                        className="w-12 h-10 rounded-lg"
+                                                        className="w-12  rounded-lg"
                                                         src="/web3g1.png"
                                                         alt=""
                                                     />
-                                                    <p id="NET" className="hidden mx-1 my-1  text-center text-sm font-medium">{selected.title}</p>
+                                                    {/*<p id="NET" className="hidden mx-1 my-1  text-center text-sm font-medium">{selected.title}</p>*/}
                                                 </div>
                                             </Listbox.Button>
                                         </div>
@@ -277,7 +271,7 @@ const Header=()=>{
                         )}
                     </Listbox>
                     <div className="-mr-2  my-0.5 lg:hidden">
-                        <Popover.Button className="bg-white  rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <Popover.Button className="bg-white  rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100  focus:ring-indigo-500">
                             <span className="sr-only">Open menu</span>
                             <MenuIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
@@ -314,7 +308,7 @@ const Header=()=>{
                                             />
                                         </div>
                                         <div className="-mr-2">
-                                            <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                                            <Popover.Button className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100  focus:ring-indigo-500">
                                                 <span className="sr-only">Close menu</span>
                                                 <XIcon className="h-6 w-6" aria-hidden="true" />
                                             </Popover.Button>
@@ -389,81 +383,6 @@ const Header=()=>{
                         </Popover.Panel>
 
                     </Transition>
-                    <Transition.Root show={opentrue} as={Fragment}>
-                        <Dialog as="div" className="fixed z-20 inset-0 overflow-y-auto " onClose={setOpentrue}>
-                            <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0"
-                                    enterTo="opacity-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                >
-                                    <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-                                </Transition.Child>
-
-                                {/* This element is to trick the browser into centering the modal contents. */}
-                                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;
-          </span>
-                                <Transition.Child
-                                    as={Fragment}
-                                    enter="ease-out duration-300"
-                                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                    enterTo="opacity-100 translate-y-0 sm:scale-100"
-                                    leave="ease-in duration-200"
-                                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                                >
-                                    <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:y-8 sm:align-middle  sm:p-6 lg:p-12 ">
-                                        <div>
-                                            <div className='flex justify-between text-xl font-light	'>
-
-                                                    <div className=" font-bold mb-2 text-2xl">
-                                                        Connect your wallet
-                                                    </div>
-                                                <button  onClick={() => setOpentrue(false)}
-                                                         className="fa fa-times " aria-hidden="true"></button>
-                                            </div>
-                                            <div className="text-base text-gray-600 w-96 mr-8">
-                                                Connect with one of available wallet providers or create a new wallet.</div>
-
-
-                                            <button className="bg-black flex justify-between text-white p-4 rounded-lg w-full my-8">
-                                                <div className="text-lg font-semibold">
-                                                    MetaMask
-                                                </div>
-                                                <div>
-                                                    <img className="w-8 h-8" src="https://portal.web3games.org/icon-wallet-metamask.svg" alt=""/>
-                                                </div>
-                                            </button>
-
-                                            <button className="bg-black flex justify-between text-white p-4 rounded-lg w-full my-8">
-                                                <div className="text-lg font-semibold">
-                                                    WalletConnect
-                                                </div>
-                                                <div>
-                                                    <img className="w-8 h-8" src="https://portal.web3games.org/icon-wallet-walletconnect.svg" alt=""/>
-                                                </div>
-                                            </button>
-                                            <button className="bg-black flex justify-between text-white p-4 rounded-lg w-full my-8">
-                                                <div className="text-lg font-semibold">
-                                                   Polkadotjs
-                                                </div>
-                                                <div>
-                                                    <img className="w-8 h-8 rounded-lg" src="https://cdn.discordapp.com/attachments/876498266550853642/908665467273613392/unknown.png" alt=""/>
-                                                </div>
-                                            </button>
-                                            <div className="text-sm text-gray-500 w-96 ">
-                                                We do not own your private keys and cannot access your funds without your confirmation.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Transition.Child>
-                            </div>
-                        </Dialog>
-                    </Transition.Root>
                 </div>
             </Popover>
         </header>

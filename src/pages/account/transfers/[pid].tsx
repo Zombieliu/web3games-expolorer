@@ -10,6 +10,7 @@ import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {AccountValue} from "../../../jotai";
 import {useQuery} from "graphql-hooks";
+import {lineBreakG} from "acorn";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -157,20 +158,22 @@ const Transfers=()=>{
 
 
   const Copy=(span)=>{
-
-    const spanText = document.getElementById(span).innerText;
-    const oInput = document.createElement('input');
-    oInput.value = spanText;
-    document.body.appendChild(oInput);
-    oInput.select();
-    document.execCommand('Copy');
-    oInput.className = 'oInput';
-    oInput.style.display = 'none';
-    document.body.removeChild(oInput);
-    if(oInput){
-
-      setIsOpen(true)
-    }
+    console.log(span.target.id)
+    // const spanText = document.getElementById(span).innerText;
+    // // const spanText = span.target.id
+    //
+    // const oInput = document.createElement('input');
+    // oInput.value = spanText;
+    // document.body.appendChild(oInput);
+    // oInput.select();
+    // document.execCommand('Copy');
+    // oInput.className = 'oInput';
+    // oInput.style.display = 'none';
+    // document.body.removeChild(oInput);
+    // if(oInput){
+    //
+    //   setIsOpen(true)
+    // }
   }
 
   function closeModal() {
@@ -198,7 +201,9 @@ const Transfers=()=>{
   }
 
   if (data) {
+    const first_data = data
     const first = data_list(data)
+    // const first_data_check = data_list(first_data)
     const trades = second_data(first)
     return (
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
@@ -250,11 +255,6 @@ const Transfers=()=>{
                                 <a href={item.afrom} className="mr-1 text-blue-400">
                                   {item.from}
                                 </a>
-                                <button onClick={() => {
-                                  // @ts-ignore
-                                  Copy("from");
-                                }}><i className="fa fa-clone mt-1" aria-hidden="true"></i>
-                                </button>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-gray-500 ">
@@ -263,11 +263,6 @@ const Transfers=()=>{
                                 <a href={item.afrom} className="mr-1 text-blue-400">
                                   {item.to}
                                 </a>
-                                <button onClick={() => {
-                                  // @ts-ignore
-                                  Copy("from");
-                                }}><i className="fa fa-clone mt-1" aria-hidden="true"></i>
-                                </button>
                               </div>
                             </td>
                             <td className={classNames(StateStyles[item.state], "px-6 py-4 whitespace-nowrap text-sm  ")}>

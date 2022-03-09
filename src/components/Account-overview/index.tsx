@@ -40,17 +40,17 @@ const AccountOverview=()=>{
   let [isOpen, setIsOpen] = useState(false);
 
 
-  function insertStr(source, start, newStr){
-    return source.slice(0, start) + newStr + source.slice(start);
-  }
-
-
-  useEffect(()=>{
-      if (Number(balance) >= 100000000){
-        const result = insertStr(balance,9,'.')
-        setBalance(result)
-      }
-  },[])
+  // function insertStr(source, start, newStr){
+  //   return source.slice(0, start) + newStr + source.slice(start);
+  // }
+  //
+  //
+  // useEffect(()=>{
+  //     if (Number(balance) >= 100000000){
+  //       const result = insertStr(balance,9,'.')
+  //       setBalance(result)
+  //     }
+  // },[])
 
   const navigation = [
     { id:1 ,name: 'Extrinsics ', href:`/account/${account}` },
