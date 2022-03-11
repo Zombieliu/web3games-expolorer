@@ -39,7 +39,7 @@ export default function Faucet() {
     const [openload ,setOpenload]= useState(false)
     const [success, successchange] = useState(false)
     const [fail, failchange] = useState(false)
-  const router=useRouter()
+    const router=useRouter()
     const [enabledNightMode,] = useAtom(darkModeAtom)
     const [, setimg] = useAtom(darkModeImg)
     useEffect(()=>{
@@ -71,7 +71,7 @@ export default function Faucet() {
                             .then(function (response) {
                                 // let error = 'Invalid Parameters (you can not get w3g ,you know why!!!!)';
                                 let success_data = 'Success';
-                                console.log(response.data.message)
+                                // console.log(response.data.message)
                                 if (response.data.message == success_data){
                                     successchange(true)
                                     setOpenload(false);
