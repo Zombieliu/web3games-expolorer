@@ -740,7 +740,7 @@ const Home=()=>{
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className=" mb-14">
                     <div className="my-20">
-                        {/*<Search/>*/}
+                        <Search/>
                         {/* future*/}
                         {/*<HotSearch/>*/}
                         {/*<div className=" xl:flex justify-between">*/}

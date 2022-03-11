@@ -181,6 +181,7 @@ const Transactions=()=> {
   }
 
   if (error) {
+    console.log(error)
     return (
         <div>
           <Error/>
