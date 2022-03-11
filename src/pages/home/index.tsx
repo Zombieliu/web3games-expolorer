@@ -12,6 +12,7 @@ import {useManualQuery } from 'graphql-hooks'
 import {useAtom} from "jotai";
 import {darkModeAtom, darkModeImg} from "../../jotai";
 import {BlockSkeleton} from "../../components/skeleton";
+import Error from "../../components/error";
 
 
 function classNames(...classes) {
@@ -621,6 +622,7 @@ const Blocks = () =>{
         const value = props.target.id;
         router.push(`/blocksdetails/${value}`)
     }
+
     if(loading){
         return(
             <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
@@ -628,76 +630,86 @@ const Blocks = () =>{
             </div>
         )
     }
-    const blocks = data.blockInfos.nodes
-    return(
-        <>
-            <div className="bg-white dark:bg-gray-600 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
-                <div className="text-gray-500 text-2xl mb-5 dark:text-gray-300 font-semibold">
-                    Finallized  Blocks
-                </div>
-                <div className="flex flex-col ">
-                    <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
-                        <div className="py-2   min-w-full sm:px-6 xl:px-8">
-                            <div className="shadow overflow-auto border-b border-gray-200 sm:rounded-lg">
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-100 dark:bg-gray-300">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                        >
-                                            Block
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                        >
-                                            Time
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                        >
-                                            Ex Count
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                        >
-                                            Event
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
-                                    {blocks.map(block=>(
-                                        <tr key={block.id} className="hover:bg-gray-200" >
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                <button id={block.id} onClick={GetBlock}>
-                                                    {block.blockHeight}
-                                                </button>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {DataDiff(block.timestamp)} Second ago
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {block.extrinsicNumber}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
-                                                {block.eventNumber}
-                                            </td>
+    if(error){
+        return(
+            <Error/>
+        )
+    }
 
+
+    if (data){
+        const blocks = data.blockInfos.nodes
+        console.log(data)
+        return(
+            <>
+                <div className="bg-white dark:bg-gray-600 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
+                    <div className="text-gray-500 text-2xl mb-5 dark:text-gray-300 font-semibold">
+                        Finallized  Blocks
+                    </div>
+                    <div className="flex flex-col ">
+                        <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
+                            <div className="py-2   min-w-full sm:px-6 xl:px-8">
+                                <div className="shadow overflow-auto border-b border-gray-200 sm:rounded-lg">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-100 dark:bg-gray-300">
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                            >
+                                                Block
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                            >
+                                                Time
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                            >
+                                                Ex Count
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                            >
+                                                Event
+                                            </th>
                                         </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                                        {blocks.map(block=>(
+                                            <tr key={block.id} className="hover:bg-gray-200" >
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                    <button id={block.id} onClick={GetBlock}>
+                                                        {block.blockHeight}
+                                                    </button>
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {DataDiff(block.timestamp)} Second ago
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                    {block.extrinsicNumber}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                                                    {block.eventNumber}
+                                                </td>
+
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            </div>
-        </>
-    )
+                </div>
+            </>
+        )
+    }
 }
 
 const News = () =>{
