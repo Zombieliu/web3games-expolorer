@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
@@ -8,6 +8,10 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom} from "../../jotai";
+import {DetailsSkeleton} from "../../components/skeleton";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -114,6 +118,19 @@ function data_list(data: any){
 
 const Transactions=()=> {
   const router = useRouter()
+  const [enabledNightMode,] = useAtom(darkModeAtom)
+
+  useEffect(()=>{
+      if (router.isReady){
+        if (enabledNightMode == true){
+          document.documentElement.classList.add('dark');
+        }else{
+          document.documentElement.classList.remove('dark');
+        }
+      }
+  },[router.isReady])
+
+
 
   let [isOpen, setIsOpen] = useState(false)
 
@@ -156,8 +173,8 @@ const Transactions=()=> {
 
   if (loading) {
     return (
-        <div>
-          {loading}
+        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+          <DetailsSkeleton/>
         </div>
     )
   }
@@ -172,38 +189,7 @@ const Transactions=()=> {
   }
 
   if (data) {
-    console.log(data)
     const extrinsic = data_list(data)
-    // const extrinsic=[
-    //   {
-    //     id:"QjBU7PxTTGnGuQGpm7KC18aMQ.....",
-    //     aid:"/extrinsics",
-    //     hash:"0xa2285..e6b7b8238e",
-    //     time:"13 minutes ago",
-    //     result:"Success",
-    //     by:"System",
-    //     aby:"#",
-    //   },
-    //   {
-    //     id:"QjBU7PxTTGnGuQGpm7KC18wMQ.....",
-    //     aid:"##",
-    //     hash:"0xa2285..e6b7b8238e",
-    //     time:"13 minutes ago",
-    //     result:"Success",
-    //     by:"System",
-    //     aby:"##",
-    //   },
-    //   {
-    //     id:"QjBU7PxTTGnGuQGpm7KC11wMQ.....",
-    //     aid:"##",
-    //     hash:"0xa2285..e6b7b8238e",
-    //     time:"13 minutes ago",
-    //     result:"Success",
-    //     by:"System",
-    //     aby:"###",
-    //   },
-    // ]
-
     return (
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
 

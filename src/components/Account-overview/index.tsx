@@ -3,7 +3,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import { Dialog, Popover, Transition } from '@headlessui/react';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue} from "../../jotai";
+import {AccountBalanceValue, AccountValue, darkModeAtom, darkModeImg} from "../../jotai";
 import {useRouter} from "next/router";
 
 
@@ -34,11 +34,24 @@ const overview = [
 ]
 
 const AccountOverview=()=>{
-  const router  = useRouter();
   const [account,] = useAtom(AccountValue);
   const [balance,setBalance] = useAtom(AccountBalanceValue);
   let [isOpen, setIsOpen] = useState(false);
 
+  const router = useRouter()
+  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [, setimg] = useAtom(darkModeImg)
+  useEffect(()=>{
+    if (router.isReady){
+      if (enabledNightMode == true){
+        document.documentElement.classList.add('dark');
+
+      }else{
+        document.documentElement.classList.remove('dark');
+        setimg("/web3gb.svg")
+      }
+    }
+  },[router.isReady])
 
   // function insertStr(source, start, newStr){
   //   return source.slice(0, start) + newStr + source.slice(start);

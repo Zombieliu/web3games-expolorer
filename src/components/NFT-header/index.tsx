@@ -1,5 +1,8 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Link from "next/link";
+import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -13,6 +16,17 @@ const navigation = [
 
 ]
 const NFTHeader=()=>{
+    const router = useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
     return(
         <div>
             <div className="lg:flex justify-between ">

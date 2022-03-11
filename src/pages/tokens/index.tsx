@@ -7,11 +7,14 @@ import {
     ChevronUpIcon,
     SelectorIcon
 } from '@heroicons/react/solid'
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
 import Sort from "../../components/sort";
+import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -452,7 +455,92 @@ const tokensState={
     rise:"fa fa-arrow-down text-red-300",
     decline:"fa fa-arrow-up text-green-300 ",
 }
+
+const Content = ()=>{
+    return(
+        <>
+            <div className="flex my-5 ">
+                <div>
+                    Total
+                </div>
+                <div className="mx-1 font-semibold">
+                    8596
+                </div>
+                <div>
+                    recognized tokens
+                </div>
+            </div>
+            <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-100 dark:bg-gray-300">
+                    <tr>
+                        {tokenstitle.map(title=>(
+                            <th key={title.title}
+                                scope="col"
+                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                            >
+                                {title.title}
+                            </th>
+                        ))}
+                    </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                    {Tokens.map(token=>(
+                        <tr key={token.id} className="hover:bg-gray-200" >
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                {token.id}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium flex">
+                                <Link  href={token.href}>
+                                    <a className="flex">
+                                        <img className="-ml-2 w-8 h-8 rounded-full"
+                                             src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png" alt=""/>
+                                        <div className="mt-2 ml-2">
+                                            {token.name}
+                                        </div>
+                                    </a>
+                                </Link>
+                            </td>
+                            <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                                {token.holders}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {token.price}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                                <i className={classNames(tokensState[token.timestate],)}  aria-hidden="true">
+                                    {token.time}
+                                </i>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                                <i className={classNames(tokensState[token.weekstate],)}  aria-hidden="true">
+                                    {token.week}
+                                </i>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {token.marketcap}
+                            </td>
+
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+        </>
+    )
+}
 const Token=()=>{
+    const router = useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
     return(
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
             <Header></Header>
@@ -470,85 +558,13 @@ const Token=()=>{
                             />
                             <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">
                                 <i className="fa fa-search" aria-hidden="true"></i></div>
-
-
                         </div>
-
                         </div>
-
                     <div className="mt-5">
                         <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
                             <div className="py-2    min-w-full  p-5 dark:text-gray-200">
-                                <div className="flex my-5 ">
 
-                                    <div>
-                                        Total
-                                    </div>
-                                    <div className="mx-1 font-semibold">
-                                        8596
-
-                                    </div>
-                                    <div>
-                                        recognized tokens
-                                    </div>
-                                </div>
-                                <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                                    <table className="min-w-full divide-y divide-gray-200">
-                                        <thead className="bg-gray-100 dark:bg-gray-300">
-                                        <tr>
-                                            {tokenstitle.map(title=>(
-                                            <th key={title.title}
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                            >
-                                                {title.title}
-                                            </th>
-                                            ))}
-                                        </tr>
-                                        </thead>
-                                        <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
-                                        {Tokens.map(token=>(
-                                            <tr key={token.id} className="hover:bg-gray-200" >
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                    {token.id}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium flex">
-                                                    <Link  href={token.href}>
-                                                    <a className="flex">
-                                                        <img className="-ml-2 w-8 h-8 rounded-full"
-                                                            src="https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png" alt=""/>
-                                                       <div className="mt-2 ml-2">
-                                                           {token.name}
-                                                       </div>
-                                                    </a>
-                                                    </Link>
-                                                </td>
-                                                <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
-                                                    {token.holders}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {token.price}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
-                                                    <i className={classNames(tokensState[token.timestate],)}  aria-hidden="true">
-                                                        {token.time}
-                                                    </i>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
-                                                    <i className={classNames(tokensState[token.weekstate],)}  aria-hidden="true">
-                                                        {token.week}
-                                                    </i>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {token.marketcap}
-                                                </td>
-
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-
+                                <Content/>
                                 <Sort></Sort>
                             </div>
                         </div>

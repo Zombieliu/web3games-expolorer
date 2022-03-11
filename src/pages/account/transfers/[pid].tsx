@@ -8,7 +8,7 @@ import Sort from '../../../components/sort';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountValue} from "../../../jotai";
+import {AccountValue, darkModeAtom, darkModeImg} from "../../../jotai";
 import {useQuery} from "graphql-hooks";
 import {lineBreakG} from "acorn";
 function classNames(...classes) {
@@ -146,36 +146,24 @@ const Transfers=()=>{
     }
   },[router.isReady])
 
+  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [, setimg] = useAtom(darkModeImg)
+  useEffect(()=>{
+    if (router.isReady){
+      if (enabledNightMode == true){
+        document.documentElement.classList.add('dark');
+      }else{
+        document.documentElement.classList.remove('dark');
+
+      }
+    }
+  },[router.isReady])
 
   const{loading,error,data} = useQuery(Account_Info,{
     variables:{
       Account:account
     }
   })
-
-
-
-
-
-  const Copy=(span)=>{
-    console.log(span.target.id)
-    // const spanText = document.getElementById(span).innerText;
-    // // const spanText = span.target.id
-    //
-    // const oInput = document.createElement('input');
-    // oInput.value = spanText;
-    // document.body.appendChild(oInput);
-    // oInput.select();
-    // document.execCommand('Copy');
-    // oInput.className = 'oInput';
-    // oInput.style.display = 'none';
-    // document.body.removeChild(oInput);
-    // if(oInput){
-    //
-    //   setIsOpen(true)
-    // }
-  }
-
   function closeModal() {
     setIsOpen(false)
   }
@@ -249,9 +237,7 @@ const Transfers=()=>{
                               {item.time}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
-
                               <div className="text-gray-800 flex" id="from">
-
                                 <a href={item.afrom} className="mr-1 text-blue-400">
                                   {item.from}
                                 </a>
@@ -259,7 +245,6 @@ const Transfers=()=>{
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-gray-500 ">
                               <div className="text-gray-800 flex" id="from">
-
                                 <a href={item.afrom} className="mr-1 text-blue-400">
                                   {item.to}
                                 </a>
@@ -268,25 +253,17 @@ const Transfers=()=>{
                             <td className={classNames(StateStyles[item.state], "px-6 py-4 whitespace-nowrap text-sm  ")}>
                               {item.change}
                             </td>
-
-
                           </tr>
                       ))}
                       </tbody>
                     </table>
                     <Sort></Sort>
                   </div>
-
-
                 </div>
               </div>
-
-
             </div>
-
           </div>
           <Tail></Tail>
-
           <Transition appear show={isOpen} as={Fragment}>
             <Dialog
                 as="div"
@@ -339,8 +316,6 @@ const Transfers=()=>{
               </div>
             </Dialog>
           </Transition>
-
-
         </div>
     )
   }

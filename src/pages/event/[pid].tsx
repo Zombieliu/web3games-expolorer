@@ -5,6 +5,8 @@ import { Dialog,Transition } from '@headlessui/react';
 import { CheckCircleIcon} from '@heroicons/react/solid';
 import {useRouter} from "next/router";
 import {useQuery} from 'graphql-hooks'
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -48,7 +50,18 @@ function data_type(data:any){
 const Events=()=>{
     const router = useRouter()
     let [isOpen, setIsOpen] = useState(false)
-    const [Event,SetEvent] = useState("1-0-0")
+    const [Event,SetEvent] = useState("")
+
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
 
     useEffect(()=>{
         if (router.isReady){
@@ -105,7 +118,13 @@ const Events=()=>{
         )
 
     }
-    if (data) {
+    if(data.eventInfos.nodes.length == 0){
+        return (
+            <div>
+                1
+            </div>
+        )
+    }else{
         console.log(data)
         const Data = data_type(data)
         const overview=[

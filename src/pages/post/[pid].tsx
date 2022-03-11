@@ -1,22 +1,28 @@
-import {useRouter} from "next/router";
-import {useQuery} from "graphql-hooks";
+import {useManualQuery } from 'graphql-hooks'
+import {initializeGraphQL} from "../../graphql/graphql-client";
+import graphQLRequest from "../../graphql/graphql-request";
 
-const Block_Info = `
- query HomePage($Block: String) {
-  blockInfos(filter:{
-    id:{
-      equalTo:$Block
+
+
+const Extrinsics_Info = `
+ query HomePage($Extrinsics: String) {
+  eventInfos(filter:{
+    extrinsicHashId:{
+      equalTo:$Extrinsics
     }
-  })
-  {
+  }){
     nodes{
-      blockHash
-      parentBlockHash
-      extrinsicsHash
-      state
-      contentHash
-      extrinsicNumber
-      timestamp
+      id
+      eventID
+      method
+      section
+      meta
+      data
+      extrinsicHash{
+        id
+        signerId
+        meta
+      }
     }
   }
 }
@@ -24,37 +30,69 @@ const Block_Info = `
 
 
 
+function Post({ post }) {
+    console.log(post)
+    // const FetchExtrinsicInfo = async (Extrinsics:string) => {
+    //     const ExtrinsicInfo = await FetchExtrinsics({
+    //         variables: { Extrinsics }
+    //     })
+    //     return ExtrinsicInfo
+    // }
+    //
+    // console.log(post)
+    // const [FetchExtrinsics] = useManualQuery(Extrinsics_Info)
+    return(
+        <div>
+            1
+        </div>
+    )
+}
 
 
-
-const Post = () =>{
-    const router = useRouter()
-    const { pid } = router.query
-
+export const allPostsQueryOptions = (params) => ({
+    variables: { Extrinsics:params },
+})
 
 
-    const{loading,error,data}: any = useQuery(Block_Info,{
-        variables:{
-            Block:"14",
+// This function gets called at build time
+export async function getStaticPaths(data) {
+    console.log(data)
+    const posts = [
+        {
+            id:"1"
         },
-    })
+        {
+            id:"2"
+        }
+    ]
+
+    // Get the paths we want to pre-render based on posts
+    const paths = posts.map((post) => ({
+        params: { pid: post.id },
+    }))
+
+    return { paths, fallback: false }
+}
+
+// This also gets called at build time
+export async function getStaticProps({ params }) {
+    // const client = initializeGraphQL()
+    // await graphQLRequest(client, Extrinsics_Info, allPostsQueryOptions(params))
 
 
-    if (loading){
-        console.log(loading)
+    const post = {
+        id:1
     }
 
-    if (error){
-        console.log(error)
-    }
+    // Pass post data to the page via props
+    return { props: { post } }
 
-    if (data){
-        console.log(data)
-    }
-
-
-
-    return <p>Post: {pid}</p>
+    // return {
+    //     props: {
+    //         initialGraphQLState: client.cache.getInitialState(),
+    //     },
+    //     revalidate: 1,
+    // }
 }
 
 export default Post

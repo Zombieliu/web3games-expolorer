@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
@@ -8,6 +8,9 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
+import {DetailsSkeleton} from "../../components/skeleton";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -94,11 +97,25 @@ const Blocks=()=>{
   const router = useRouter()
   let [isOpen, setIsOpen] = useState(false)
 
+  const [enabledNightMode,] = useAtom(darkModeAtom)
+
+  useEffect(()=>{
+    if (router.isReady){
+      if (enabledNightMode == true){
+        document.documentElement.classList.add('dark');
+      }else{
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  },[router.isReady])
+
+
   const{loading,error,data} = useQuery(Blcok_Info,{
     variables:{
       first:20
-    }
+    },
   })
+
 
   const Copy=(span)=>{
 
@@ -132,8 +149,8 @@ const Blocks=()=>{
 
   if (loading) {
     return (
-        <div>
-          {loading}
+        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+          <DetailsSkeleton/>
         </div>
     )
   }

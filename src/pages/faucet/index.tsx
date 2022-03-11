@@ -1,4 +1,4 @@
-import React, {Fragment, useRef, useState} from 'react'
+import React, {Fragment, useEffect, useRef, useState} from 'react'
 import Header from"../../components/header"
 import Tail from '../../components/tail'
 import { Listbox, Dialog,Transition } from '@headlessui/react';
@@ -7,6 +7,9 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import axios from "axios";
 import {element} from "prop-types";
 import check_address from "../../utils";
+import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -17,7 +20,18 @@ const types = [
 
 ]
 
-
+const Found =()=>{
+    return(
+        <>
+            <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
+                <h1 className="text-2xl text-black  text-center mb-5 dark:text-gray-400">How to fund</h1>
+                <h2 className="text-gray-600 text-center md:text-left text-sm mb-5">This faucet is running on the Octopus testnet. To prevent malicious actors from exhausting all funds, requests are tied to Twitter social network accounts. Anyone having a Twitter account may request funds within the permitted limits.</h2>
+                <h3 className="text-gray-600 text-center md:text-left text-sm mb-5">To request funds via Twitter, make a tweet with your W3G account pasted into the contents.</h3>
+                <h4 className="text-gray-600 text-center md:text-left text-sm mb-5">Copy-paste the tweets URL into the above input box and get your W3G. Each account can get 100 W3G every 24 hours.</h4>
+            </div>
+        </>
+    )
+}
 
 export default function Faucet() {
     const cancelButtonRef = useRef(null)
@@ -25,6 +39,19 @@ export default function Faucet() {
     const [openload ,setOpenload]= useState(false)
     const [success, successchange] = useState(false)
     const [fail, failchange] = useState(false)
+  const router=useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [, setimg] = useAtom(darkModeImg)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
+
     function sendtoken(){
         let inputValue = (document.getElementById('faucet') as HTMLInputElement).value;
         let check_result = check_address(inputValue);
@@ -153,13 +180,7 @@ export default function Faucet() {
                           </p>
                       </div>
                   </div>
-                  <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
-                      <h1 className="text-2xl text-black  text-center mb-5 dark:text-gray-400">How to fund</h1>
-                      <h2 className="text-gray-600 text-center md:text-left text-sm mb-5">This faucet is running on the Octopus testnet. To prevent malicious actors from exhausting all funds, requests are tied to Twitter social network accounts. Anyone having a Twitter account may request funds within the permitted limits.</h2>
-                      <h3 className="text-gray-600 text-center md:text-left text-sm mb-5">To request funds via Twitter, make a tweet with your W3G account pasted into the contents.</h3>
-                      <h4 className="text-gray-600 text-center md:text-left text-sm mb-5">Copy-paste the tweets URL into the above input box and get your W3G. Each account can get 100 W3G every 24 hours.</h4>
-
-                  </div>
+                  <Found/>
               </div>
 
           <Transition.Root show={openload} as={Fragment}>

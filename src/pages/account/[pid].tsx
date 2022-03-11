@@ -6,7 +6,7 @@ import Sort from '../../components/sort';
 import AccountOverview from '../../components/Account-overview';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue} from "../../jotai";
+import {AccountBalanceValue, AccountValue, darkModeAtom, darkModeImg} from "../../jotai";
 import {useQuery} from "graphql-hooks";
 import axios from "axios";
 
@@ -122,7 +122,8 @@ const Account=()=>{
     if (router.isReady){
       const {pid} = router.query;
       setAccount(`${pid}`)
-      axios.get(`http://47.242.8.196:3003/api/get/get_balance?account=${pid}`, {
+      // axios.get(`http://47.242.8.196:3003/api/get/get_balance?account=${pid}`,
+      axios.get(`http://localhost:3003/api/get/get_balance?account=${pid}`, {
       })
           .then(function (response) {
             if (Number(response.data.data) >= 100000000){
@@ -136,6 +137,17 @@ const Account=()=>{
             console.log(error);
           });
 
+    }
+  },[router.isReady])
+
+  const [enabledNightMode,] = useAtom(darkModeAtom)
+  useEffect(()=>{
+    if (router.isReady){
+      if (enabledNightMode == true){
+        document.documentElement.classList.add('dark');
+      }else{
+        document.documentElement.classList.remove('dark');
+      }
     }
   },[router.isReady])
 

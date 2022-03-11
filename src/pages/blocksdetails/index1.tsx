@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
@@ -6,6 +6,9 @@ import Sort from "../../components/sort";
 import { message, Button, Space } from 'antd';
 import {CheckCircleIcon, XIcon} from "@heroicons/react/solid";
 import {Dialog, Transition } from "@headlessui/react";
+import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -64,8 +67,18 @@ const overview=[
 
 const BlocksDetails=()=>{
     let [isOpen, setIsOpen] = useState(false)
+    const router = useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
     const Copy=(span)=>{
-
             const spanText = document.getElementById(span).innerText;
             const oInput = document.createElement('input');
             oInput.value = spanText;
@@ -89,10 +102,7 @@ const BlocksDetails=()=>{
         setIsOpen(true)
     }
     return(
-
-
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
-
             <Header></Header>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className="my-20 mb-14">
@@ -108,20 +118,15 @@ const BlocksDetails=()=>{
                             />
                             <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">
                                 <i className="fa fa-search" aria-hidden="true"></i></div>
-
-
                         </div>
-
                     </div>
                     <div className="mt-5">
                         <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
                             <div className="py-5 min-w-full  p-5 dark:text-gray-200">
                             <div className="flex my-5 text-xl font-semibold text-gray-700">
-
                                 <div>
                                     Overview
                                 </div>
-
                             </div>
                                 <div className="text-gray-400 text-sm ">
                                     {overview.map(item=>(
@@ -208,13 +213,10 @@ const BlocksDetails=()=>{
                                                      <div className=" mx-1   font-semibold">{item.transactions}</div>
                                                      <div>Extrinsics</div>
                                                  </div>
-
                                              </div>
-
                                          </div>
                                      </div> ))}
                                 </div>
-
                             </div>
                         </div>
                     </div>

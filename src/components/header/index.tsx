@@ -3,14 +3,16 @@ import Link from "next/link";
 import { Switch } from '@headlessui/react'
 import {MenuIcon, XIcon} from "@heroicons/react/outline";
 import React, {Fragment, useEffect, useState} from "react";
-import { message, Button, Space } from 'antd';
 import {CheckIcon, ChevronDownIcon} from "@heroicons/react/solid";
+import {darkModeAtom, darkModeImg} from '../../jotai'
+import { useAtom } from 'jotai';
+import {useRouter} from "next/router";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 const navigation = [
     { id:1 ,name: 'Home', href: '/home' },
-    { id:4 ,name: 'Faucet', href: '/faucet' },
+    { id:2 ,name: 'Faucet', href: '/faucet' },
 
 ]
 const blockchain=[
@@ -31,30 +33,22 @@ const publishingOptions = [
 ]
 
 const Header=()=>{
-
-
-    //
-    //黑夜
-    const [enabled, setEnabled] = useState(false)
-    //背景图
-    const [img, setimg] = useState('/web3gb.svg')
-    //
+    const [enabledNightMode,setEnabledNightMode] = useAtom(darkModeAtom)
+    const [img, setimg] = useAtom(darkModeImg)
     const [selected, setSelected] = useState(publishingOptions[0])
 
+
     function dartchange() {
-        setEnabled(!enabled);
-        if(enabled){
+        if(enabledNightMode){
+            setEnabledNightMode(!enabledNightMode);
             document.documentElement.classList.remove('dark');
-            setimg("web3gb.svg")
+            setimg("/web3gb.svg")
         }else{
+            setEnabledNightMode(!enabledNightMode);
             document.documentElement.classList.add('dark');
-            setimg("web3gw1.svg")
+            setimg("/web3gw1.svg")
         }
     }
-    const connect = () => {
-        message.success('This is a normal message');
-    };
-
 
     let net
   const  getNet=()=>{
@@ -79,7 +73,8 @@ const Header=()=>{
                                         src={img}
                                         alt=""
                                     />
-                                </a></Link>
+                                </a>
+                            </Link>
 
                         </div>
 
@@ -161,19 +156,13 @@ const Header=()=>{
                     </div>
                     {/*切换*/}
                     <div className="hidden lg:flex w-full justify-end md:flex-1 ">
-                        {/*<div>*/}
-                        {/*    <button onClick={login} className="bg-gray-900 dark:bg-gray-600 transition duration-700  w-36 p-3 text-gray-100 dark:text-gray-300 rounded-lg mr-10 flex justify-center">*/}
-                        {/*        Connect Wallet*/}
-                        {/*    </button>*/}
-                        {/*</div>*/}
-
                         <div className="flex justify-center mt-3 ">
 
                             <Switch
-                                checked={enabled}
+                                checked={enabledNightMode}
                                 onChange={dartchange}
                                 className={classNames(
-                                    enabled ? 'bg-gray-600' : 'bg-gray-200',
+                                    enabledNightMode ? 'bg-gray-600' : 'bg-gray-200',
                                     'relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200   '
                                 )}
                             >
@@ -182,14 +171,14 @@ const Header=()=>{
                                 <span
                                     aria-hidden="true"
                                     className={classNames(
-                                        enabled ? 'translate-x-5' : 'translate-x-0',
+                                        enabledNightMode ? 'translate-x-5' : 'translate-x-0',
                                         'pointer-events-none inline-block h-5 w-5 rounded-full    transform ring-0 transition ease-in-out duration-200'
                                     )}
                                 >
 
                                     <div className="flex justify-center text-center ml-0.5 px-2.5 p-0.5 bg-white dark:bg-gray-700 dark:text-yellow-400 rounded-full  text-lg">
 
-                                <i className={enabled?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>
+                                <i className={enabledNightMode?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>
                             </div>
 
                                 </span>
@@ -351,10 +340,10 @@ const Header=()=>{
 
                                         {/*</select>*/}
                                             <Switch
-                                              checked={enabled}
+                                              checked={enabledNightMode}
                                               onChange={dartchange}
                                               className={classNames(
-                                                enabled ? 'bg-gray-600' : 'bg-gray-200',
+                                                  enabledNightMode ? 'bg-gray-600' : 'bg-gray-200',
                                                 'relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200   '
                                               )}
                                             >
@@ -363,14 +352,14 @@ const Header=()=>{
                                                 <span
                                                   aria-hidden="true"
                                                   className={classNames(
-                                                    enabled ? 'translate-x-5' : 'translate-x-0',
+                                                      enabledNightMode ? 'translate-x-5' : 'translate-x-0',
                                                     'pointer-events-none inline-block h-5 w-5 rounded-full    transform ring-0 transition ease-in-out duration-200'
                                                   )}
                                                 >
 
                                     <div className="flex justify-center text-center ml-0.5 px-2.5 p-0.5 bg-white dark:bg-gray-700 dark:text-yellow-400 rounded-full  text-lg">
 
-                                <i className={enabled?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>
+                                <i className={enabledNightMode?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>
                             </div>
 
                                 </span>

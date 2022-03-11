@@ -1,8 +1,11 @@
 import Header from "../../components/header";
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import NFTHeader from "../../components/NFT-header";
 import Sort from "../../components/sort";
 import Link from "next/link";
+import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 
 const allnfts=[
@@ -63,8 +66,89 @@ const allnfts=[
     }
 ]
 
+const Content = () =>{
+    return(
+        <>
+            <div className="mt-5">
+                <div className="flex grid md:grid-cols-2 xl:grid-cols-4 text-xs lg:text-sm">
+                    {allnfts.map(item=>(
+                        <div key={item.title} className="rounded-lg border my-3 mx-auto lg:m-3 ">
 
+                            <div className="">
+                                <Link  href={item.atitle}>
+                                    <a>
+                                        <img className="w-72 h-72 rounded-t"
+                                             src={item.img} alt=""/>
+                                    </a>
+                                </Link>
+                            </div>
+                            <div className="p-3">
+                                <div className="flex text-blue-400 font-semibold justify-between">
+                                    <div>
+                                        <a href={item.atitle}>
+                                            {item.title}
+                                        </a>
+                                    </div>
+                                    <Link href={item.aicon}>
+                                        <a>
+                                            <i className="fa fa-asterisk" aria-hidden="true"></i>
+                                        </a>
+                                    </Link>
+                                </div>
+                                <div className="flex">
+                                    <div className="text-gray-400 mr-1">
+                                        Sold on:
+                                    </div>
+                                    <div className="text-blue-400  ">
+                                        <Link href={item.asoldon}>
+                                            <a>
+                                                {item.soldon}
+                                            </a>
+                                        </Link>
+                                    </div>
+
+                                </div>
+                                <div className="flex justify-between mt-3">
+                                    <div className="flex">
+                                        <div className="mr-2">
+                                            <img className="w-6 h-6 rounded-lg" src="/web3gsmall.png" alt=""/>
+                                        </div>
+                                        <div className="mt-0.5">
+                                            {item.money}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex">
+                                        <div className="mr-2">
+                                            <i className="fa fa-clock-o" aria-hidden="true"></i>
+                                        </div>
+                                        <div>
+                                            {item.time}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <Sort></Sort>
+            </div>
+        </>
+    )
+}
 const NFTs=()=>{
+    const router = useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
     return(
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
             <Header></Header>
@@ -92,76 +176,8 @@ const NFTs=()=>{
 
                             </div>
                         </div>
-
-                        <div className="mt-5">
-                            <div className="flex grid md:grid-cols-2 xl:grid-cols-4 text-xs lg:text-sm">
-                                {allnfts.map(item=>(
-                            <div key={item.title} className="rounded-lg border my-3 mx-auto lg:m-3 ">
-
-                                <div className="">
-                                    <Link  href={item.atitle}>
-                                    <a>
-                                <img className="w-72 h-72 rounded-t"
-                                     src={item.img} alt=""/>
-                                    </a>
-                                    </Link>
-                                    </div>
-                                <div className="p-3">
-                                <div className="flex text-blue-400 font-semibold justify-between">
-                                    <div>
-                                        <a href={item.atitle}>
-                                            {item.title}
-                                        </a>
-                                    </div>
-                                    <Link href={item.aicon}>
-                                    <a>
-                                    <i className="fa fa-asterisk" aria-hidden="true"></i>
-                                    </a>
-                                    </Link>
-                                </div>
-                                <div className="flex">
-                                    <div className="text-gray-400 mr-1">
-                                        Sold on:
-                                    </div>
-                                    <div className="text-blue-400  ">
-                                        <Link href={item.asoldon}>
-                                        <a>
-                                            {item.soldon}
-                                        </a>
-                                        </Link>
-                                    </div>
-
-                                </div>
-                                <div className="flex justify-between mt-3">
-                                    <div className="flex">
-                                    <div className="mr-2">
-                                        <img className="w-6 h-6 rounded-lg" src="/web3gsmall.png" alt=""/>
-                                    </div>
-                                    <div className="mt-0.5">
-                                        {item.money}
-                                    </div>
-                                    </div>
-
-                                    <div className="flex">
-                                        <div className="mr-2">
-                                            <i className="fa fa-clock-o" aria-hidden="true"></i>
-                                        </div>
-                                        <div>
-                                            {item.time}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                                ))}
-                        </div>
-
-                            <Sort></Sort>
-                            </div>
+                        <Content/>
                     </div>
-
-
-
                     </div>
 
             </div>

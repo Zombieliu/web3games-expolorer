@@ -7,6 +7,8 @@ import {CheckCircleIcon, XIcon} from "@heroicons/react/solid";
 import {Dialog, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
 import {useQuery} from "graphql-hooks";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 
 function classNames(...classes) {
@@ -35,27 +37,6 @@ const tokenstitle=[
 
 
 
-// const Block_Info = `
-//  query HomePage($Block: String) {
-//   blockInfos(filter:{
-//     id:{
-//       equalTo:$Block
-//     }
-//   })
-//   {
-//     nodes{
-//       blockHash
-//       parentBlockHash
-//       extrinsicsHash
-//       state
-//       contentHash
-//       extrinsicNumber
-//       timestamp
-//     }
-//   }
-// }
-// `
-
 const Block_Info = `
  query HomePage($Block: String) {
   extrinsicInfos(filter:{
@@ -83,35 +64,6 @@ const Block_Info = `
   }
 }
 `
-
-
-// extrinsicInfos(filter:{
-//     blockHeight:{
-//         equalTo:$Block
-//     }
-// })
-// {
-//     nodes{
-//     id
-//     extrinsicHash
-//     meta
-//     nonce
-//     success
-// }
-// }
-
-// const Tokens=[
-//     {
-//         id:data.extrinsicInfos.nodes[0].id,
-//         extrinsicHash:data.extrinsicInfos.nodes[0].extrinsicHash,
-//         nonce:data.extrinsicInfos.nodes[0].nonce,
-//         state:data.extrinsicInfos.nodes[0].success,
-//         by:"System",
-//         address:"",
-//         fee:"0.0005",
-//     },
-//
-// ]
 
 class extrinsicInfo {
     private id: string;
@@ -168,13 +120,21 @@ function data_list(data: any){
         return data_list
 }
 
-
-
 const BlocksDetails=()=>{
     const router = useRouter()
     const [Block,changeBlock] = useState('0xa5f01bf449536de62bb9719134ca7e28a90a8c837fe07cc2b81733fe163049d1')
     let [isOpen, setIsOpen] = useState(false)
 
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
 
     useEffect(()=>{
         if (router.isReady) {
@@ -298,40 +258,15 @@ const BlocksDetails=()=>{
 
         const Tokens = data_list(data)
 
-
-        // const Tokens=[
-        //     {
-        //         id:data.extrinsicInfos.nodes[0].id,
-        //         extrinsicHash:data.extrinsicInfos.nodes[0].extrinsicHash,
-        //         nonce:data.extrinsicInfos.nodes[0].nonce,
-        //         state:data.extrinsicInfos.nodes[0].success,
-        //         by:"System",
-        //         address:"",
-        //         fee:"0.0005",
-        //     },
-        //
-        // ]
-
-
         return(
             <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
-
                 <Header></Header>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-20 mb-14">
                         <div className="mx-auto lg:flex justify-between ">
-
                             <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
                                 Block Details
                             </div>
-                            {/*<div className="flex ">*/}
-                            {/*    <input type="text"*/}
-                            {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"*/}
-                            {/*           placeholder="Search Block,Extrinsic Hash"*/}
-                            {/*    />*/}
-                            {/*    <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
-                            {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
-                            {/*</div>*/}
 
                         </div>
                         <div className="mt-5">

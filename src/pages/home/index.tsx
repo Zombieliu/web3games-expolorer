@@ -8,7 +8,10 @@ import Tail from "../../components/tail";
 import {useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
-import { useManualQuery } from 'graphql-hooks'
+import {useManualQuery } from 'graphql-hooks'
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
+import {BlockSkeleton} from "../../components/skeleton";
 
 
 function classNames(...classes) {
@@ -211,25 +214,10 @@ function DataDiff (blocktime) {
     }
 }
 
-const Home=()=>{
+
+
+const Search = () =>{
     const router = useRouter()
-    const [selected, setSelected] = useState(types[0])
-    const [enabled, setEnabled] = useState(true)
-
-
-    const move=()=>{
-        setEnabled(!enabled)
-    }
-
-
-
-
-    const{loading,error,data} = useQuery(Blcok_Info,{
-        variables:{
-            first:10
-        }
-    })
-
     const [fetchUser] = useManualQuery(GET_USER_QUERY)
 
     const fetchUserThenSomething = async (query_data:string) => {
@@ -238,16 +226,10 @@ const Home=()=>{
         })
         return block
     }
-
-    const GetBlock = (props) => {
-        const value = props.target.id;
-        router.push(`/blocksdetails/${value}`)
-    }
-
+    const [selected, setSelected] = useState(types[0])
     const DataCheck = async (props) =>{
         const key_code = props.nativeEvent.keyCode
         if (key_code == 13){
-            // console.log(selected.name)
             if (selected.name == 'Block'){
                 const value = props.target.value
                 const block = await fetchUserThenSomething(value)
@@ -288,7 +270,7 @@ const Home=()=>{
             }
         }
         else if (selected.name == 'BlockHash'){
-             await router.push(`/blocksdetails/${value}`)
+            await router.push(`/blocksdetails/${value}`)
         }
         else if (selected.name == 'ExtrinsicHash'){
             await router.push(`/extrinsics/${value}`)
@@ -300,169 +282,175 @@ const Home=()=>{
             alert("no data")
         }
     }
+    return (
+        <>
+            <div className="text-5xl text-black font-medium">
+                <div className="mt-5  justify-center hidden xl:flex">
+                    <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -mr-11">
+                        <button onClick={ButtonDataCheck}>
+                            <i className="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <input type="text"
+                           id="homeinput"
+                           className="bg-gray-200 text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
+                           placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
+                           onKeyDown={DataCheck}
+                    />
+                    <div className="-ml-44 -my-2 flex">
 
-
-    if(!data){
-        return(
-            <div>
-
-            </div>
-        )
-
-    }
-    const blocks = data.blockInfos.nodes
-    return(
-        <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
-            <Header></Header>
-            <div className="max-w-7xl mx-auto py-16  px-4 ">
-                <div className=" mb-14">
-                    <div  className="  my-20">
-                        {/**/}
-                        <div className="text-5xl text-black font-medium">
-                        <div className="mt-5  justify-center hidden xl:flex">
-                            <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -mr-11">
-                                <button onClick={ButtonDataCheck}>
-                                    <i className="fa fa-search" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                            <input type="text"
-                                   id="homeinput"
-                                   className="bg-gray-200 text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
-                                   placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
-                                   onKeyDown={DataCheck}
-                            />
-                            <div className="-ml-44 -my-2 flex">
-
-                                <Listbox value={selected} onChange={setSelected} >
-                                    {({ open }) => (
-                                        <>
-                                            <div className=" relative ">
-                                                <Listbox.Button className="relative w-full border-gray-300  border-l    pl-12    text-left cursor-default   sm:text-base">
-                                                    <span className="block truncate text-lg w-24 mr-2"> {selected.name}</span>
-                                                    <span className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
-                <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                        <Listbox value={selected} onChange={setSelected}>
+                            {({open}) => (
+                                <>
+                                    <div className=" relative ">
+                                        <Listbox.Button
+                                            className="relative w-full border-gray-300  border-l    pl-12    text-left cursor-default   sm:text-base">
+                                            <span className="block truncate text-lg w-24 mr-2"> {selected.name}</span>
+                                            <span
+                                                className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
+                <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true"/>
               </span>
-                                                </Listbox.Button>
+                                        </Listbox.Button>
 
-                                                <Transition
-                                                    show={open}
-                                                    as={Fragment}
-                                                    leave="transition ease-in duration-100"
-                                                    leaveFrom="opacity-100"
-                                                    leaveTo="opacity-0"
-                                                >
-                                                    <Listbox.Options className="absolute z-10 mt-1 w-44 bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto  sm:text-sm">
-                                                        {types.map((type) => (
-                                                            <Listbox.Option
-                                                                key={type.id}
-                                                                className={({ active }) =>
-                                                                    classNames(
-                                                                        active ? 'text-white bg-indigo-600' : 'text-gray-900',
-                                                                        'cursor-default select-none relative py-2 pl-8 pr-4'
-                                                                    )
-                                                                }
-                                                                value={type}
-                                                            >
-                                                                {({ selected, active }) => (
-                                                                    <>
+                                        <Transition
+                                            show={open}
+                                            as={Fragment}
+                                            leave="transition ease-in duration-100"
+                                            leaveFrom="opacity-100"
+                                            leaveTo="opacity-0"
+                                        >
+                                            <Listbox.Options
+                                                className="absolute z-10 mt-1 w-44 bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto  sm:text-sm">
+                                                {types.map((type) => (
+                                                    <Listbox.Option
+                                                        key={type.id}
+                                                        className={({active}) =>
+                                                            classNames(
+                                                                active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                                                'cursor-default select-none relative py-2 pl-8 pr-4'
+                                                            )
+                                                        }
+                                                        value={type}
+                                                    >
+                                                        {({selected, active}) => (
+                                                            <>
                         <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
                           {type.name}
                         </span>
-
-                                                                        {selected ? (
-                                                                            <span
-                                                                                className={classNames(
-                                                                                    active ? 'text-white' : 'text-indigo-600',
-                                                                                    'absolute inset-y-0 left-0 flex items-center pl-1.5'
-                                                                                )}
-                                                                            >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                {selected ? (
+                                                                    <span
+                                                                        className={classNames(
+                                                                            active ? 'text-white' : 'text-indigo-600',
+                                                                            'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                                                                        )}
+                                                                    >
+                            <CheckIcon className="h-5 w-5" aria-hidden="true"/>
                           </span>
-                                                                        ) : null}
-                                                                    </>
-                                                                )}
-                                                            </Listbox.Option>
-                                                        ))}
-                                                    </Listbox.Options>
-                                                </Transition>
-                                            </div>
-                                        </>
-                                    )}
-                                </Listbox>
-                            </div>
+                                                                ) : null}
+                                                            </>
+                                                        )}
+                                                    </Listbox.Option>
+                                                ))}
+                                            </Listbox.Options>
+                                        </Transition>
+                                    </div>
+                                </>
+                            )}
+                        </Listbox>
+                    </div>
 
-                        </div></div>
-                        {/**/}
-                        <div className="hidden mt-2  xl:flex" >
-                            <div className="text-xl mt-1 text-gray-400">
-                                Hot Search:</div>
-                            <div className="flex justify-between">
-                            {hotsearch.map(item=>(
+                </div>
+            </div>
+        </>
+    );
+}
 
-                            <div key={item.h1} className="flex ml-5 mt-2">
-                                <img  className="w-6 h-6" src={item.img} alt=""/>
-                               <Link href={item.a}><a  className="text-xs text-gray-400 mt-1 ml-2 hover:text-blue-400">
-                                    {item.h1}</a></Link>
-                            </div>
-                            ))}
-                                <Link href="">
-                                <a  className="ml-5 text-xl mt-1 text-gray-600 hover:text-yellow-600">
-                                    more
-                                    <i className="fa fa-angle-right ml-3 " aria-hidden="true"></i>
-                                </a></Link>
-                            </div>
+const HotSearch = () =>{
+    const router = useRouter()
+    return(
+        <>
+            <div className="hidden mt-2  xl:flex" >
+                <div className="text-xl mt-1 text-gray-400">
+                    Hot Search:</div>
+                <div className="flex justify-between">
+                    {hotsearch.map(item=>(
+
+                        <div key={item.h1} className="flex ml-5 mt-2">
+                            <img  className="w-6 h-6" src={item.img} alt=""/>
+                            <Link href={item.a}><a  className="text-xs text-gray-400 mt-1 ml-2 hover:text-blue-400">
+                                {item.h1}</a></Link>
                         </div>
+                    ))}
+                    <Link href="">
+                        <a  className="ml-5 text-xl mt-1 text-gray-600 hover:text-yellow-600">
+                            more
+                            <i className="fa fa-angle-right ml-3 " aria-hidden="true"></i>
+                        </a></Link>
+                </div>
+            </div>
+        </>
+    )
+}
 
-                        <div className=" xl:flex justify-between">
-                            <div className="xl:w-7/12">
-                        {/*        */}
-                        <div >
-                            <div className="flex justify-between mt-5 bg-white dark:bg-gray-600 rounded-lg ">
+const Announcement = () =>{
+    const router = useRouter()
+    return(
+        <div>
+            <div className="flex justify-between mt-5 bg-white dark:bg-gray-600 rounded-lg ">
 
-                                <div className="flex p-2">
-                                    <div className="flex">
-                                <div className="text-xl xl:text-2xl text-gray-400 ">
-                                <i className="fa fa-bullhorn " aria-hidden="true"></i></div>
+                <div className="flex p-2">
+                    <div className="flex">
+                        <div className="text-xl xl:text-2xl text-gray-400 ">
+                            <i className="fa fa-bullhorn " aria-hidden="true"></i></div>
 
+                    </div>
+                    <div className="text-xs xl:text-sm mt-1.5 text-gray-700 dark:text-gray-400 ml-2 w-11/12 xl:truncate overflow-hidden h-4 xl:h-6">
+                        Temporarily suspend the use of interface of nile/tronex/shasta on Tronscan and Trongrid
+                    </div>
+                </div>
+                <div className="mt-3.5 mr-3">
+                    <Link  href="">
+                        <a className="text-xs xl:text-sm flex text-gray-800 dark:text-gray-400 hover:text-yellow-600">
+                            more
+                            <i className="fa fa-angle-right ml-2 mt-1" aria-hidden="true"></i>
+                        </a>
+                    </Link>
+                </div>
+
+
+            </div>
+        </div>
+    )
+}
+
+const Token = () =>{
+    const router = useRouter()
+    const [enabled, setEnabled] = useState(true)
+    const move=()=>{
+        setEnabled(!enabled)
+    }
+    return(
+        <>
+            <div className="px-5 pt-3 bg-white dark:bg-gray-600  mt-6 rounded-lg shadow-lg">
+                <div className=" grid xl:grid-cols-2 ">
+
+                    {tokens.one.map(token=>(
+
+                        <Link key={token.title} href={token.a}>
+                            <a className="flex justify-between border-b dark:border-gray-500 py-6 mr-5" >
+                                <div className="flex">
+                                    <img className="w-12 h-12"
+                                         src={token.img} alt=""/>
+                                    <div className="ml-12">
+                                        <h1 className="text-gray-400 dark:text-gray-200 text-xs xl:text-sm">
+                                            {token.title}
+                                        </h1>
+                                        <h2 className="text-sm dark:text-gray-300 xl:text-xl font-semibold">
+                                            {token.money}
+                                        </h2>
+
+                                    </div>
                                 </div>
-                                <div className="text-xs xl:text-sm mt-1.5 text-gray-700 dark:text-gray-400 ml-2 w-11/12 xl:truncate overflow-hidden h-4 xl:h-6">
-                                    Temporarily suspend the use of interface of nile/tronex/shasta on Tronscan and Trongrid
-                                </div>
-                                </div>
-                                <div className="mt-3.5 mr-3">
-                                    <Link  href="">
-                                    <a className="text-xs xl:text-sm flex text-gray-800 dark:text-gray-400 hover:text-yellow-600">
-                                        more
-                                        <i className="fa fa-angle-right ml-2 mt-1" aria-hidden="true"></i>
-                                    </a>
-                                    </Link>
-                                </div>
-
-
-                            </div>
-                        </div>
-
-                        {/*        */}
-                        <div className="px-5 pt-5 bg-white dark:bg-gray-600  mt-6 rounded-lg shadow-lg">
-                            <div className=" grid xl:grid-cols-2 ">
-
-                                {tokens.one.map(token=>(
-
-                               <Link key={token.title} href={token.a}>
-                                   <a className="flex justify-between border-b dark:border-gray-500 py-6 mr-5" >
-                            <div className="flex">
-                                <img className="w-12 h-12"
-                                    src={token.img} alt=""/>
-                                <div className="ml-12">
-                                    <h1 className="text-gray-400 dark:text-gray-200 text-xs xl:text-sm">
-                                        {token.title}
-                                    </h1>
-                                    <h2 className="text-sm dark:text-gray-300 xl:text-xl font-semibold">
-                                        {token.money}
-                                    </h2>
-
-                                </div>
-                            </div>
                                 <div className=" ">
                                     <div className="text-gray-200 text-base flex justify-end">
                                         24h
@@ -472,27 +460,27 @@ const Home=()=>{
                                     </div>
 
                                 </div>
-                                </a>
-                               </Link>
-                                ))}
-                        </div>
+                            </a>
+                        </Link>
+                    ))}
+                </div>
 
-                            <div className="">
-                                <Disclosure  >
-                                    {({ open }) => (
-                                        <>
-                                            <div className="">
-                                                <Transition
-                                                    as={Fragment}
-                                                    enter="transition ease-out duration-900"
-                                                    enterFrom="opacity-0 translate-y-1"
-                                                    enterTo="opacity-100 translate-y-0"
-                                                    leave="transition ease-in duration-500"
-                                                    leaveFrom="opacity-100 translate-y-0"
-                                                    leaveTo="opacity-0 translate-y-1"
-                                                >
-                                            <Disclosure.Panel className="grid xl:grid-cols-2">
-                                                {tokens.two.map(token=>(
+                <div className="">
+                    <Disclosure  >
+                        {({ open }) => (
+                            <>
+                                <div className="">
+                                    <Transition
+                                        as={Fragment}
+                                        enter="transition ease-out duration-900"
+                                        enterFrom="opacity-0 translate-y-1"
+                                        enterTo="opacity-100 translate-y-0"
+                                        leave="transition ease-in duration-500"
+                                        leaveFrom="opacity-100 translate-y-0"
+                                        leaveTo="opacity-0 translate-y-1"
+                                    >
+                                        <Disclosure.Panel className="grid xl:grid-cols-2">
+                                            {tokens.two.map(token=>(
                                                 <Link key={token.title} href={token.a}><a className="flex justify-between border-b dark:border-gray-500 py-6 mr-5 " >
                                                     <div className="flex mr-2">
                                                         <img className="w-12 h-12"
@@ -518,203 +506,258 @@ const Home=()=>{
                                                     </div>
                                                 </a>
                                                 </Link>
-                                                ))}
+                                            ))}
 
-                                            </Disclosure.Panel>
-                                                </Transition>
-                                            <div className="flex justify-center py-1.5">
+                                        </Disclosure.Panel>
+                                    </Transition>
+                                    <div className="flex justify-center py-1.5">
 
-                                                    <Disclosure.Button onClick={move} className={enabled?"pr-4 text-sm font-medium text-left text-gray-500 hover:text-black":"hidden"}>
-                                                        <ChevronDownIcon
-                                                            className={` w-5  `}
-                                                            aria-hidden="true"
-                                                        />
-                                                    </Disclosure.Button>
+                                        <Disclosure.Button onClick={move} className={enabled?"pr-4 text-sm font-medium text-left text-gray-500 hover:text-black":"hidden"}>
+                                            <ChevronDownIcon
+                                                className={` w-5  `}
+                                                aria-hidden="true"
+                                            />
+                                        </Disclosure.Button>
 
-                                                <Disclosure.Button onClick={move} className={enabled?"hidden":"pr-4 text-sm font-medium text-left text-gray-500 hover:text-black"}>
-                                                    <ChevronUpIcon
-                                                        className={` w-5  `}
-                                                        aria-hidden="true"
-                                                    />
-                                                </Disclosure.Button>
-                                                </div>
-
-                                            </div>
-                                        </>
-
-                                    )}
-                                </Disclosure>
-
-                                        </div>
-
-                        </div>
-                            </div>
-
-                            {/**/}
-                            <div className="mb-20 xl:mb-0  mt-5 shadow-xl h-80">
-                                <div className=" p-5 px-7 bg-white dark:bg-gray-600 rounded-lg ">
-                                    <div className="flex ">
-                                    <div className="flex justify-between ">
-                                        <img className="w-16 h-16 mr-6"
-                                             src="/web3g2.png" alt=""/>
-                                        <div>
-                                            <h1 className="text-xl font-semibold dark:text-gray-50">W3G</h1>
-                                            <h2 className="text-base text-gray-400 dark:text-gray-400">
-                                                Latest Price
-                                            </h2>
-                                        </div>
+                                        <Disclosure.Button onClick={move} className={enabled?"hidden":"pr-4 text-sm font-medium text-left text-gray-500 hover:text-black"}>
+                                            <ChevronUpIcon
+                                                className={` w-5  `}
+                                                aria-hidden="true"
+                                            />
+                                        </Disclosure.Button>
                                     </div>
-                                    <div className="ml-12 xl:ml-20 ">
-                                        <div className="text-base text-green-500 flex bg-green-200 rounded-lg mb-3">
 
-                                            <div className="ml-2  xl:ml-6 py-1">
-                                                +100%
-                                            </div>
-                                            <i className="fa fa-long-arrow-up  mr-4 xl:ml-2 mt-2" aria-hidden="true"></i>
-                                        </div>
-                                        <div className="text-xs xl:text-lg flex dark:text-gray-100">
-                                            $ 0.07
-                                            <div className="text-gray-300 text-xs xl:text-base ml-2 mt-0.5">
-                                             /USDT
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                    <div className="mt-10 pr-2">
-                                        {project.map(item=>(
-
-
-                                          <Link  key={item.img} href={item.a}>
-                                        <a>
-                                        <div className="flex justify-between pb-2">
-                                            <div className="flex">
-                                            <img className="w-10 h-10" src={item.img} alt=""/>
-                                                <div className="pl-5">
-                                                    <h1 className="text-sm xl:text-base text-gray-400 dark:text-gray-300">
-                                                        {item.title}
-
-                                                    </h1>
-                                                    <h2 className="text-sm xl:text-base dark:text-gray-300">
-                                                        {item.value}
-                                                    </h2>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="">
-                                                <div className="text-gray-300 text-sm xl:text-base">
-                                                    {item.h1}
-                                                </div>
-                                                <div className={classNames(projectStyle[item.states],"text-sm xl:text-base dark:text-gray-300 flex justify-end")} >
-                                                    {item.percentage}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        </a></Link>
-                                        ))}
-
-
-
-
-                                    </div>
                                 </div>
+                            </>
 
+                        )}
+                    </Disclosure>
 
-                            </div>
-                        </div>
+                </div>
 
-                        {/**/}
-                        <div className="mt-20  xl:flex justify-between ">
-                            <div className="bg-white dark:bg-gray-600 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
-                                <div className="text-gray-500 text-2xl mb-5 dark:text-gray-300 font-semibold">
-                                  Finallized  Blocks
-                                </div>
-                                <div className="flex flex-col ">
-                                    <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
-                                        <div className="py-2   min-w-full sm:px-6 xl:px-8">
-                                            <div className="shadow overflow-auto border-b border-gray-200 sm:rounded-lg">
-                                                <table className="min-w-full divide-y divide-gray-200">
-                                                    <thead className="bg-gray-100 dark:bg-gray-300">
-                                                    <tr>
-                                                        <th
-                                                            scope="col"
-                                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                                        >
-                                                            Block
-                                                        </th>
-                                                        <th
-                                                            scope="col"
-                                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                                        >
-                                                            Time
-                                                        </th>
-                                                        <th
-                                                            scope="col"
-                                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                                        >
-                                                            Ex Count
-                                                        </th>
-                                                        <th
-                                                            scope="col"
-                                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                                        >
-                                                            Event
-                                                        </th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
-                                                    {blocks.map(block=>(
-                                                        <tr key={block.id} className="hover:bg-gray-200" >
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                    <button id={block.id} onClick={GetBlock}>
-                                                                        {block.blockHeight}
-                                                                    </button>
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                {DataDiff(block.timestamp)} Second ago
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                                {block.extrinsicNumber}
-                                                            </td>
-                                                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
-                                                                {block.eventNumber}
-                                                            </td>
+            </div>
+        </>
+    )
+}
 
-                                                        </tr>
-                                                    ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
+const Project = () =>{
+    const router = useRouter()
+    return(
+        <>
+            <div className="mb-20 xl:mb-0  mt-5 shadow-xl h-80">
+                <div className=" p-5 px-7 bg-white dark:bg-gray-600 rounded-lg ">
+                    <div className="flex ">
+                        <div className="flex justify-between ">
+                            <img className="w-16 h-16 mr-6"
+                                 src="/web3g2.png" alt=""/>
                             <div>
-                                <div className="bg-white dark:bg-gray-600 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
-                                    <div className="text-gray-500 dark:text-gray-200 text-2xl mb-6 font-semibold">
-                                        News
-                                    </div>
-                                    <div className=" xl:w-80">
-                                        <div className="dark:bg-gray-600">
-                                            <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                            <a className="twitter-timeline" data-width="600" data-height="600">
-                                                A Twitter List by web3games</a></Link>
-                                            <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8"></Script>
-                                        </div>
+                                <h1 className="text-xl font-semibold dark:text-gray-50">W3G</h1>
+                                <h2 className="text-base text-gray-400 dark:text-gray-400">
+                                    Latest Price
+                                </h2>
+                            </div>
+                        </div>
+                        <div className="ml-12 xl:ml-20 ">
+                            <div className="text-base text-green-500 flex bg-green-200 rounded-lg mb-3">
 
-                                    </div>
+                                <div className="ml-2  xl:ml-6 py-1">
+                                    +100%
                                 </div>
-
+                                <i className="fa fa-long-arrow-up  mr-4 xl:ml-2 mt-2" aria-hidden="true"></i>
+                            </div>
+                            <div className="text-xs xl:text-lg flex dark:text-gray-100">
+                                $ 0.07
+                                <div className="text-gray-300 text-xs xl:text-base ml-2 mt-0.5">
+                                    /USDT
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div className="mt-10 pr-2">
+                        {project.map(item=>(
+                            <Link  key={item.img} href={item.a}>
+                                <a>
+                                    <div className="flex justify-between pb-2">
+                                        <div className="flex">
+                                            <img className="w-10 h-10" src={item.img} alt=""/>
+                                            <div className="pl-5">
+                                                <h1 className="text-sm xl:text-base text-gray-400 dark:text-gray-300">
+                                                    {item.title}
+                                                </h1>
+                                                <h2 className="text-sm xl:text-base dark:text-gray-300">
+                                                    {item.value}
+                                                </h2>
+                                            </div>
+                                        </div>
+                                        <div className="">
+                                            <div className="text-gray-300 text-sm xl:text-base">
+                                                {item.h1}
+                                            </div>
+                                            <div className={classNames(projectStyle[item.states],"text-sm xl:text-base dark:text-gray-300 flex justify-end")} >
+                                                {item.percentage}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a></Link>
+                        ))}
+                    </div>
+                </div>
 
 
+            </div>
+
+        </>
+    )
+}
+
+const Blocks = () =>{
+    const router = useRouter()
+    const{loading,error,data} = useQuery(Blcok_Info,{
+        variables:{
+            first:10
+        }
+    })
+    const GetBlock = (props) => {
+        const value = props.target.id;
+        router.push(`/blocksdetails/${value}`)
+    }
+    if(loading){
+        return(
+            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+                <BlockSkeleton/>
+            </div>
+        )
+    }
+    const blocks = data.blockInfos.nodes
+    return(
+        <>
+            <div className="bg-white dark:bg-gray-600 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
+                <div className="text-gray-500 text-2xl mb-5 dark:text-gray-300 font-semibold">
+                    Finallized  Blocks
+                </div>
+                <div className="flex flex-col ">
+                    <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
+                        <div className="py-2   min-w-full sm:px-6 xl:px-8">
+                            <div className="shadow overflow-auto border-b border-gray-200 sm:rounded-lg">
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-100 dark:bg-gray-300">
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                        >
+                                            Block
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                        >
+                                            Time
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                        >
+                                            Ex Count
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                        >
+                                            Event
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                                    {blocks.map(block=>(
+                                        <tr key={block.id} className="hover:bg-gray-200" >
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                <button id={block.id} onClick={GetBlock}>
+                                                    {block.blockHeight}
+                                                </button>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {DataDiff(block.timestamp)} Second ago
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {block.extrinsicNumber}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                                                {block.eventNumber}
+                                            </td>
+
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </>
+    )
+}
+
+const News = () =>{
+    return(
+        <><div>
+                <div className="bg-white dark:bg-gray-600 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
+                    <div className="text-gray-500 dark:text-gray-200 text-2xl mb-6 font-semibold">
+                        News
+                    </div>
+                    <div className=" xl:w-80">
+                        <div className="dark:bg-gray-600">
+                            <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
+                                <a className="twitter-timeline" data-width="600" data-height="600">
+                                    A Twitter List by web3games</a></Link>
+                            <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <Tail></Tail>
+        </>
+    )
+}
+
+const Home=()=>{
+    const router = useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
+
+    return(
+        <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+            <Header/>
+            <div className="max-w-7xl mx-auto py-16  px-4 ">
+                <div className=" mb-14">
+                    <div className="my-20">
+                        {/*<Search/>*/}
+                        {/* future*/}
+                        {/*<HotSearch/>*/}
+                        {/*<div className=" xl:flex justify-between">*/}
+                        {/*    <div className="xl:w-7/12">*/}
+                        {/*        <Announcement/>*/}
+                        {/*        <Token/>*/}
+                        {/*    </div>*/}
+                        {/*    <Project/>*/}
+                        {/*</div>*/}
+                        <div className="mt-20  xl:flex justify-between ">
+                            <Blocks/>
+                            <News></News>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Tail/>
         </div>
 
     )
@@ -722,3 +765,5 @@ const Home=()=>{
 
 
 export  default Home
+
+
