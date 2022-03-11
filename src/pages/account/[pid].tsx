@@ -123,7 +123,7 @@ const Account=()=>{
       const {pid} = router.query;
       setAccount(`${pid}`)
       // axios.get(`http://47.242.8.196:3003/api/get/get_balance?account=${pid}`,
-      axios.get(`http://localhost:3003/api/get/get_balance?account=${pid}`, {
+      axios.get(`http://localhost:3002/api/get/get_balance?account=${pid}`, {
       })
           .then(function (response) {
             if (Number(response.data.data) >= 100000000){
