@@ -11,6 +11,7 @@ import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {darkModeAtom} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
+import Error from "../../components/error";
 
 
 function classNames(...classes) {
@@ -182,7 +183,7 @@ const Transactions=()=> {
   if (error) {
     return (
         <div>
-          {error}
+          <Error/>
         </div>
     )
 

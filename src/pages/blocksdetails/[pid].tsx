@@ -9,7 +9,8 @@ import {useRouter} from "next/router";
 import {useQuery} from "graphql-hooks";
 import {useAtom} from "jotai";
 import { darkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
-
+import Error from  '../../components/error'
+import {DetailsSkeleton} from "../../components/skeleton";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -64,6 +65,34 @@ const Block_Info = `
   }
 }
 `
+
+function DataDiff (blockTime) {
+    const start = new Date(blockTime).getTime();
+    const end = new Date().getTime();
+    const milliseconds = Math.abs(end - start).toString()
+    // @ts-ignore
+    const seconds = parseInt(String(milliseconds / 1000));
+    const minutes = parseInt(String(seconds / 60));
+    const hours = parseInt(String(minutes / 60));
+    const days = parseInt(String(hours / 24));
+    if (days >= 1){
+        let new_hours = hours - days * 24
+        let new_minutes = minutes  - hours * 60
+        let new_seconds = seconds - minutes * 60
+        return `${days} days ${new_hours} hours ${new_minutes} minutes ${new_seconds} seconds ago`
+    }else if (hours >= 1){
+        let new_minutes = minutes  - hours * 60
+        let new_seconds = seconds - minutes * 60
+        return `${hours} hours ${new_minutes} minutes ${new_seconds} seconds ago`
+    }else if (minutes >= 1){
+        let new_seconds = seconds - minutes * 60
+        return `${minutes} minutes ${new_seconds} seconds ago`
+    }else if (seconds >= 1){
+        return `${seconds} seconds ago`
+    }else{
+        return `now`
+    }
+}
 
 class extrinsicInfo {
     private id: string;
@@ -120,8 +149,12 @@ function data_list(data: any){
         return data_list
 }
 
-const Overview = () =>{
-    const router = useRouter()
+const GetBlockData = (blockTime) => {
+    const start = new Date(blockTime).toUTCString();
+    return `${start}`
+}
+
+const Overview = (props:any) =>{
     const [,setIsOpen] = useAtom(CopyValue)
     const Copy=(span)=>{
         console.log(span)
@@ -139,6 +172,21 @@ const Overview = () =>{
         }
     }
 
+    let time = DataDiff(props.data.extrinsicInfos.nodes[0].blockHash.timestamp)
+    let utc = GetBlockData(props.data.extrinsicInfos.nodes[0].blockHash.timestamp)
+    const overview=[
+        {
+            block:`#${props.data.extrinsicInfos.nodes[0].blockHash.blockHeight}`,
+            timestamp:time,
+            UTCtime:utc,
+            blockHash:props.data.extrinsicInfos.nodes[0].blockHash.id,
+            parentBlockHash:props.data.extrinsicInfos.nodes[0].blockHash.parentBlockHash,
+            extrinsicsHash:props.data.extrinsicInfos.nodes[0].blockHash.extrinsicsHash,
+            contentHash:props.data.extrinsicInfos.nodes[0].blockHash.contentHash,
+            State:props.data.extrinsicInfos.nodes[0].blockHash.state,
+            extrinsicNumber:props.data.extrinsicInfos.nodes[0].blockHash.extrinsicNumber,
+        }
+    ]
     return(
       <>
           <div className="mt-5">
@@ -274,8 +322,18 @@ const Overview = () =>{
     )
 }
 
-const Extrinsic = () =>{
+const Extrinsic = (props:any) =>{
     const router = useRouter()
+    const Tokens = data_list(props.data)
+
+    async function getAccount(e){
+        await router.push(`/account/${e.target.id}`)
+    }
+    const GetExtrinsics = (props) => {
+        const value = props.target.id;
+        router.push(`/extrinsics/${value}`)
+    }
+
     return(
       <>
           <div className="mt-5">
@@ -340,9 +398,13 @@ const Extrinsic = () =>{
       </>
     )
 }
+
+
+
 const BlocksDetails=()=>{
     const router = useRouter()
     const [enabledNightMode,] = useAtom(darkModeAtom)
+
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){
@@ -353,7 +415,8 @@ const BlocksDetails=()=>{
         }
     },[router.isReady])
 
-    const [Block,changeBlock] = useState('0xa5f01bf449536de62bb9719134ca7e28a90a8c837fe07cc2b81733fe163049d1')
+    const [Block,changeBlock] = useState('')
+
     useEffect(()=>{
         if (router.isReady) {
             const pid = router.query.pid
@@ -368,90 +431,28 @@ const BlocksDetails=()=>{
         }
     })
 
-    function DataDiff (blockTime) {
-        const start = new Date(blockTime).getTime();
-        const end = new Date().getTime();
-        const milliseconds = Math.abs(end - start).toString()
-        // @ts-ignore
-        const seconds = parseInt(String(milliseconds / 1000));
-        const minutes = parseInt(String(seconds / 60));
-        const hours = parseInt(String(minutes / 60));
-        const days = parseInt(String(hours / 24));
-        if (days >= 1){
-            let new_hours = hours - days * 24
-            let new_minutes = minutes  - hours * 60
-            let new_seconds = seconds - minutes * 60
-            return `${days} days ${new_hours} hours ${new_minutes} minutes ${new_seconds} seconds ago`
-        }else if (hours >= 1){
-            let new_minutes = minutes  - hours * 60
-            let new_seconds = seconds - minutes * 60
-            return `${hours} hours ${new_minutes} minutes ${new_seconds} seconds ago`
-        }else if (minutes >= 1){
-            let new_seconds = seconds - minutes * 60
-            return `${minutes} minutes ${new_seconds} seconds ago`
-        }else if (seconds >= 1){
-            return `${seconds} seconds ago`
-        }else{
-            return `now`
-        }
-    }
-
-    function GetBlockData(blockTime) {
-        const start = new Date(blockTime).toUTCString();
-        return `${start}`
-    }
-
-    async function getAccount(e){
-       await router.push(`/account/${e.target.id}`)
-    }
-
-
-
-    const GetExtrinsics = (props) => {
-        const value = props.target.id;
-        router.push(`/extrinsics/${value}`)
-    }
 
     if (loading){
         return(
-            <div>
-                {loading}
+            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+                <DetailsSkeleton/>
             </div>
         )
     }
 
     if(error){
         return(
-            <div>
-                {error}
-            </div>
+            <Error/>
         )
 
     }
 
-    // console.log(data.blockInfos.nodes[0])
-    if (data){
-        console.log(data)
-        // console.log(data.blockInfos.nodes[0]);
-        let time = DataDiff(data.extrinsicInfos.nodes[0].blockHash.timestamp)
-        let utc = GetBlockData(data.extrinsicInfos.nodes[0].blockHash.timestamp)
-        // console.log(DataDiff(data.blockInfos.nodes[0].timestamp));
-        const overview=[
-            {
-                block:`#${data.extrinsicInfos.nodes[0].blockHash.blockHeight}`,
-                timestamp:time,
-                UTCtime:utc,
-                blockHash:data.extrinsicInfos.nodes[0].blockHash.id,
-                parentBlockHash:data.extrinsicInfos.nodes[0].blockHash.parentBlockHash,
-                extrinsicsHash:data.extrinsicInfos.nodes[0].blockHash.extrinsicsHash,
-                contentHash:data.extrinsicInfos.nodes[0].blockHash.contentHash,
-                State:data.extrinsicInfos.nodes[0].blockHash.state,
-                extrinsicNumber:data.extrinsicInfos.nodes[0].blockHash.extrinsicNumber,
-            }
-        ]
-        const Tokens = data_list(data)
-
-        return(
+    if (data.extrinsicInfos.nodes.length == 0){
+      return (
+              <Error></Error>
+      )
+    }else{
+        return (
             <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
                 <Header></Header>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
@@ -461,14 +462,11 @@ const BlocksDetails=()=>{
                                 Block Details
                             </div>
                         </div>
-                        <Overview/>
-                        <Extrinsic/>
+                        <Overview data={data}/>
+                        <Extrinsic data={data}/>
                     </div>
-
                 </div>
                 <Tail></Tail>
-
-
             </div>
         )
     }

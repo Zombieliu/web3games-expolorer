@@ -9,6 +9,8 @@ import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {darkModeAtom, darkModeImg, EventValue} from "../../jotai";
 import {useManualQuery } from 'graphql-hooks'
+import {DetailsSkeleton} from "../../components/skeleton";
+import Error from "../../components/error";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -477,26 +479,22 @@ const Extrinsics=()=>{
 
     if (loading){
         return(
-            <div>
-                3
+            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+                <DetailsSkeleton/>
             </div>
         )
     }
 
     if(error){
         return(
-            <div>
-                2
-            </div>
+            <Error/>
         )
 
     }
 
     if(data.eventInfos.nodes.length == 0){
         return (
-            <div>
-                1
-            </div>
+            <Error/>
         )
     }else{
         return(

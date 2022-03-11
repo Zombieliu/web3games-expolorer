@@ -7,6 +7,8 @@ import {useRouter} from "next/router";
 import {useQuery} from 'graphql-hooks'
 import {useAtom} from "jotai";
 import {darkModeAtom, darkModeImg} from "../../jotai";
+import Error from "../../components/error";
+import {DetailsSkeleton} from "../../components/skeleton";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -104,28 +106,23 @@ const Events=()=>{
 
     if (loading){
         return(
-            <div>
-                {loading}
+            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+                <DetailsSkeleton/>
             </div>
         )
     }
 
     if(error){
         return(
-            <div>
-                {error}
-            </div>
+            <Error/>
         )
 
     }
     if(data.eventInfos.nodes.length == 0){
         return (
-            <div>
-                1
-            </div>
+            <Error/>
         )
     }else{
-        console.log(data)
         const Data = data_type(data)
         const overview=[
             {

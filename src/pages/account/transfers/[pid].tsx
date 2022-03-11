@@ -10,7 +10,8 @@ import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {AccountValue, darkModeAtom, darkModeImg} from "../../../jotai";
 import {useQuery} from "graphql-hooks";
-import {lineBreakG} from "acorn";
+import Error from "../../../components/error";
+import {DetailsSkeleton} from "../../../components/skeleton";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -174,8 +175,8 @@ const Transfers=()=>{
 
   if (loading) {
     return (
-        <div>
-          {loading}
+        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+          <DetailsSkeleton/>
         </div>
     )
   }
@@ -183,7 +184,7 @@ const Transfers=()=>{
   if (error) {
     return (
         <div>
-          {error}
+          <Error/>
         </div>
     )
   }

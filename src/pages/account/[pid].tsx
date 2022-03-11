@@ -9,6 +9,8 @@ import {useAtom} from "jotai";
 import {AccountBalanceValue, AccountValue, darkModeAtom, darkModeImg} from "../../jotai";
 import {useQuery} from "graphql-hooks";
 import axios from "axios";
+import Error from "../../components/error";
+import {DetailsSkeleton} from "../../components/skeleton";
 
 
 function classNames(...classes) {
@@ -162,17 +164,15 @@ const Account=()=>{
 
   if (loading) {
     return (
-        <div>
-          {loading}
+        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+          <DetailsSkeleton/>
         </div>
     )
   }
 
   if (error) {
     return (
-        <div>
-          {error}
-        </div>
+        <Error/>
     )
 
   }
