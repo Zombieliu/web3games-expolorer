@@ -8,7 +8,7 @@ let graphQLClient
 function createClient(initialState) {
     return new GraphQLClient({
         ssrMode: typeof window === 'undefined',
-        url: 'http://localhost:3000', // Server URL (must be absolute)
+        url: 'http://47.242.8.196:3000', // Server URL (must be absolute)
         cache: memCache({initialState}),
     })
 
