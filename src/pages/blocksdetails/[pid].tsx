@@ -8,7 +8,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
 import {useQuery} from "graphql-hooks";
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import { darkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
 
 
 function classNames(...classes) {
@@ -120,11 +120,228 @@ function data_list(data: any){
         return data_list
 }
 
+const Overview = () =>{
+    const router = useRouter()
+    const [,setIsOpen] = useAtom(CopyValue)
+    const Copy=(span)=>{
+        console.log(span)
+        const spanText = document.getElementById(span).innerText;
+        const oInput = document.createElement('input');
+        oInput.value = spanText;
+        document.body.appendChild(oInput);
+        oInput.select();
+        document.execCommand('Copy');
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+        document.body.removeChild(oInput);
+        if(oInput){
+            setIsOpen(true)
+        }
+    }
+
+    return(
+      <>
+          <div className="mt-5">
+              <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
+                  <div className="py-5 min-w-full  p-5 dark:text-gray-200">
+                      <div className="flex my-5 text-xl font-semibold text-gray-700">
+
+                          <div>
+                              Overview
+                          </div>
+
+                      </div>
+                      <div className="text-gray-400 text-sm ">
+                          {overview.map(item=>(
+                            <div key={item.block}>
+                                <div className="md:flex justify-between lg:justify-start  my-3 ">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Block
+                                    </div>
+                                    <div className="text-gray-800 " id="block">
+                                        {item.block}  <button onClick={() => {
+                                        // @ts-ignore
+                                        Copy("block");
+                                    }}> <i className="fa fa-clone mt-1" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <div className="md:flex  justify-between lg:justify-start my-3">
+                                    <div className="font-semibold justify-between lg:font-medium  w-60 mr-32">
+                                        Timestamp
+                                    </div>
+                                    <div className="h-auto  lg:flex">
+                                        <div className="text-gray-800 ">
+                                            {item.timestamp}
+                                        </div>
+                                        <div className="flex">
+                                            <div className="mx-3 hidden lg:inline-block">
+                                                |
+                                            </div>
+                                            <div className="md:flex">
+                                                <div className="">
+                                                    <i className="fa fa-clock-o" aria-hidden="true"></i>  {item.UTCtime} +UTC
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className=" md:flex justify-between lg:justify-start my-3 ">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Block Hash
+                                    </div>
+                                    <div id={item.blockHash} className="text-gray-800 text-xs lg:text-sm   break-words ">
+                                        {item.blockHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.blockHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Parent Block Hash
+                                    </div>
+                                    <div id={item.parentBlockHash} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                        {item.parentBlockHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.parentBlockHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Extrinsics Hash
+                                    </div>
+                                    <div id={item.extrinsicsHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                        {item.extrinsicsHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.extrinsicsHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3 ">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Content Hash
+                                    </div>
+                                    <div id={item.contentHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                        {item.contentHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.contentHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        State Hash
+                                    </div>
+                                    <div id={item.State} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                        {item.State} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.State}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex  justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Extrinsics
+                                    </div>
+                                    <div className="md:flex justify-between lg:justify-start text-gray-800">
+
+                                        <div className="flex ">
+                                            <div>Total</div>
+                                            <div className=" mx-1   font-semibold">{item.extrinsicNumber}</div>
+                                            <div>Extrinsics</div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div> ))}
+                      </div>
+
+                  </div>
+              </div>
+          </div></>
+    )
+}
+
+const Extrinsic = () =>{
+    const router = useRouter()
+    return(
+      <>
+          <div className="mt-5">
+              <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
+                  <div className="py-2 min-w-full  p-5 dark:text-gray-200">
+                      <div className="flex my-5 text-xl font-semibold text-gray-700">
+
+                          <div>
+                              Extrinsic
+                          </div>
+
+                      </div>
+                      <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
+                          <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-100 dark:bg-gray-300">
+                              <tr>
+                                  {tokenstitle.map(title=>(
+                                    <th key={title.title}
+                                        scope="col"
+                                        className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                    >
+                                        {title.title}
+                                        <i className={title.title} aria-hidden="true"></i>
+                                    </th>
+                                  ))}
+                              </tr>
+                              </thead>
+                              <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                              {Tokens.map(token=>(
+                                <tr key={token.id} className="hover:bg-gray-200" >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                        <button id={token.extrinsicHash} onClick={GetExtrinsics}>
+                                            {token.id}
+                                        </button>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
+                                        <button id={token.extrinsicHash} onClick={GetExtrinsics}>
+                                            {token.extrinsicHash}
+                                        </button>
+                                    </td>
+                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                                        {token.nonce}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {token.state ? "success" : "fail"}
+                                    </td>
+                                    <td  className="px-6 py-4 whitespace-nowrap text-base ">
+                                        <button onClick={getAccount} className="text-blue-400" id={token.address}>
+                                            {token.by}
+                                        </button>
+                                    </td>
+                                </tr>
+                              ))}
+                              </tbody>
+                          </table>
+                      </div>
+
+                      <Sort></Sort>
+                  </div>
+              </div>
+          </div>
+      </>
+    )
+}
 const BlocksDetails=()=>{
     const router = useRouter()
-    const [Block,changeBlock] = useState('0xa5f01bf449536de62bb9719134ca7e28a90a8c837fe07cc2b81733fe163049d1')
-    let [isOpen, setIsOpen] = useState(false)
-
     const [enabledNightMode,] = useAtom(darkModeAtom)
     useEffect(()=>{
         if (router.isReady){
@@ -136,6 +353,7 @@ const BlocksDetails=()=>{
         }
     },[router.isReady])
 
+    const [Block,changeBlock] = useState('0xa5f01bf449536de62bb9719134ca7e28a90a8c837fe07cc2b81733fe163049d1')
     useEffect(()=>{
         if (router.isReady) {
             const pid = router.query.pid
@@ -187,29 +405,7 @@ const BlocksDetails=()=>{
        await router.push(`/account/${e.target.id}`)
     }
 
-    const Copy=(span)=>{
-        console.log(span)
-            const spanText = document.getElementById(span).innerText;
-            const oInput = document.createElement('input');
-            oInput.value = spanText;
-            document.body.appendChild(oInput);
-            oInput.select();
-            document.execCommand('Copy');
-            oInput.className = 'oInput';
-            oInput.style.display = 'none';
-            document.body.removeChild(oInput);
-            if(oInput){
-                setIsOpen(true)
-            }
-    }
 
-    function closeModal() {
-        setIsOpen(false)
-    }
-
-    function openModal() {
-        setIsOpen(true)
-    }
 
     const GetExtrinsics = (props) => {
         const value = props.target.id;
@@ -253,9 +449,6 @@ const BlocksDetails=()=>{
                 extrinsicNumber:data.extrinsicInfos.nodes[0].blockHash.extrinsicNumber,
             }
         ]
-
-
-
         const Tokens = data_list(data)
 
         return(
@@ -267,254 +460,15 @@ const BlocksDetails=()=>{
                             <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
                                 Block Details
                             </div>
-
                         </div>
-                        <div className="mt-5">
-                            <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
-                                <div className="py-5 min-w-full  p-5 dark:text-gray-200">
-                                    <div className="flex my-5 text-xl font-semibold text-gray-700">
-
-                                        <div>
-                                            Overview
-                                        </div>
-
-                                    </div>
-                                    <div className="text-gray-400 text-sm ">
-                                        {overview.map(item=>(
-                                            <div key={item.block}>
-                                                <div className="md:flex justify-between lg:justify-start  my-3 ">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Block
-                                                    </div>
-                                                    <div className="text-gray-800 " id="block">
-                                                        {item.block}  <button onClick={() => {
-                                                        // @ts-ignore
-                                                        Copy("block");
-                                                    }}> <i className="fa fa-clone mt-1" aria-hidden="true"></i></button>
-                                                    </div>
-                                                </div>
-                                                <div className="md:flex  justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold justify-between lg:font-medium  w-60 mr-32">
-                                                        Timestamp
-                                                    </div>
-                                                    <div className="h-auto  lg:flex">
-                                                        <div className="text-gray-800 ">
-                                                            {item.timestamp}
-                                                        </div>
-                                                        <div className="flex">
-                                                            <div className="mx-3 hidden lg:inline-block">
-                                                                |
-                                                            </div>
-                                                            <div className="md:flex">
-                                                                <div className="">
-                                                                    <i className="fa fa-clock-o" aria-hidden="true"></i>  {item.UTCtime} +UTC
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className=" md:flex justify-between lg:justify-start my-3 ">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Block Hash
-                                                    </div>
-                                                    <div id={item.blockHash} className="text-gray-800 text-xs lg:text-sm   break-words ">
-                                                        {item.blockHash} &nbsp;
-                                                        <button onClick={() => {
-                                                        // @ts-ignore
-                                                        Copy(`${item.blockHash}`);}}>
-                                                        <i className="fa fa-clone mt-1" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Parent Block Hash
-                                                    </div>
-                                                    <div id={item.parentBlockHash} className="text-gray-800  text-xs lg:text-sm  break-words">
-                                                        {item.parentBlockHash} &nbsp;
-                                                        <button onClick={() => {
-                                                            // @ts-ignore
-                                                            Copy(`${item.parentBlockHash}`);}}>
-                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Extrinsics Hash
-                                                    </div>
-                                                    <div id={item.extrinsicsHash} className="text-gray-800  text-xs lg:text-sm break-words ">
-                                                        {item.extrinsicsHash} &nbsp;
-                                                        <button onClick={() => {
-                                                            // @ts-ignore
-                                                            Copy(`${item.extrinsicsHash}`);}}>
-                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3 ">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Content Hash
-                                                    </div>
-                                                    <div id={item.contentHash} className="text-gray-800  text-xs lg:text-sm break-words ">
-                                                        {item.contentHash} &nbsp;
-                                                        <button onClick={() => {
-                                                            // @ts-ignore
-                                                            Copy(`${item.contentHash}`);}}>
-                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        State Hash
-                                                    </div>
-                                                    <div id={item.State} className="text-gray-800  text-xs lg:text-sm  break-words">
-                                                        {item.State} &nbsp;
-                                                        <button onClick={() => {
-                                                            // @ts-ignore
-                                                            Copy(`${item.State}`);}}>
-                                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div className="md:flex  justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Extrinsics
-                                                    </div>
-                                                    <div className="md:flex justify-between lg:justify-start text-gray-800">
-
-                                                        <div className="flex ">
-                                                            <div>Total</div>
-                                                            <div className=" mx-1   font-semibold">{item.extrinsicNumber}</div>
-                                                            <div>Extrinsics</div>
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-                                            </div> ))}
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="mt-5">
-                            <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
-                                <div className="py-2 min-w-full  p-5 dark:text-gray-200">
-                                    <div className="flex my-5 text-xl font-semibold text-gray-700">
-
-                                        <div>
-                                            Extrinsic
-                                        </div>
-
-                                    </div>
-                                    <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                                        <table className="min-w-full divide-y divide-gray-200">
-                                            <thead className="bg-gray-100 dark:bg-gray-300">
-                                            <tr>
-                                                {tokenstitle.map(title=>(
-                                                    <th key={title.title}
-                                                        scope="col"
-                                                        className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                                    >
-                                                        {title.title}
-                                                        <i className={title.title} aria-hidden="true"></i>
-                                                    </th>
-                                                ))}
-                                            </tr>
-                                            </thead>
-                                            <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
-                                            {Tokens.map(token=>(
-                                                <tr key={token.id} className="hover:bg-gray-200" >
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                        <button id={token.extrinsicHash} onClick={GetExtrinsics}>
-                                                            {token.id}
-                                                        </button>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
-                                                        <button id={token.extrinsicHash} onClick={GetExtrinsics}>
-                                                            {token.extrinsicHash}
-                                                        </button>
-                                                    </td>
-                                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
-                                                        {token.nonce}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                        {token.state ? "success" : "fail"}
-                                                    </td>
-                                                    <td  className="px-6 py-4 whitespace-nowrap text-base ">
-                                                        <button onClick={getAccount} className="text-blue-400" id={token.address}>
-                                                            {token.by}
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <Sort></Sort>
-                                </div>
-                            </div>
-                        </div>
+                        <Overview/>
+                        <Extrinsic/>
                     </div>
 
                 </div>
                 <Tail></Tail>
 
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="fixed inset-0 z-40  -mt-72"
-                        onClose={closeModal}
-                    >
-                        <div className="min-h-screen px-4 text-center ">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                                <Dialog.Overlay className="fixed inset-0" />
-                            </Transition.Child>
 
-                            {/* This element is to trick the browser into centering the modal contents. */}
-                            <span
-                                className="inline-block h-screen align-middle"
-                                aria-hidden="true"
-                            >
-              &#8203;
-            </span>
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <div className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                                    <div className="flex justify-center">
-                                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
-                                    </div>
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        Copy successfully !
-                                    </Dialog.Title>
-                                </div>
-                            </Transition.Child>
-                        </div>
-                    </Dialog>
-                </Transition>
             </div>
         )
     }
