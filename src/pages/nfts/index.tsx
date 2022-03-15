@@ -1,7 +1,6 @@
 import Header from "../../components/header";
 import React, {Fragment, useEffect, useState} from "react";
 import NFTHeader from "../../components/NFT-header";
-import Sort from "../../components/sort";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
@@ -132,7 +131,7 @@ const Content = () =>{
                     ))}
                 </div>
 
-                <Sort></Sort>
+                {/*<Sort></Sort>*/}
             </div>
         </>
     )

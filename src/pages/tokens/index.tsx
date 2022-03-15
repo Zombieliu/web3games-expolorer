@@ -11,7 +11,6 @@ import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
-import Sort from "../../components/sort";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {darkModeAtom, darkModeImg} from "../../jotai";
@@ -565,7 +564,7 @@ const Token=()=>{
                             <div className="py-2    min-w-full  p-5 dark:text-gray-200">
 
                                 <Content/>
-                                <Sort></Sort>
+                                {/*<Sort></Sort>*/}
                             </div>
                         </div>
                     </div>
