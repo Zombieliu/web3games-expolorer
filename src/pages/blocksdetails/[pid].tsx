@@ -2,7 +2,6 @@ import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
-import Sort from "../../components/sort";
 import {CheckCircleIcon, XIcon} from "@heroicons/react/solid";
 import {Dialog, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
@@ -391,7 +390,7 @@ const Extrinsic = (props:any) =>{
                           </table>
                       </div>
 
-                      <Sort></Sort>
+                      {/*<Sort></Sort>*/}
                   </div>
               </div>
           </div>

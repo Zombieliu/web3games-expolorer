@@ -2,14 +2,13 @@ import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
-import Sort from "../../components/sort";
-import {CheckCircleIcon} from "@heroicons/react/solid";
+import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom} from "../../jotai";
+import {darkModeAtom, extrinsicPageNumberValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -39,8 +38,8 @@ const tokenstitle=[
 
 
 const Block_Info = `
- query {
-  extrinsicInfos(first:20,orderBy:TIMESTAMP_DESC){
+ query HomePage($first: Int) { 
+  extrinsicInfos(first:20,offset:$first,orderBy:TIMESTAMP_DESC){
     nodes{
       id
       extrinsicHeight
@@ -49,6 +48,7 @@ const Block_Info = `
       success
       signerId
     }
+    totalCount
   }
 }
 `
@@ -117,10 +117,88 @@ function data_list(data: any){
   return data_list
 }
 
+const Sort=(props:any)=>{
+  const extrinsic_number = props.data.extrinsicInfos.totalCount
+
+  let extrinsic_number_pages = (extrinsic_number / 20)
+
+
+  if (extrinsic_number_pages > 500){
+    extrinsic_number_pages = 500
+  }
+
+  const router = useRouter()
+  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [extrinsicPageNumber,SetextrinsicPageNumber] = useAtom(extrinsicPageNumberValue)
+  useEffect(()=>{
+    if (router.isReady){
+      if (enabledNightMode == true){
+        document.documentElement.classList.add('dark');
+      }else{
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  },[router.isReady])
+
+
+  const addPageCounter = ()=>{
+    if (extrinsicPageNumber != extrinsic_number_pages){
+      SetextrinsicPageNumber(extrinsicPageNumber + 1)
+    }
+  }
+
+  const decPageCounter = ()=>{
+    if (extrinsicPageNumber != 1){
+      SetextrinsicPageNumber(extrinsicPageNumber - 1)
+    }
+  }
+
+  const lastPage = ()=>{
+    SetextrinsicPageNumber(extrinsic_number_pages)
+  }
+
+  const firstPage = ()=>{
+    SetextrinsicPageNumber(1)
+  }
+
+  return(
+      <div>
+        <div className="rounded-md   flex justify-end my-5" aria-label="Pagination">
+          <button
+              onClick={firstPage}
+              className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <span className="">First</span>
+          </button>
+          <button
+              onClick={decPageCounter}
+              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <span className="sr-only">Previous</span>
+            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <div className="bg-white border-gray-300 hidden lg:inline-block text-gray-500  relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+            Page {extrinsicPageNumber} of {extrinsic_number_pages}
+          </div>
+          <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span className="sr-only">Next</span>
+            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <button
+              onClick={lastPage}
+              className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <span className="">Last</span>
+          </button>
+        </div>
+      </div>
+  )
+}
+
 const Transactions=()=> {
   const router = useRouter()
   const [enabledNightMode,] = useAtom(darkModeAtom)
-
+  const [extrinsicPageNumber,] = useAtom(extrinsicPageNumberValue)
   useEffect(()=>{
       if (router.isReady){
         if (enabledNightMode == true){
@@ -136,7 +214,11 @@ const Transactions=()=> {
   let [isOpen, setIsOpen] = useState(false)
 
 
-  const {loading, error, data}: any = useQuery(Block_Info, {})
+  const {loading, error, data}: any = useQuery(Block_Info, {
+    variables:{
+      first:(extrinsicPageNumber - 1) * 20
+    },
+  })
 
   const Copy = (span) => {
 
@@ -191,6 +273,7 @@ const Transactions=()=> {
   }
 
   if (data) {
+    console.log(data)
     const extrinsic = data_list(data)
     return (
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
@@ -275,7 +358,7 @@ const Transactions=()=> {
                     </table>
                   </div>
 
-                  <Sort></Sort>
+                  <Sort data={data}></Sort>
                 </div>
               </div>
 

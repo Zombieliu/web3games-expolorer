@@ -1,16 +1,14 @@
 import React, {Fragment, useEffect, useState} from "react";
-import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
-import Sort from "../../components/sort";
-import {CheckCircleIcon} from "@heroicons/react/solid";
+import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
-import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import {BlockPageNumberValue, darkModeAtom, darkModeImg} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -38,7 +36,7 @@ const tokenstitle=[
 
 const Blcok_Info = `
  query HomePage($first: Int) {
-  blockInfos(first:$first,orderBy:TIMESTAMP_DESC){
+  blockInfos(first:20,offset:$first,orderBy:TIMESTAMP_DESC){
     nodes{
       id
       blockHeight
@@ -46,9 +44,24 @@ const Blcok_Info = `
       eventNumber
       timestamp
     }
+    totalCount
   }
 }
 `
+
+// const After_Block_Info = `
+//  query HomePage($offsetNumber: Int) {
+//   blockInfos(first:20,offset:$offsetNumber,orderBy:TIMESTAMP_DESC){
+//     nodes{
+//       id
+//       blockHeight
+//       extrinsicNumber
+//       eventNumber
+//       timestamp
+//     }
+//   }
+// }
+// `
 
 class BlockInfo {
   private id: string;
@@ -93,11 +106,18 @@ function GetBlockData(blockTime) {
   return `${start}`
 }
 
-const Blocks=()=>{
-  const router = useRouter()
-  let [isOpen, setIsOpen] = useState(false)
+const Sort=(props:any)=>{
+  const block_number:number = props.data.blockInfos.totalCount
 
+  let block_number_pages:number = (block_number / 20)
+
+  if (block_number_pages > 500){
+    block_number_pages = 500
+  }
+
+  const router = useRouter()
   const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
 
   useEffect(()=>{
     if (router.isReady){
@@ -110,9 +130,81 @@ const Blocks=()=>{
   },[router.isReady])
 
 
+  const addPageCounter = async ()=>{
+    if (BlockPageNumber != block_number_pages){
+      SetBlockPageNumber(BlockPageNumber + 1)
+    }
+
+  }
+
+  const decPageCounter = ()=>{
+    if (BlockPageNumber != 1){
+      SetBlockPageNumber(BlockPageNumber - 1)
+    }
+  }
+
+  const lastPage = ()=>{
+    SetBlockPageNumber(block_number_pages)
+  }
+
+  const firstPage = ()=>{
+    SetBlockPageNumber(1)
+  }
+
+  return(
+      <div>
+        <div className="rounded-md   flex justify-end my-5" aria-label="Pagination">
+          <button
+              onClick={firstPage}
+              className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <span className="">First</span>
+          </button>
+          <button
+              onClick={decPageCounter}
+              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <span className="sr-only">Previous</span>
+            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <div className="bg-white border-gray-300 hidden lg:inline-block text-gray-500  relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+            Page {BlockPageNumber} of {block_number_pages}
+          </div>
+          <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            <span className="sr-only">Next</span>
+            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <button
+              onClick={lastPage}
+              className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+          >
+            <span className="">Last</span>
+          </button>
+        </div>
+      </div>
+  )
+}
+
+const Blocks=()=>{
+  const router = useRouter()
+  let [isOpen, setIsOpen] = useState(false)
+
+  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [BlockPageNumber,] = useAtom(BlockPageNumberValue)
+
+  useEffect(()=>{
+    if (router.isReady){
+      if (enabledNightMode == true){
+        document.documentElement.classList.add('dark');
+      }else{
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  },[router.isReady])
+
   const{loading,error,data} = useQuery(Blcok_Info,{
     variables:{
-      first:20
+      first:(BlockPageNumber - 1) * 20
     },
   })
 
@@ -165,7 +257,7 @@ const Blocks=()=>{
   }
 
   if (data) {
-    console.log(data)
+    // console.log(data)
     const extrinsic = data_list(data)
     return (
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
@@ -251,7 +343,7 @@ const Blocks=()=>{
                     </table>
                   </div>
 
-                  <Sort></Sort>
+                  <Sort data={data}></Sort>
                 </div>
               </div>
 

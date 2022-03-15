@@ -1,7 +1,6 @@
 import React, {Fragment, useCallback, useEffect, useMemo, useState} from "react";
 import Header from "../../components/header";
 import Tail from "../../components/tail";
-import Sort from "../../components/sort";
 import { Dialog,Transition } from '@headlessui/react';
 import { CheckCircleIcon} from '@heroicons/react/solid';
 import {useQuery} from "graphql-hooks";
@@ -447,7 +446,7 @@ const Events = (props) =>{
                         </table>
                     </div>
 
-                    <Sort/>
+                    {/*<Sort/>*/}
                 </div>
             </>
         )
