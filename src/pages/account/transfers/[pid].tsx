@@ -4,7 +4,6 @@ import AccountOverview from '../../../components/Account-overview';
 import Tail from '../../../components/tail';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckCircleIcon } from '@heroicons/react/solid';
-import Sort from '../../../components/sort';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
@@ -258,7 +257,7 @@ const Transfers=()=>{
                       ))}
                       </tbody>
                     </table>
-                    <Sort></Sort>
+                    {/*<Sort></Sort>*/}
                   </div>
                 </div>
               </div>

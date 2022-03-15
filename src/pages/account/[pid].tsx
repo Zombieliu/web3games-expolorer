@@ -2,7 +2,6 @@ import Header from "../../components/header";
 import React, {Fragment, useEffect, useState} from 'react';
 import Link from 'next/link';
 import Tail from '../../components/tail';
-import Sort from '../../components/sort';
 import AccountOverview from '../../components/Account-overview';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
@@ -240,7 +239,6 @@ const Account=()=>{
                       ))}
                       </tbody>
                     </table>
-                    <Sort></Sort>
                   </div>
 
 
