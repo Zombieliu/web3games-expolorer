@@ -13,6 +13,8 @@ import {useAtom} from "jotai";
 import {darkModeAtom, darkModeImg} from "../../jotai";
 import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
+import {NextPage} from "next";
+import Head from "next/head";
 
 
 function classNames(...classes) {
@@ -733,7 +735,7 @@ const News = () =>{
     )
 }
 
-const Home=()=>{
+const Home= ()  =>{
     const router = useRouter()
     const [enabledNightMode,] = useAtom(darkModeAtom)
     useEffect(()=>{
@@ -748,6 +750,10 @@ const Home=()=>{
 
     return(
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+            <Head>
+                <title>Web3Games</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <Header/>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className=" mb-14">
