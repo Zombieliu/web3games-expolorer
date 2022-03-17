@@ -25,9 +25,9 @@ const Found =()=>{
         <>
             <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
                 <h1 className="text-2xl text-black  text-center mb-5 dark:text-gray-400">How to fund</h1>
-                <h2 className="text-gray-600 text-center md:text-left text-sm mb-5">This faucet is running on the Web3Games testnet. To prevent malicious actors from exhausting all funds, requests are tied to Twitter social network accounts. Anyone having a Twitter account may request funds within the permitted limits.</h2>
-                <h3 className="text-gray-600 text-center md:text-left text-sm mb-5">To request funds via Twitter, make a tweet with your W3G account pasted into the contents.</h3>
-                <h4 className="text-gray-600 text-center md:text-left text-sm mb-5">Copy-paste the tweets URL into the above input box and get your W3G. Each account can get 100 W3G every 24 hours.</h4>
+                <h2 className="text-gray-600 text-center md:text-left text-sm mb-5">This faucet is running on the Web3Games Dev testnet. To prevent malicious actors from exhausting all funds, The faucet will record some information to ensure that it will not be repeatedly claimed.</h2>
+                <h3 className="text-gray-600 text-center md:text-left text-sm mb-5">The obtained tokens can be used for network testing and other operations.</h3>
+                <h4 className="text-gray-600 text-center md:text-left text-sm mb-5">Each account can get 5 W3G every 24 hours.</h4>
             </div>
         </>
     )
