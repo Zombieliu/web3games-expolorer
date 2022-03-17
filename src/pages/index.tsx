@@ -15,17 +15,7 @@ const IndexPage: NextPage = () => {
         <title>Web3Games</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header>
-          <Home></Home>
-          {/*<Link*/}
-          {/*    href='/'*/}
-          {/*    locale={route.locale === 'en' ? 'de' : 'en'}*/}
-          {/*>*/}
-          {/*    <footer>*/}
-          {/*        <p>{t('description')}</p>*/}
-          {/*    </footer>*/}
-          {/*</Link>*/}
-      </header>
+            <Home></Home>
     </div>
   )
 }
