@@ -11,7 +11,6 @@ function createClient(initialState) {
         url: 'http://47.242.8.196:3000', // Server URL (must be absolute)
         cache: memCache({initialState}),
     })
-
 }
 
 export function initializeGraphQL(initialState = null) {
