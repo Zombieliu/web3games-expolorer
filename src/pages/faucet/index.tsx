@@ -62,7 +62,7 @@ export default function Faucet() {
                 .then(function (response) {
                     if (response.data){
                         let {query,country,city} = response.data
-                        axios.post('http://47.242.8.196:3002/api/insert/user', {
+                        axios.post('http://47.242.8.196:3004/api/insert/user', {
                             address: inputValue,
                             ip: query,
                             country,
