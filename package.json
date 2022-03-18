@@ -5,9 +5,9 @@
   "author": "henryliu",
   "license": "GPL3",
   "scripts": {
-    "dev": "next -p 3001",
+    "dev": "next -p 3003",
     "build": "next build",
-    "start": "next start -p 3001",
+    "start": "next start -p 3003",
     "type-check": "tsc",
     "test": "jest",
     "format": "prettier --write 'src/**/*ts'",
