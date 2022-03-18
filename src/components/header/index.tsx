@@ -7,6 +7,7 @@ import { CheckCircleIcon, CheckIcon, ChevronDownIcon } from '@heroicons/react/so
 import {darkModeAtom, darkModeImg,CopyValue} from '../../jotai'
 import { useAtom } from 'jotai';
 import {useRouter} from "next/router";
+import {use} from "i18next";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -27,9 +28,9 @@ const blockchain=[
 ]
 
 const publishingOptions = [
-    { title: 'Mainnet', href: 'https://api.devnet.solana.com', },
-    { title: 'Testnet', href: 'https://api.devnet.solana.com',  },
-    { title: 'Devnet', href: 'https://api.devnet.solana.com',  },
+    // { title: 'Mainnet', href: 'https://api.devnet.solana.com', },
+    { title: 'Testnet', href: 'http://testnet-explorer.web3games.org/home', show:"testnet-explorer.web3games"},
+    { title: 'Devnet', href: 'http://devnet-explorer.web3games.org/home',  show:"devnet-explorer.web3games"},
 ]
 
 const Copy = () =>{
@@ -99,6 +100,7 @@ const Copy = () =>{
     )
 }
 const Header=()=>{
+    const router = useRouter()
     const [enabledNightMode,setEnabledNightMode] = useAtom(darkModeAtom)
     const [img, setimg] = useAtom(darkModeImg)
     const [selected, setSelected] = useState(publishingOptions[0])
@@ -117,10 +119,9 @@ const Header=()=>{
     }
 
     let net
-  const  getNet=()=>{
-        net =document.getElementById("NET").innerHTML
-      console.log(net)
 
+    const getNet=(e)=>{
+        router.push(e.target.id)
   }
 
 
@@ -290,7 +291,7 @@ const Header=()=>{
                                         leaveFrom="opacity-100"
                                         leaveTo="opacity-0"
                                     >
-                                        <Listbox.Options className="origin-top-right absolute z-10 right-0 w-52  rounded-md shadow-lg overflow-hidden bg-gray-50   ">
+                                        <Listbox.Options  className="origin-top-right absolute z-10 right-0 w-52  rounded-md shadow-lg overflow-hidden bg-gray-50   ">
                                             {publishingOptions.map((option) => (
                                                 <Listbox.Option
                                                     key={option.title}
@@ -303,19 +304,20 @@ const Header=()=>{
                                                     value={option}
                                                 >
                                                     {({ selected, active }) => (
-                                                       <button onClick={getNet}><div className="flex flex-col ">
-                                                            <div className="flex justify-between text-base">
-                                                                <p  className={selected ? 'font-normal' : 'font-semibold'}>{option.title}</p>
+                                                       <button id={option.href} onClick={getNet}><div className="flex flex-col ">
+                                                            <div   className="flex justify-between text-base">
+                                                                <p id={option.href} className={selected ? 'font-normal' : 'font-semibold'}>{option.title}</p>
                                                                 {selected ? (
-                                                                    <span className='text-blue-400' >
-                                                         <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                        </span>
+                                                                    <span id={option.href} className='text-blue-400' >
+                                                                        <CheckIcon  className="h-5 w-5" aria-hidden="true" />
+                                                                    </span>
                                                                 ) : null}
                                                             </div>
-                                                            <p className={classNames(active ? '  ' : 'text-indigo-200', 'text-blue-400')}>
-                                                                {option.href}
+                                                            <p id={option.href} className={classNames(active ? '  ' : 'text-indigo-200', 'text-blue-400')}>
+                                                                {option.show}
                                                             </p>
-                                                        </div></button>
+                                                        </div>
+                                                       </button>
                                                     )}
                                                 </Listbox.Option>
                                             ))}
