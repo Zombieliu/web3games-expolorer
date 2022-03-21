@@ -5,7 +5,6 @@ import { Listbox, Dialog,Transition } from '@headlessui/react';
 import {ExclamationIcon } from "@heroicons/react/outline";
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import axios from "axios";
-import {element} from "prop-types";
 import check_address from "../../utils";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
@@ -58,11 +57,11 @@ export default function Faucet() {
 
         if (selected.id == check_result){
             setOpenload(true);
-            axios.get('http://ip-api.com/json/')
+            axios.get('https://pro.ip-api.com/json/?key=NyhIAYaqlelxAUZ&fields=status,message,country,city,query')
                 .then(function (response) {
                     if (response.data){
                         let {query,country,city} = response.data
-                        axios.post('http://47.242.8.196:3004/api/insert/user', {
+                        axios.post('https://explorer-devnet-restful-api.web3games.org/api/insert/user', {
                             address: inputValue,
                             ip: query,
                             country,
