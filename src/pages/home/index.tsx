@@ -751,7 +751,7 @@ const Home= ()  =>{
     return(
         <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
             <Head>
-                <title>Web3Games</title>
+                <title>Web3Games Explorer  | Dashboard</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Header/>
