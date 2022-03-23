@@ -1,5 +1,8 @@
 import Link from "next/link"
-import React from "react"
+import React, {useEffect, useState} from "react"
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
+import {useRouter} from "next/router";
 
 
 
@@ -79,6 +82,18 @@ const participate=[
 
 ]
 const Tail=()=>{
+    const router = useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [img, ] = useAtom(darkModeImg)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
     return(
         <div className="border-t border-gray-400 pt-12 pb-1 px-10  2xl:pt-32 ">
             <div className="md:flex justify-between  max-w-7xl mx-auto">
@@ -102,7 +117,7 @@ const Tail=()=>{
                 </div>
                 <div>
                     <div  className="flex justify-center md:justify-end " >
-                    <img  src="/web3gb.svg" alt=""/>
+                    <img  src={img} alt=""/>
                     </div>
                     <div className="my-5 text-gray-500 text-sm text-center">
                         The best block explorer of Web3Games

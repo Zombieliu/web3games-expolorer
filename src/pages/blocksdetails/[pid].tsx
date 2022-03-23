@@ -1,16 +1,21 @@
-import React, {Fragment, useState} from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import Link from 'next/link'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
-import Sort from "../../components/sort";
-import { message, Button, Space } from 'antd';
 import {CheckCircleIcon, XIcon} from "@heroicons/react/solid";
 import {Dialog, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
+import {useQuery} from "graphql-hooks";
+import {useAtom} from "jotai";
+import { darkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
+import Error from  '../../components/error'
+import {DetailsSkeleton} from "../../components/skeleton";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
+
+
 
 const tokenstitle=[
     {
@@ -20,8 +25,7 @@ const tokenstitle=[
         title:"Hash"
     },
     {
-        title:"Time",
-        i:"fa fa-clock-o ml-1"
+        title:"Nonce",
     },
     {
         title:"Result"
@@ -29,130 +33,196 @@ const tokenstitle=[
     {
         title:"Signer By"
     },
-    {
-        title:"Weight (W3G)"
-    },
-]
-const Tokens=[
-    {
-        signature:"QjBU7PxTTGnGuQGpm7KC18wMQ.....",
-        asignature:"",
-        block:"0xa2285..e6b7b8238e",
-        ablock:"",
-        time:"13 minutes ago",
-        instructions:"Success",
-        by:"System",
-        aby:"",
-        fee:"0.0005",
-
-
-    },
 ]
 
-const BlocksDetails=()=>{
-    const router = useRouter()
-    const { pid } = router.query
 
+
+const Block_Info = `
+ query HomePage($Block: String) {
+  extrinsicInfos(filter:{
+    blockHashId:{
+      equalTo:$Block
+    }
+  }){
+    nodes{
+      id
+      extrinsicHeight
+      signerId
+      success
+      nonce
+      blockHash{
+        id
+        blockHeight
+        parentBlockHash
+        extrinsicsHash
+        state
+        contentHash
+        extrinsicNumber
+        timestamp
+      }
+    }
+  }
+}
+`
+
+function DataDiff (blockTime) {
+    const start = new Date(blockTime).getTime();
+    const end = new Date().getTime();
+    const milliseconds = Math.abs(end - start).toString()
+    // @ts-ignore
+    const seconds = parseInt(String(milliseconds / 1000));
+    const minutes = parseInt(String(seconds / 60));
+    const hours = parseInt(String(minutes / 60));
+    const days = parseInt(String(hours / 24));
+    if (days >= 1){
+        let new_hours = hours - days * 24
+        let new_minutes = minutes  - hours * 60
+        let new_seconds = seconds - minutes * 60
+        return `${days} days ${new_hours} hours ${new_minutes} minutes ${new_seconds} seconds ago`
+    }else if (hours >= 1){
+        let new_minutes = minutes  - hours * 60
+        let new_seconds = seconds - minutes * 60
+        return `${hours} hours ${new_minutes} minutes ${new_seconds} seconds ago`
+    }else if (minutes >= 1){
+        let new_seconds = seconds - minutes * 60
+        return `${minutes} minutes ${new_seconds} seconds ago`
+    }else if (seconds >= 1){
+        return `${seconds} seconds ago`
+    }else{
+        return `now`
+    }
+}
+
+class extrinsicInfo {
+    private id: string;
+    private extrinsicHash: string;
+    private nonce: string;
+    private state: string;
+    private by: string;
+    private address: string;
+
+    constructor(
+        id:string,
+        extrinsicHash:string,
+        nonce:string,
+        state:string,
+        by:string,
+        address:string,
+    ) {
+        this.id = id
+        this.extrinsicHash = extrinsicHash
+        this.nonce = nonce
+        this.state = state
+        this.by = by
+        this.address = address
+    }
+}
+
+function data_list(data: any){
+        console.log(data)
+        let times = data.extrinsicInfos.nodes.length;
+        let data_list = [];
+        for (let i = 0;i < times;i++){
+            if (data.extrinsicInfos.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
+                let result = new extrinsicInfo(
+                    data.extrinsicInfos.nodes[i].extrinsicHeight,
+                    data.extrinsicInfos.nodes[i].id,
+                    data.extrinsicInfos.nodes[i].nonce,
+                    data.extrinsicInfos.nodes[i].success,
+                    "system",
+                    data.extrinsicInfos.nodes[i].signerId,
+                )
+                data_list.push(result)
+            }else{
+                let result = new extrinsicInfo(
+                    data.extrinsicInfos.nodes[i].extrinsicHeight,
+                    data.extrinsicInfos.nodes[i].id,
+                    data.extrinsicInfos.nodes[i].nonce,
+                    data.extrinsicInfos.nodes[i].success,
+                    data.extrinsicInfos.nodes[i].signerId,
+                    data.extrinsicInfos.nodes[i].signerId,
+                )
+                data_list.push(result)
+            }
+        }
+        return data_list
+}
+
+const GetBlockData = (blockTime) => {
+    const start = new Date(blockTime).toUTCString();
+    return `${start}`
+}
+
+const Overview = (props:any) =>{
+    const [,setIsOpen] = useAtom(CopyValue)
+    const Copy=(span)=>{
+        console.log(span)
+        const spanText = document.getElementById(span).innerText;
+        const oInput = document.createElement('input');
+        oInput.value = spanText;
+        document.body.appendChild(oInput);
+        oInput.select();
+        document.execCommand('Copy');
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+        document.body.removeChild(oInput);
+        if(oInput){
+            setIsOpen(true)
+        }
+    }
+
+    let time = DataDiff(props.data.extrinsicInfos.nodes[0].blockHash.timestamp)
+    let utc = GetBlockData(props.data.extrinsicInfos.nodes[0].blockHash.timestamp)
     const overview=[
         {
-            block:`#${pid}`,
-            timestamp:"13 minutes ago",
-            UTCtime:"February 22, 2022 12:58:53 PM ",
-            blockhash:"57jhBBbH98QEPDaRY8nrSPXitHJQv9YU1PmToKA4XZm4",
-            address:"6TkKqq15wXjqEjNg9zqTKADwuVATR9dW3rkNnsYme1ea",
-            reward:"0.0029575 W3G ($0.2510)",
-            transactions:"1",
-            previous:"ED1rmKttuGH1pBiq8hLoHRFhqjhK7uaPmqYYJvzdXy9m",
-            Extrinsics:"5Eeh22xf25G6qtgFhBZJYCorYKPVVtQKGkLUd9RQLYfcruhb",
-            State:"5EUeR5dYRtLx252PrXvqaVLXpMND6oSbdL1Rme5FBKyeGTC4"
+            block:`#${props.data.extrinsicInfos.nodes[0].blockHash.blockHeight}`,
+            timestamp:time,
+            UTCtime:utc,
+            blockHash:props.data.extrinsicInfos.nodes[0].blockHash.id,
+            parentBlockHash:props.data.extrinsicInfos.nodes[0].blockHash.parentBlockHash,
+            extrinsicsHash:props.data.extrinsicInfos.nodes[0].blockHash.extrinsicsHash,
+            contentHash:props.data.extrinsicInfos.nodes[0].blockHash.contentHash,
+            State:props.data.extrinsicInfos.nodes[0].blockHash.state,
+            extrinsicNumber:props.data.extrinsicInfos.nodes[0].blockHash.extrinsicNumber,
         }
     ]
-
-    let [isOpen, setIsOpen] = useState(false)
-    const Copy=(span)=>{
-
-            const spanText = document.getElementById(span).innerText;
-            const oInput = document.createElement('input');
-            oInput.value = spanText;
-            document.body.appendChild(oInput);
-            oInput.select();
-            document.execCommand('Copy');
-            oInput.className = 'oInput';
-            oInput.style.display = 'none';
-            document.body.removeChild(oInput);
-            if(oInput){
-
-                setIsOpen(true)
-            }
-    }
-
-    function closeModal() {
-        setIsOpen(false)
-    }
-
-    function openModal() {
-        setIsOpen(true)
-    }
     return(
+      <>
+          <div className="mt-5">
+              <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
+                  <div className="py-5 min-w-full  p-5 dark:text-gray-200">
+                      <div className="flex my-5 text-xl font-semibold text-gray-700">
 
+                          <div>
+                              Overview
+                          </div>
 
-        <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
-
-            <Header></Header>
-            <div className="max-w-7xl mx-auto py-16  px-4 ">
-                <div className="my-20 mb-14">
-                    <div className="mx-auto lg:flex justify-between ">
-
-                        <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
-                            Block Details
-                        </div>
-                        <div className="flex ">
-                            <input type="text"
-                                   className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"
-                                   placeholder="Search transactions, blocks, programs and token"
-                            />
-                            <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">
-                                <i className="fa fa-search" aria-hidden="true"></i></div>
-
-
-                        </div>
-
-                    </div>
-                    <div className="mt-5">
-                        <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
-                            <div className="py-5 min-w-full  p-5 dark:text-gray-200">
-                            <div className="flex my-5 text-xl font-semibold text-gray-700">
-
-                                <div>
-                                    Overview
-                                </div>
-
-                            </div>
-                                <div className="text-gray-400 text-sm ">
-                                    {overview.map(item=>(
-                                     <div key={item.block}>
-                                    <div className="md:flex   my-3 ">
-                                        <div className="font-semibold lg:font-medium w-60 mr-32">
-                                            Block
-                                        </div>
-                                        <div className="text-gray-800 " id="block">
-                                            {item.block}  <button onClick={() => {
-                                            // @ts-ignore
-                                            Copy("block");
-                                        }}> <i className="fa fa-clone mt-1" aria-hidden="true"></i></button>
-                                        </div>
+                      </div>
+                      <div className="text-gray-400 text-sm ">
+                          {overview.map(item=>(
+                            <div key={item.block}>
+                                <div className="md:flex justify-between lg:justify-start  my-3 ">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Block
                                     </div>
-                                    <div className="md:flex   my-3">
-                                        <div className="font-semibold justify-between lg:font-medium  w-60 mr-32">
-                                            Timestamp
-                                        </div>
-                                        <div className="md:flex">
-                                        <div className="text-gray-800">
+                                    <div className="text-gray-800 " id="block">
+                                        {item.block}  <button onClick={() => {
+                                        // @ts-ignore
+                                        Copy("block");
+                                    }}> <i className="fa fa-clone mt-1" aria-hidden="true"></i></button>
+                                    </div>
+                                </div>
+                                <div className="md:flex  justify-between lg:justify-start my-3">
+                                    <div className="font-semibold justify-between lg:font-medium  w-60 mr-32">
+                                        Timestamp
+                                    </div>
+                                    <div className="h-auto  lg:flex">
+                                        <div className="text-gray-800 ">
                                             {item.timestamp}
                                         </div>
                                         <div className="flex">
-                                            <div className="mx-3 hidden md:inline-block">
-                                            |
+                                            <div className="mx-3 hidden lg:inline-block">
+                                                |
                                             </div>
                                             <div className="md:flex">
                                                 <div className="">
@@ -160,194 +230,244 @@ const BlocksDetails=()=>{
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div className=" md:flex justify-between lg:justify-start my-3 ">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Block Hash
+                                    </div>
+                                    <div id={item.blockHash} className="text-gray-800 text-xs lg:text-sm   break-words ">
+                                        {item.blockHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.blockHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Parent Block Hash
+                                    </div>
+                                    <div id={item.parentBlockHash} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                        {item.parentBlockHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.parentBlockHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Extrinsics Hash
+                                    </div>
+                                    <div id={item.extrinsicsHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                        {item.extrinsicsHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.extrinsicsHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3 ">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Content Hash
+                                    </div>
+                                    <div id={item.contentHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                        {item.contentHash} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.contentHash}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        State Hash
+                                    </div>
+                                    <div id={item.State} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                        {item.State} &nbsp;
+                                        <button onClick={() => {
+                                            // @ts-ignore
+                                            Copy(`${item.State}`);}}>
+                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="md:flex  justify-between lg:justify-start my-3">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                        Extrinsics
+                                    </div>
+                                    <div className="md:flex justify-between lg:justify-start text-gray-800">
+
+                                        <div className="flex ">
+                                            <div>Total</div>
+                                            <div className=" mx-1   font-semibold">{item.extrinsicNumber}</div>
+                                            <div>Extrinsics</div>
                                         </div>
-                                    </div>
-                                         <div className="md:flex  my-3 ">
-                                             <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                 Block Hash
-                                             </div>
-                                             <div className="text-gray-800 text-xs lg:text-sm    ">
-                                                 {item.blockhash}
-                                             </div>
-                                         </div>
-                                         <div className="md:flex  my-3">
-                                             <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                 Parent Block Hash
-                                             </div>
-                                             <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                 {item.previous}
-                                             </div>
-                                         </div>
-                                         <div className="md:flex  my-3">
-                                             <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                 Extrinsics Hash
-                                             </div>
-                                             <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                 {item.Extrinsics}
-                                             </div>
-                                         </div>
-                                         <div className="md:flex  my-3">
-                                             <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                 State Hash
-                                             </div>
-                                             <div className="text-gray-800 flex text-xs lg:text-sm  ">
-                                                 {item.State}
-                                             </div>
-                                         </div>
-                                         <div className="md:flex  my-3">
-                                             <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                 Weight
-                                             </div>
-                                             <div className="text-gray-800">
-                                                 {item.reward}
-                                             </div>
-                                         </div>
-                                         <div className="md:flex   my-3">
-                                             <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                 Extrinsics
-                                             </div>
-                                             <div className="md:flex text-gray-800">
 
-                                                 <div className="flex ">
-                                                     <div>Total</div>
-                                                     <div className=" mx-1   font-semibold">{item.transactions}</div>
-                                                     <div>Extrinsics</div>
-                                                 </div>
-
-                                             </div>
-
-                                         </div>
-                                     </div> ))}
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-5">
-                        <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
-                            <div className="py-2 min-w-full  p-5 dark:text-gray-200">
-                                <div className="flex my-5 text-xl font-semibold text-gray-700">
-
-                                    <div>
-                                        Extrinsic
                                     </div>
 
                                 </div>
-                                <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                                    <table className="min-w-full divide-y divide-gray-200">
-                                        <thead className="bg-gray-100 dark:bg-gray-300">
-                                        <tr>
-                                            {tokenstitle.map(title=>(
-                                                <th key={title.title}
-                                                    scope="col"
-                                                    className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
-                                                >
-                                                    {title.title}
-                                                    <i className={title.i} aria-hidden="true"></i>
-                                                </th>
-                                            ))}
-                                        </tr>
-                                        </thead>
-                                        <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
-                                            {Tokens.map(token=>(
-                                                <tr key={token.signature} className="hover:bg-gray-200" >
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                        <Link href="/extrinsics">{token.signature}</Link>
-                                                    </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium font-medium ">
-                                                    {token.block}
-                                                </td>
-                                                <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
-                                                    {token.time}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {token.instructions}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base ">
+                            </div> ))}
+                      </div>
 
-                                                    <button onClick={() => {
-                                                        // @ts-ignore
-                                                        Copy("by");
-                                                    }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
-                                                    </button>
-                                                    <Link href={token.aby}>
-                                                    <a  className="text-blue-400" id="by">
-                                                        {token.by}</a></Link>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
-                                                    {token.fee}
-                                                </td>
+                  </div>
+              </div>
+          </div></>
+    )
+}
+
+const Extrinsic = (props:any) =>{
+    const router = useRouter()
+    const Tokens = data_list(props.data)
+
+    async function getAccount(e){
+        await router.push(`/account/${e.target.id}`)
+    }
+    const GetExtrinsics = (props) => {
+        const value = props.target.id;
+        router.push(`/extrinsics/${value}`)
+    }
+
+    return(
+      <>
+          <div className="mt-5">
+              <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
+                  <div className="py-2 min-w-full  p-5 dark:text-gray-200">
+                      <div className="flex my-5 text-xl font-semibold text-gray-700">
+
+                          <div>
+                              Extrinsic
+                          </div>
+
+                      </div>
+                      <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
+                          <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-100 dark:bg-gray-300">
+                              <tr>
+                                  {tokenstitle.map(title=>(
+                                    <th key={title.title}
+                                        scope="col"
+                                        className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                    >
+                                        {title.title}
+                                        <i className={title.title} aria-hidden="true"></i>
+                                    </th>
+                                  ))}
+                              </tr>
+                              </thead>
+                              <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                              {Tokens.map(token=>(
+                                <tr key={token.id} className="hover:bg-gray-200" >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                        <button id={token.extrinsicHash} onClick={GetExtrinsics}>
+                                            {token.id}
+                                        </button>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
+                                        <button id={token.extrinsicHash} onClick={GetExtrinsics}>
+                                            {token.extrinsicHash}
+                                        </button>
+                                    </td>
+                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                                        {token.nonce}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {token.state ? "success" : "fail"}
+                                    </td>
+                                    <td  className="px-6 py-4 whitespace-nowrap text-base ">
+                                        <button onClick={getAccount} className="text-blue-400" id={token.address}>
+                                            {token.by}
+                                        </button>
+                                    </td>
+                                </tr>
+                              ))}
+                              </tbody>
+                          </table>
+                      </div>
+
+                      {/*<Sort></Sort>*/}
+                  </div>
+              </div>
+          </div>
+      </>
+    )
+}
 
 
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </div>
 
-                                <Sort></Sort>
+const BlocksDetails=()=>{
+    const router = useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
+
+    const [Block,changeBlock] = useState('')
+
+    useEffect(()=>{
+        if (router.isReady) {
+            const pid = router.query.pid
+            console.log(pid)
+            changeBlock(`${pid}`)
+        }
+    },[router.isReady])
+
+    const{loading,error,data}: any = useQuery(Block_Info,{
+        variables:{
+            Block
+        }
+    })
+
+
+    if (loading){
+        return(
+            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+                <DetailsSkeleton/>
+            </div>
+        )
+    }
+
+    if(error){
+        return(
+            <Error/>
+        )
+
+    }
+
+    if (data.extrinsicInfos.nodes.length == 0){
+      return (
+              <Error></Error>
+      )
+    }else{
+        return (
+            <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+                <Header></Header>
+                <div className="max-w-7xl mx-auto py-16  px-4 ">
+                    <div className="my-20 mb-14">
+                        <div className="mx-auto lg:flex justify-between ">
+                            <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
+                                Block Details
                             </div>
                         </div>
+                        <Overview data={data}/>
+                        <Extrinsic data={data}/>
                     </div>
                 </div>
-
+                <Tail></Tail>
             </div>
-            <Tail></Tail>
-
-            <Transition appear show={isOpen} as={Fragment}>
-                <Dialog
-                    as="div"
-                    className="fixed inset-0 z-40  -mt-72"
-                    onClose={closeModal}
-                >
-                    <div className="min-h-screen px-4 text-center ">
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <Dialog.Overlay className="fixed inset-0" />
-                        </Transition.Child>
-
-                        {/* This element is to trick the browser into centering the modal contents. */}
-                        <span
-                            className="inline-block h-screen align-middle"
-                            aria-hidden="true"
-                        >
-              &#8203;
-            </span>
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0 scale-95"
-                            enterTo="opacity-100 scale-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100 scale-100"
-                            leaveTo="opacity-0 scale-95"
-                        >
-                            <div className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                                <div className="flex justify-center">
-                                    <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
-                                </div>
-                                <Dialog.Title
-                                    as="h3"
-                                    className="text-lg font-medium leading-6 text-gray-900"
-                                >
-                                    Copy successfully !
-                                </Dialog.Title>
-                            </div>
-                        </Transition.Child>
-                    </div>
-                </Dialog>
-            </Transition>
-
-        </div>
-    )
+        )
+    }
 }
 export default BlocksDetails

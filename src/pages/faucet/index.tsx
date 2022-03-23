@@ -1,12 +1,14 @@
-import React, {Fragment, useRef, useState} from 'react'
+import React, {Fragment, useEffect, useRef, useState} from 'react'
 import Header from"../../components/header"
 import Tail from '../../components/tail'
 import { Listbox, Dialog,Transition } from '@headlessui/react';
 import {ExclamationIcon } from "@heroicons/react/outline";
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import axios from "axios";
-import {element} from "prop-types";
 import check_address from "../../utils";
+import {useRouter} from "next/router";
+import {useAtom} from "jotai";
+import {darkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -17,7 +19,18 @@ const types = [
 
 ]
 
-
+const Found =()=>{
+    return(
+        <>
+            <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
+                <h1 className="text-2xl text-black  text-center mb-5 dark:text-gray-400">How to fund</h1>
+                <h2 className="text-gray-600 text-center md:text-left text-sm mb-5">This faucet is running on the Web3Games Dev testnet. To prevent malicious actors from exhausting all funds, The faucet will record some information to ensure that it will not be repeatedly claimed.</h2>
+                <h3 className="text-gray-600 text-center md:text-left text-sm mb-5">The obtained tokens can be used for network testing and other operations.</h3>
+                <h4 className="text-gray-600 text-center md:text-left text-sm mb-5">Each account can get 5 W3G every 24 hours.</h4>
+            </div>
+        </>
+    )
+}
 
 export default function Faucet() {
     const cancelButtonRef = useRef(null)
@@ -25,17 +38,32 @@ export default function Faucet() {
     const [openload ,setOpenload]= useState(false)
     const [success, successchange] = useState(false)
     const [fail, failchange] = useState(false)
+    const router=useRouter()
+    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [, setimg] = useAtom(darkModeImg)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                document.documentElement.classList.add('dark');
+            }else{
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady])
+
     function sendtoken(){
         let inputValue = (document.getElementById('faucet') as HTMLInputElement).value;
         let check_result = check_address(inputValue);
 
         if (selected.id == check_result){
             setOpenload(true);
-            axios.get('http://ip-api.com/json/')
+            axios.get('https://pro.ip-api.com/json/?key=NyhIAYaqlelxAUZ&fields=status,message,country,city,query')
                 .then(function (response) {
                     if (response.data){
                         let {query,country,city} = response.data
-                        axios.post('http://47.242.8.196:3000/api/insert/user', {
+                        // https://explorer-devnet-restful-api.web3games.org/api/insert/user
+                        // http://47.242.8.196:3004/api/insert/user
+                        axios.post('https://explorer-devnet-restful-api.web3games.org/api/insert/user', {
                             address: inputValue,
                             ip: query,
                             country,
@@ -44,7 +72,7 @@ export default function Faucet() {
                             .then(function (response) {
                                 // let error = 'Invalid Parameters (you can not get w3g ,you know why!!!!)';
                                 let success_data = 'Success';
-                                console.log(response.data.message)
+                                // console.log(response.data.message)
                                 if (response.data.message == success_data){
                                     successchange(true)
                                     setOpenload(false);
@@ -153,13 +181,7 @@ export default function Faucet() {
                           </p>
                       </div>
                   </div>
-                  <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
-                      <h1 className="text-2xl text-black text-center mb-5 dark:text-gray-400">How to fund</h1>
-                      <h2 className="text-gray-600 text-sm mb-5">This faucet is running on the Octopus testnet. To prevent malicious actors from exhausting all funds, requests are tied to Twitter social network accounts. Anyone having a Twitter account may request funds within the permitted limits.</h2>
-                      <h3 className="text-gray-600 text-sm mb-5">To request funds via Twitter, make a tweet with your W3G account pasted into the contents.</h3>
-                      <h4 className="text-gray-600 text-sm mb-5">Copy-paste the tweets URL into the above input box and get your W3G. Each account can get 100 W3G every 24 hours.</h4>
-
-                  </div>
+                  <Found/>
               </div>
 
           <Transition.Root show={openload} as={Fragment}>
