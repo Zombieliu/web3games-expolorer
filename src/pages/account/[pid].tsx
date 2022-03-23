@@ -126,10 +126,18 @@ const Account=()=>{
       axios.get(`https://explorer-devnet-restful-api.web3games.org/api/get/get_balance?account=${pid}`, {
       })
           .then(function (response) {
-            if (Number(response.data.data) >= 100000000){
-              const result = insertStr(response.data.data,9,'.')
+            if (response.data.data.length > 19){
+              const data = response.data.data
+              const new_data = data.substring(0,16)
+              console.log(new_data)
+              const result = insertStr(new_data,8,'.')
               setBalance(result)
-            }else{
+            }else if(response.data.data.length > 8 && response.data.data.length < 20){
+              const data = response.data.data
+              const result = insertStr(data,-8,'.')
+              setBalance(result)
+            }
+            else{
               setBalance(response.data.data)
             }
           })
