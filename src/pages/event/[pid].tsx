@@ -26,6 +26,7 @@ const Event_Info = `
       method
       section
       meta
+      data
     }
   }
 }
@@ -34,13 +35,13 @@ const Event_Info = `
 function data_type(data:any){
     let Data = [];
     const times = JSON.parse(data.eventInfos.nodes[0].meta).fields.length
+    console.log(JSON.parse(data.eventInfos.nodes[0].data)[0])
     for (let i =0;i<times;i++){
         let content = {
             id : i ,
             Name : `${JSON.parse(data.eventInfos.nodes[0].meta).fields[i].name}`,
             Type : `${JSON.parse(data.eventInfos.nodes[0].meta).fields[i].typeName}`,
-            Data : `${JSON.parse(data.eventInfos.nodes[0].meta).fields[i].type}`,
-
+            Data : `${JSON.parse(data.eventInfos.nodes[0].data)[i]}`,
         }
         Data.push(content)
     }
