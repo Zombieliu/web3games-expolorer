@@ -483,6 +483,7 @@ const Extrinsics=()=>{
                 const data = await fetchExtrinsic({
                     variables: { tx: query_data }
                 })
+                console.log(data)
                 SetExtrinsicInfo(`${data.data.evmInfos.nodes[0].id}`)
 
             }
