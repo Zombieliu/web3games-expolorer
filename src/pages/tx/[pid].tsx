@@ -4,10 +4,10 @@ import Tail from "../../components/tail";
 import { Dialog,Transition } from '@headlessui/react';
 import { CheckCircleIcon} from '@heroicons/react/solid';
 import {useQuery} from "graphql-hooks";
+import {useManualQuery } from 'graphql-hooks'
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {darkModeAtom, darkModeImg, EventValue} from "../../jotai";
-import {useManualQuery } from 'graphql-hooks'
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -51,6 +51,19 @@ const Extrinsics_Info = `
 `
 
 
+const Tx_Info = `
+ query HomePage($tx: String) {
+   evmInfos(filter:{
+        transactionHash:{
+            equalTo:$tx
+        }
+    }){
+        nodes{
+            id
+        }
+    }
+}
+`
 class EventInfo {
     private id:string
     private eventid: string;
@@ -456,11 +469,20 @@ const Extrinsics=()=>{
     const router = useRouter()
     const [enabledNightMode,] = useAtom(darkModeAtom)
     const [Extrinsics, SetExtrinsicInfo] = useState("")
-
+    const [fetchExtrinsic] = useManualQuery(Tx_Info)
     useEffect(()=>{
         if (router.isReady){
             const pid = router.query.pid
-            SetExtrinsicInfo(`${pid}`)
+            // SetExtrinsicInfo(`${pid}`)
+            const fetchExtrinsicInfo = async (query_data:string) => {
+                const data = await fetchExtrinsic({
+                    variables: { tx: query_data }
+                })
+                if (data.data.evmInfos.nodes.length != 0){
+                    SetExtrinsicInfo(`${data.data.evmInfos.nodes[0].id}`)
+                }
+            }
+            fetchExtrinsicInfo(`${pid}`)
             if (enabledNightMode == true){
                 document.documentElement.classList.add('dark');
             }else{
@@ -468,7 +490,6 @@ const Extrinsics=()=>{
             }
         }
     },[router.isReady])
-
 
     const{loading,error,data}: any = useQuery(Extrinsics_Info,{
         variables:{
