@@ -64,10 +64,6 @@ const Tx_Info = `
     }
 }
 `
-
-
-
-
 class EventInfo {
     private id:string
     private eventid: string;
@@ -474,7 +470,6 @@ const Extrinsics=()=>{
     const [enabledNightMode,] = useAtom(darkModeAtom)
     const [Extrinsics, SetExtrinsicInfo] = useState("")
     const [fetchExtrinsic] = useManualQuery(Tx_Info)
-
     useEffect(()=>{
         if (router.isReady){
             const pid = router.query.pid
@@ -495,10 +490,6 @@ const Extrinsics=()=>{
             }
         }
     },[router.isReady])
-
-
-
-
 
     const{loading,error,data}: any = useQuery(Extrinsics_Info,{
         variables:{
