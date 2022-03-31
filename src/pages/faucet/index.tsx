@@ -68,7 +68,6 @@ export default function Faucet() {
                             // https://explorer-devnet-restful-api.web3games.org/api/insert/user
                             // http://47.242.8.196:3004/api/insert/user
                             // http://localhost:3004/api/insert/user
-
                             axios.post('https://explorer-devnet-restful-api.web3games.org/api/add_evm_address', {
                                 address: inputValue,
                                 ip: query,
