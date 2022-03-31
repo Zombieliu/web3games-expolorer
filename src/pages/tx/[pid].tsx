@@ -65,9 +65,6 @@ const Tx_Info = `
 }
 `
 
-
-
-
 class EventInfo {
     private id:string
     private eventid: string;
@@ -495,10 +492,6 @@ const Extrinsics=()=>{
             }
         }
     },[router.isReady])
-
-
-
-
 
     const{loading,error,data}: any = useQuery(Extrinsics_Info,{
         variables:{
