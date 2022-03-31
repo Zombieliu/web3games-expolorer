@@ -123,7 +123,7 @@ const Account=()=>{
     if (router.isReady){
       const {pid} = router.query;
       setAccount(`${pid}`)
-      axios.get(`https://explorer-devnet-restful-api.web3games.org/api/get/get_balance?account=${pid}`, {
+      axios.get(`https://explorer-devnet-restful-api.web3games.org/api/get_balance?account=${pid}`, {
       })
           .then(function (response) {
             if (response.data.data.length > 19){

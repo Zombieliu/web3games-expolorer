@@ -124,7 +124,7 @@ const Address=()=>{
       const {pid} = router.query;
       const substrate_address = polkadotCryptoUtils.evmToAddress(`${pid}`, 42);
       setAccount(`${pid}`)
-      axios.get(`https://explorer-devnet-restful-api.web3games.org/api/get/get_balance?account=${substrate_address}`, {
+      axios.get(`https://explorer-devnet-restful-api.web3games.org/api/get_balance?account=${substrate_address}`, {
       })
           .then(function (response) {
             if (response.data.data.length > 19){
