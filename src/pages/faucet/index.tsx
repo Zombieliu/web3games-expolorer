@@ -51,48 +51,90 @@ export default function Faucet() {
         }
     },[router.isReady])
 
+
+
+
     function sendtoken(){
         let inputValue = (document.getElementById('faucet') as HTMLInputElement).value;
         let check_result = check_address(inputValue);
-
-        if (selected.id == check_result){
+        console.log(check_result)
+        if (selected.id == check_result) {
             setOpenload(true);
-            axios.get('https://pro.ip-api.com/json/?key=NyhIAYaqlelxAUZ&fields=status,message,country,city,query')
-                .then(function (response) {
-                    if (response.data){
-                        let {query,country,city} = response.data
-                        // https://explorer-devnet-restful-api.web3games.org/api/insert/user
-                        // http://47.242.8.196:3004/api/insert/user
-                        axios.post('https://explorer-devnet-restful-api.web3games.org/api/insert/user', {
-                            address: inputValue,
-                            ip: query,
-                            country,
-                            city
-                        })
-                            .then(function (response) {
-                                // let error = 'Invalid Parameters (you can not get w3g ,you know why!!!!)';
-                                let success_data = 'Success';
-                                // console.log(response.data.message)
-                                if (response.data.message == success_data){
-                                    successchange(true)
-                                    setOpenload(false);
-                                }else{
-                                    failchange(true);
-                                    setOpenload(false);
-                                }
+            if (check_result == 1) {
+                axios.get('https://pro.ip-api.com/json/?key=NyhIAYaqlelxAUZ&fields=status,message,country,city,query')
+                    .then(function (response) {
+                        if (response.data){
+                            let {query,country,city} = response.data
+                            // https://explorer-devnet-restful-api.web3games.org/api/insert/user
+                            // http://47.242.8.196:3004/api/insert/user
+                            // http://localhost:3004/api/insert/user
+                            axios.post('http://localhost:7001/api/add_evm_address', {
+                                address: inputValue,
+                                ip: query,
+                                country,
+                                city
                             })
-                            .catch(function (error) {
-                                alert(error)
-                            });
-                    }else{
-                        alert('no ip')
-                    }
-                })
-                .catch(function (error) {
-                    alert(error)
-                });
-        }else{
-            alert(`you address not conform to ${selected.name}`)
+                                .then(function (response) {
+                                    // let error = 'Invalid Parameters (you can not get w3g ,you know why!!!!)';
+                                    let success_data = 'Success';
+                                    // console.log(response.data.message)
+                                    if (response.data.message == success_data){
+                                        successchange(true)
+                                        setOpenload(false);
+                                    }else{
+                                        failchange(true);
+                                        setOpenload(false);
+                                    }
+                                })
+                                .catch(function (error) {
+                                    alert(error)
+                                });
+                        }else{
+                            alert('no ip')
+                        }
+                    })
+                    .catch(function (error) {
+                        alert(error)
+                    });
+            } else if (check_result == 2) {
+                axios.get('https://pro.ip-api.com/json/?key=NyhIAYaqlelxAUZ&fields=status,message,country,city,query')
+                    .then(function (response) {
+                        if (response.data){
+                            let {query,country,city} = response.data
+                            // https://explorer-devnet-restful-api.web3games.org/api/insert/user
+                            // http://47.242.8.196:3004/api/insert/user
+                            // http://localhost:3004/api/insert/user
+                            axios.post('https://explorer-devnet-restful-api.web3games.org/api/add_sub_address', {
+                                address: inputValue,
+                                ip: query,
+                                country,
+                                city
+                            })
+                                .then(function (response) {
+                                    // let error = 'Invalid Parameters (you can not get w3g ,you know why!!!!)';
+                                    let success_data = 'Success';
+                                    // console.log(response.data.message)
+                                    if (response.data.message == success_data){
+                                        successchange(true)
+                                        setOpenload(false);
+                                    }else{
+                                        failchange(true);
+                                        setOpenload(false);
+                                    }
+                                })
+                                .catch(function (error) {
+                                    alert(error)
+                                });
+                        }else{
+                            alert('no ip')
+                        }
+                    })
+                    .catch(function (error) {
+                        alert(error)
+                    });
+            } else {
+                alert("you input error address")
+            }
         }
     }
 
