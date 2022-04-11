@@ -152,7 +152,7 @@ export default function Faucet() {
                       <div className="mt-5 xl:flex justify-center">
                           <input type="text"
                                  className="bg-gray-200 text-xs md:text-sm  2xl:text-lg rounded-lg p-3  w-9/12  xl:w-5/12  border hover:border-indigo-500 focus:bg-white dark:bg-gray-300  outline-none"
-                                 placeholder="Please paste address/account which contains your W3G account"
+                                 placeholder="Please input your address, eg.. evm address 0x.... "
                                  id="faucet"
                           />
                           <div className=" xl:-ml-44 justify-center mt-3 flex">
