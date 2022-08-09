@@ -128,7 +128,7 @@ const Header=()=>{
     return(
         <header>
             <Popover className="relative bg-white  ">
-                <div className="flex  fixed z-20 inset-x-0 bg-white dark:bg-black   transition duration-700 mb-10 pl-5 mb-5 justify-between items-center  p-3 md:p-3 sm:px-6 lg:justify-end md:space-x-10 lg:px-10  ">
+                <div className="flex  fixed z-20 inset-x-0 bg-white/95 dark:bg-black/90 backdrop-blur-sm    transition duration-700 mb-10 pl-5 mb-5 justify-between items-center  p-3 md:p-3 sm:px-6 lg:justify-end md:space-x-10 lg:px-10  ">
 
                     <div className=" flex w-full justify-between lg:justify-start">
                         <div className="flex justify-start  ">

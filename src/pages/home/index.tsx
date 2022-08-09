@@ -644,7 +644,7 @@ const Blocks = () =>{
         console.log(data)
         return(
             <>
-                <div className="bg-white dark:bg-gray-600 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
+                <div className="bg-white dark:bg-neutral-800 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
                     <div className="text-gray-500 text-2xl mb-5 dark:text-gray-300 font-semibold">
                         Finallized  Blocks
                     </div>
@@ -749,7 +749,7 @@ const Home= ()  =>{
     },[router.isReady])
 
     return(
-        <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
             <Head>
                 <title>Web3Games Explorer  | Dashboard</title>
                 <link rel="icon" href="/favicon.ico" />
