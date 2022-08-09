@@ -651,51 +651,51 @@ const Blocks = () =>{
                     <div className="flex flex-col ">
                         <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
                             <div className="py-2   min-w-full sm:px-6 xl:px-8">
-                                <div className="shadow overflow-auto border-b border-gray-200 sm:rounded-lg">
-                                    <table className="min-w-full divide-y divide-gray-200">
-                                        <thead className="bg-gray-100 dark:bg-gray-300">
+                                <div className="shadow overflow-auto border-b border-gray-200 dark:border-neutral-500 sm:rounded-lg">
+                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
+                                        <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                                         <tr>
                                             <th
                                                 scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                                className="px-6 py-3 text-left text-sm font-semibold   "
                                             >
                                                 Block
                                             </th>
                                             <th
                                                 scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                                className="px-6 py-3 text-left text-sm font-semibold   "
                                             >
                                                 Time
                                             </th>
                                             <th
                                                 scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                                className="px-6 py-3 text-left text-sm font-semibold   "
                                             >
                                                 Ex Count
                                             </th>
                                             <th
                                                 scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                                className="px-6 py-3 text-left text-sm font-semibold   "
                                             >
                                                 Event
                                             </th>
                                         </tr>
                                         </thead>
-                                        <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                                        <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
                                         {blocks.map(block=>(
-                                            <tr key={block.id} className="hover:bg-gray-200" >
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                            <tr key={block.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 dark:text-indigo-400 font-medium">
                                                     <button id={block.id} onClick={GetBlock}>
                                                         {block.blockHeight}
                                                     </button>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
                                                     {DataDiff(block.timestamp)} Second ago
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
                                                     {block.extrinsicNumber}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-400">
                                                     {block.eventNumber}
                                                 </td>
 
@@ -717,18 +717,20 @@ const Blocks = () =>{
 const News = () =>{
     return(
         <><div>
-                <div className="bg-white dark:bg-gray-600 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
+                <div className="bg-white dark:bg-neutral-800 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
                     <div className="text-gray-500 dark:text-gray-200 text-2xl mb-6 font-semibold">
                         News
                     </div>
                     <div className=" xl:w-80">
-                        <div className="dark:bg-gray-600">
+                        <div className="dark:bg-neutral-500">
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
                                 <a className="twitter-timeline" data-width="600" data-height="600">
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </>

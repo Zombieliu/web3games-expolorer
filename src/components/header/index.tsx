@@ -8,6 +8,7 @@ import {darkModeAtom, darkModeImg,CopyValue} from '../../jotai'
 import { useAtom } from 'jotai';
 import {useRouter} from "next/router";
 import {use} from "i18next";
+import {log} from "util";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -104,6 +105,11 @@ const Header=()=>{
     const [enabledNightMode,setEnabledNightMode] = useAtom(darkModeAtom)
     const [img, setimg] = useAtom(darkModeImg)
     const [selected, setSelected] = useState(publishingOptions[0])
+    const [SwitchState,setSwitchState] = useState(false)
+
+    useEffect(()=>{
+
+    },[])
 
 
     function dartchange() {
