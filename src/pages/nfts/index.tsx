@@ -4,7 +4,7 @@ import NFTHeader from "../../components/NFT-header";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, darkModeImg} from "../../jotai";
 
 
 const allnfts=[
@@ -138,7 +138,7 @@ const Content = () =>{
 }
 const NFTs=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){

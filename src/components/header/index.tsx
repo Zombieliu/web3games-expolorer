@@ -4,7 +4,7 @@ import { Switch } from '@headlessui/react'
 import {MenuIcon, XIcon} from "@heroicons/react/outline";
 import React, {Fragment, useEffect, useState} from "react";
 import { CheckCircleIcon, CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import {darkModeAtom, darkModeImg,CopyValue} from '../../jotai'
+import { darkModeImg,CopyValue, DarkModeAtom} from '../../jotai'
 import { useAtom } from 'jotai';
 import {useRouter} from "next/router";
 import {use} from "i18next";
@@ -102,8 +102,8 @@ const Copy = () =>{
 }
 const Header=()=>{
     const router = useRouter()
-    const [enabledNightMode,setEnabledNightMode] = useAtom(darkModeAtom)
-    const [img, setimg] = useAtom(darkModeImg)
+    const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
+    const [img,setimg] = useAtom(darkModeImg)
     const [selected, setSelected] = useState(publishingOptions[0])
     const [SwitchState,setSwitchState] = useState(false)
 
@@ -112,11 +112,14 @@ const Header=()=>{
     },[])
 
 
+
+
     function dartchange() {
         if(enabledNightMode){
             setEnabledNightMode(!enabledNightMode);
             document.documentElement.classList.remove('dark');
             setimg("/web3gb.svg")
+
         }else{
             setEnabledNightMode(!enabledNightMode);
             document.documentElement.classList.add('dark');

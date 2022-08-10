@@ -3,7 +3,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import { Dialog, Popover, Transition } from '@headlessui/react';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue, darkModeAtom, darkModeImg} from "../../jotai";
+import {AccountBalanceValue, AccountValue, DarkModeAtom, darkModeImg} from "../../jotai";
 import {useRouter} from "next/router";
 
 
@@ -39,7 +39,7 @@ const AccountOverview=()=>{
   let [isOpen, setIsOpen] = useState(false);
 
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [, setimg] = useAtom(darkModeImg)
   useEffect(()=>{
     if (router.isReady){

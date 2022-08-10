@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import NFTHeader from "../../../components/NFT-header";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import { darkModeImg ,darkModeAtom} from "../../../jotai";
+import { darkModeImg ,DarkModeAtom} from "../../../jotai";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -185,7 +185,7 @@ const Content = () =>{
 }
 const Trades=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){

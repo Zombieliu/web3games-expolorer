@@ -8,7 +8,7 @@ import axios from "axios";
 import check_address from "../../utils";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -23,10 +23,10 @@ const Found =()=>{
     return(
         <>
             <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
-                <h1 className="text-2xl text-black  text-center mb-5 dark:text-gray-400">How to fund</h1>
-                <h2 className="text-gray-600 text-center md:text-left text-sm mb-5">This faucet is running on the Web3Games Dev testnet. To prevent malicious actors from exhausting all funds, The faucet will record some information to ensure that it will not be repeatedly claimed.</h2>
-                <h3 className="text-gray-600 text-center md:text-left text-sm mb-5">The obtained tokens can be used for network testing and other operations.</h3>
-                <h4 className="text-gray-600 text-center md:text-left text-sm mb-5">Each account can get 5 W3G every 24 hours.</h4>
+                <h1 className="text-2xl text-black  text-center mb-5 dark:text-gray-50">How to fund</h1>
+                <h2 className="text-gray-900 dark:text-gray-300 text-center md:text-left text-sm mb-5">This faucet is running on the Web3Games Dev testnet. To prevent malicious actors from exhausting all funds, The faucet will record some information to ensure that it will not be repeatedly claimed.</h2>
+                <h3 className="text-gray-900 dark:text-gray-300 text-center md:text-left text-sm mb-5">The obtained tokens can be used for network testing and other operations.</h3>
+                <h4 className="text-gray-900 dark:text-gray-300 text-center md:text-left text-sm mb-5">Each account can get 5 W3G every 24 hours.</h4>
             </div>
         </>
     )
@@ -39,7 +39,7 @@ export default function Faucet() {
     const [success, successchange] = useState(false)
     const [fail, failchange] = useState(false)
     const router=useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     const [, setimg] = useAtom(darkModeImg)
     useEffect(()=>{
         if (router.isReady){
@@ -146,7 +146,7 @@ export default function Faucet() {
             <Header></Header>
               <div className="pt-20">
                   <div className="text-center mt-10 ">
-                      <div className="text-4xl mt-16 font-extrabold dark:text-gray-400">
+                      <div className="text-4xl mt-16 font-extrabold dark:text-gray-100">
                           W3G Authenticated Faucet
                       </div>
                       <div className="mt-5 xl:flex justify-center">
@@ -216,7 +216,7 @@ export default function Faucet() {
                           </div>
                           <p className="flex justify-center text-center text-base font-medium text-gray-500">
 
-                              <button  onClick={sendtoken} className="mt-10 xl:mt-0 xl:ml-10  px-5 py-3 dark:bg-gray-700 dark:text-gray-400 rounded-lg font-bold text-gray-600 text-base font-normal border border-black transition duration-500 hover:bg-gray-700  hover:text-white "
+                              <button  onClick={sendtoken} className="mt-10 xl:mt-0 xl:ml-10  px-5 py-3 dark:bg-zinc-800 dark:text-gray-200 rounded-lg font-bold text-gray-600 text-base font-normal border border-black transition duration-500 hover:bg-gray-700  hover:text-white  dark:hover:bg-gray-300 dark:hover:text-black"
                               >
                                   Give me W3G
                               </button>

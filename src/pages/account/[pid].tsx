@@ -5,7 +5,7 @@ import Tail from '../../components/tail';
 import AccountOverview from '../../components/Account-overview';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue, darkModeAtom, darkModeImg} from "../../jotai";
+import {AccountBalanceValue, AccountValue, DarkModeAtom, darkModeImg} from "../../jotai";
 import {useQuery} from "graphql-hooks";
 import axios from "axios";
 import Error from "../../components/error";
@@ -148,7 +148,7 @@ const Account=()=>{
     }
   },[router.isReady])
 
-  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){

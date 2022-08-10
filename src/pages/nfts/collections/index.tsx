@@ -4,7 +4,7 @@ import NFTHeader from "../../../components/NFT-header";
 import Link from 'next/link';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../../jotai";
+import {DarkModeAtom, darkModeImg} from "../../../jotai";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -200,7 +200,7 @@ const collections=[
  }
 const Collections=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){

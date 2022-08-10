@@ -1,7 +1,7 @@
 import Link from "next/link"
 import React, {useEffect, useState} from "react"
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, darkModeImg} from "../../jotai";
 import {useRouter} from "next/router";
 
 
@@ -83,7 +83,7 @@ const participate=[
 ]
 const Tail=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     const [img, ] = useAtom(darkModeImg)
     useEffect(()=>{
         if (router.isReady){
@@ -95,7 +95,7 @@ const Tail=()=>{
         }
     },[router.isReady])
     return(
-        <div className="border-t border-gray-400 pt-12 pb-1 px-10  2xl:pt-32 ">
+        <div className="border-t border-gray-400 dark:border-zinc-700 pt-12 pb-1 px-10   2xl:pt-32 ">
             <div className="md:flex justify-between  max-w-7xl mx-auto">
                 <div className="text-center md:flex justify-between mb-10">
                     {ends.map(end=>(

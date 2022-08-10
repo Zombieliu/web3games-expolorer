@@ -7,7 +7,7 @@ import { CheckCircleIcon } from '@heroicons/react/solid';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountValue, darkModeAtom, darkModeImg} from "../../../jotai";
+import {AccountValue, DarkModeAtom, darkModeImg} from "../../../jotai";
 import {useQuery} from "graphql-hooks";
 import Error from "../../../components/error";
 import {DetailsSkeleton} from "../../../components/skeleton";
@@ -146,7 +146,7 @@ const Transfers=()=>{
     }
   },[router.isReady])
 
-  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [, setimg] = useAtom(darkModeImg)
   useEffect(()=>{
     if (router.isReady){

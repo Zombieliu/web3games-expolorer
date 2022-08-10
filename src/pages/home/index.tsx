@@ -10,7 +10,7 @@ import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useManualQuery } from 'graphql-hooks'
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, darkModeImg} from "../../jotai";
 import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import {NextPage} from "next";
@@ -615,6 +615,21 @@ const Project = () =>{
 
 const Blocks = () =>{
     const router = useRouter()
+
+    const BlocksTitle = [
+        {
+            title:"Block",
+        },
+        {
+            title:"Time",
+        },
+        {
+            title:"Ex Count",
+        },
+        {
+            title:"Event",
+        }
+    ]
     const{loading,error,data} = useQuery(Blcok_Info,{
         variables:{
             first:10
@@ -655,30 +670,16 @@ const Blocks = () =>{
                                     <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
                                         <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                                         <tr>
+                                            {BlocksTitle.map(items=>(
+
                                             <th
                                                 scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold   "
+                                                className=" px-6 py-3 text-left text-sm font-semibold   "
                                             >
-                                                Block
+                                                {items.title}
                                             </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold   "
-                                            >
-                                                Time
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold   "
-                                            >
-                                                Ex Count
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="px-6 py-3 text-left text-sm font-semibold   "
-                                            >
-                                                Event
-                                            </th>
+
+                                                ))}
                                         </tr>
                                         </thead>
                                         <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
@@ -692,10 +693,10 @@ const Blocks = () =>{
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
                                                     {DataDiff(block.timestamp)} Second ago
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
+                                                <td className=" px-6 pr-20 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
                                                     {block.extrinsicNumber}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-400">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
                                                     {block.eventNumber}
                                                 </td>
 
@@ -715,16 +716,18 @@ const Blocks = () =>{
 }
 
 const News = () =>{
+    const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
     return(
         <><div>
                 <div className="bg-white dark:bg-neutral-800 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
-                    <div className="text-gray-500 dark:text-gray-200 text-2xl mb-6 font-semibold">
+                    <div className="text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                         News
                     </div>
                     <div className=" xl:w-80">
-                        <div className="dark:bg-neutral-500">
+                        <div className="dark:bg-black"  id="container" >
+
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                <a className="twitter-timeline" data-width="600" data-height="600">
+                                <a className="twitter-timeline" data-width="600" data-height="600" data-theme={classNames(enabledNightMode?"":"")}>
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
                         </div>
@@ -739,7 +742,7 @@ const News = () =>{
 
 const Home= ()  =>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){

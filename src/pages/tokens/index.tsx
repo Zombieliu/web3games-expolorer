@@ -13,7 +13,7 @@ import Header from "../../components/header";
 import Tail from "../../components/tail";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, darkModeImg} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -530,7 +530,7 @@ const Content = ()=>{
 }
 const Token=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){

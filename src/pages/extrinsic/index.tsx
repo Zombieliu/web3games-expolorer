@@ -8,7 +8,7 @@ import {useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom, extrinsicPageNumberValue} from "../../jotai";
+import {DarkModeAtom, extrinsicPageNumberValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -128,7 +128,7 @@ const Sort=(props:any)=>{
   }
 
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [extrinsicPageNumber,SetextrinsicPageNumber] = useAtom(extrinsicPageNumberValue)
   useEffect(()=>{
     if (router.isReady){
@@ -197,7 +197,7 @@ const Sort=(props:any)=>{
 
 const Transactions=()=> {
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [extrinsicPageNumber,] = useAtom(extrinsicPageNumberValue)
   useEffect(()=>{
       if (router.isReady){

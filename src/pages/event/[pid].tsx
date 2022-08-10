@@ -6,7 +6,7 @@ import { CheckCircleIcon} from '@heroicons/react/solid';
 import {useRouter} from "next/router";
 import {useQuery} from 'graphql-hooks'
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, darkModeImg} from "../../jotai";
 import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
 
@@ -55,7 +55,7 @@ const Events=()=>{
     let [isOpen, setIsOpen] = useState(false)
     const [Event,SetEvent] = useState("")
 
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){

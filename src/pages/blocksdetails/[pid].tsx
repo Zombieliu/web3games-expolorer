@@ -7,7 +7,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
 import {useQuery} from "graphql-hooks";
 import {useAtom} from "jotai";
-import { darkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
+import { DarkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
 import Error from  '../../components/error'
 import {DetailsSkeleton} from "../../components/skeleton";
 
@@ -402,7 +402,7 @@ const Extrinsic = (props:any) =>{
 
 const BlocksDetails=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
 
     useEffect(()=>{
         if (router.isReady){

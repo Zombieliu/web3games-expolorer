@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, darkModeAtom, darkModeImg} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom, darkModeImg} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 
 
@@ -116,7 +116,7 @@ const Sort=(props:any)=>{
   }
 
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
 
   useEffect(()=>{
@@ -190,7 +190,7 @@ const Blocks=()=>{
   const router = useRouter()
   let [isOpen, setIsOpen] = useState(false)
 
-  const [enabledNightMode,] = useAtom(darkModeAtom)
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [BlockPageNumber,] = useAtom(BlockPageNumberValue)
 
   useEffect(()=>{

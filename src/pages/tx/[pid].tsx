@@ -7,7 +7,7 @@ import {useQuery} from "graphql-hooks";
 import {useManualQuery } from 'graphql-hooks'
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {darkModeAtom, darkModeImg, EventValue} from "../../jotai";
+import {DarkModeAtom, darkModeImg, EventValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -468,7 +468,7 @@ const Events = (props) =>{
 
 const Extrinsics=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(darkModeAtom)
+    const [enabledNightMode,] = useAtom(DarkModeAtom)
     const [Extrinsics, SetExtrinsicInfo] = useState("")
     const [fetchExtrinsic] = useManualQuery(Tx_Info)
 
