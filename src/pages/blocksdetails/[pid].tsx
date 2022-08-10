@@ -189,9 +189,9 @@ const Overview = (props:any) =>{
     return(
       <>
           <div className="mt-5">
-              <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
+              <div className="my-5  bg-white dark:bg-neutral-800 rounded-lg  ">
                   <div className="py-5 min-w-full  p-5 dark:text-gray-200">
-                      <div className="flex my-5 text-xl font-semibold text-gray-700">
+                      <div className="flex my-5 text-xl font-semibold dark:text-neutral-200">
 
                           <div>
                               Overview
@@ -202,10 +202,10 @@ const Overview = (props:any) =>{
                           {overview.map(item=>(
                             <div key={item.block}>
                                 <div className="md:flex justify-between lg:justify-start  my-3 ">
-                                    <div className="font-semibold lg:font-medium w-60 mr-32">
+                                    <div className="font-semibold lg:font-medium w-60 mr-32  ">
                                         Block
                                     </div>
-                                    <div className="text-gray-800 " id="block">
+                                    <div className="text-gray-800  dark:text-white" id="block">
                                         {item.block}  <button onClick={() => {
                                         // @ts-ignore
                                         Copy("block");
@@ -217,14 +217,14 @@ const Overview = (props:any) =>{
                                         Timestamp
                                     </div>
                                     <div className="h-auto  lg:flex">
-                                        <div className="text-gray-800 ">
+                                        <div className="text-gray-800 dark:text-white ">
                                             {item.timestamp}
                                         </div>
                                         <div className="flex">
                                             <div className="mx-3 hidden lg:inline-block">
                                                 |
                                             </div>
-                                            <div className="md:flex">
+                                            <div className="md:flex dark:text-white">
                                                 <div className="">
                                                     <i className="fa fa-clock-o" aria-hidden="true"></i>  {item.UTCtime} +UTC
                                                 </div>
@@ -236,7 +236,7 @@ const Overview = (props:any) =>{
                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                         Block Hash
                                     </div>
-                                    <div id={item.blockHash} className="text-gray-800 text-xs lg:text-sm   break-words ">
+                                    <div id={item.blockHash} className="text-gray-800 dark:text-white text-xs lg:text-sm   break-words ">
                                         {item.blockHash} &nbsp;
                                         <button onClick={() => {
                                             // @ts-ignore
@@ -249,7 +249,7 @@ const Overview = (props:any) =>{
                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                         Parent Block Hash
                                     </div>
-                                    <div id={item.parentBlockHash} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                    <div id={item.parentBlockHash} className="text-gray-800 dark:text-white  text-xs lg:text-sm  break-words">
                                         {item.parentBlockHash} &nbsp;
                                         <button onClick={() => {
                                             // @ts-ignore
@@ -262,7 +262,7 @@ const Overview = (props:any) =>{
                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                         Extrinsics Hash
                                     </div>
-                                    <div id={item.extrinsicsHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                    <div id={item.extrinsicsHash} className="text-gray-800 dark:text-white text-xs lg:text-sm break-words ">
                                         {item.extrinsicsHash} &nbsp;
                                         <button onClick={() => {
                                             // @ts-ignore
@@ -275,7 +275,7 @@ const Overview = (props:any) =>{
                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                         Content Hash
                                     </div>
-                                    <div id={item.contentHash} className="text-gray-800  text-xs lg:text-sm break-words ">
+                                    <div id={item.contentHash} className="text-gray-800 dark:text-white text-xs lg:text-sm break-words ">
                                         {item.contentHash} &nbsp;
                                         <button onClick={() => {
                                             // @ts-ignore
@@ -288,7 +288,7 @@ const Overview = (props:any) =>{
                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                         State Hash
                                     </div>
-                                    <div id={item.State} className="text-gray-800  text-xs lg:text-sm  break-words">
+                                    <div id={item.State} className="text-gray-800 dark:text-white text-xs lg:text-sm  break-words">
                                         {item.State} &nbsp;
                                         <button onClick={() => {
                                             // @ts-ignore
@@ -301,7 +301,7 @@ const Overview = (props:any) =>{
                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                         Extrinsics
                                     </div>
-                                    <div className="md:flex justify-between lg:justify-start text-gray-800">
+                                    <div className="md:flex justify-between lg:justify-start text-gray-800 dark:text-white">
 
                                         <div className="flex ">
                                             <div>Total</div>
@@ -336,23 +336,19 @@ const Extrinsic = (props:any) =>{
     return(
       <>
           <div className="mt-5">
-              <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
+              <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
                   <div className="py-2 min-w-full  p-5 dark:text-gray-200">
-                      <div className="flex my-5 text-xl font-semibold text-gray-700">
-
-                          <div>
+                      <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
                               Extrinsic
-                          </div>
-
                       </div>
-                      <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                          <table className="min-w-full divide-y divide-gray-200">
-                              <thead className="bg-gray-100 dark:bg-gray-300">
+                      <div className="shadow overflow-auto rounded-lg pb-2.5">
+                          <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
+                              <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                               <tr>
                                   {tokenstitle.map(title=>(
                                     <th key={title.title}
                                         scope="col"
-                                        className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                        className="px-6 py-3 text-left text-sm font-semibold   "
                                     >
                                         {title.title}
                                         <i className={title.title} aria-hidden="true"></i>
@@ -360,9 +356,9 @@ const Extrinsic = (props:any) =>{
                                   ))}
                               </tr>
                               </thead>
-                              <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                              <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
                               {Tokens.map(token=>(
-                                <tr key={token.id} className="hover:bg-gray-200" >
+                                <tr key={token.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
                                         <button id={token.extrinsicHash} onClick={GetExtrinsics}>
                                             {token.id}
@@ -373,10 +369,10 @@ const Extrinsic = (props:any) =>{
                                             {token.extrinsicHash}
                                         </button>
                                     </td>
-                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {token.nonce}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {token.state ? "success" : "fail"}
                                     </td>
                                     <td  className="px-6 py-4 whitespace-nowrap text-base ">
@@ -452,12 +448,12 @@ const BlocksDetails=()=>{
       )
     }else{
         return (
-            <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+            <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
                 <Header></Header>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-20 mb-14">
                         <div className="mx-auto lg:flex justify-between ">
-                            <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
+                            <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-200">
                                 Block Details
                             </div>
                         </div>

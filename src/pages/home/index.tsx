@@ -289,16 +289,17 @@ const Search = () =>{
         <>
             <div className="text-5xl text-black font-medium">
                 <div className="mt-5  justify-center hidden xl:flex">
-                    <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -mr-11">
+                    <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -mr-11">
                         <button onClick={ButtonDataCheck}>
                             <i className="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </div>
                     <input type="text"
                            id="homeinput"
-                           className="bg-gray-200 text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
+                           className="bg-gray-200 dark:bg-neutral-800  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700   text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
                            placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
                            onKeyDown={DataCheck}
+                           autoComplete="off"
                     />
                     <div className="-ml-44 -my-2 flex">
 
@@ -307,8 +308,8 @@ const Search = () =>{
                                 <>
                                     <div className=" relative ">
                                         <Listbox.Button
-                                            className="relative w-full border-gray-300  border-l    pl-12    text-left cursor-default   sm:text-base">
-                                            <span className="block truncate text-lg w-24 mr-2"> {selected.name}</span>
+                                            className="relative w-full  border-gray-300  xl:border-l   px-6 dark:border-neutral-700   dark:text-white    text-left cursor-default   sm:text-base">
+                                            <span className="block truncate  w-28 "> {selected.name}</span>
                                             <span
                                                 className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
                 <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true"/>
@@ -323,13 +324,13 @@ const Search = () =>{
                                             leaveTo="opacity-0"
                                         >
                                             <Listbox.Options
-                                                className="absolute z-10 mt-1 w-44 bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto  sm:text-sm">
+                                                className="absolute z-10 mt-5 w-44 bg-white shadow-lg max-h-60 rounded-md dark:bg-neutral-800  py-1 text-base ring-1 ring-black ring-opacity-5   sm:text-sm">
                                                 {types.map((type) => (
                                                     <Listbox.Option
                                                         key={type.id}
                                                         className={({active}) =>
                                                             classNames(
-                                                                active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                                                active ? 'text-white bg-indigo-600  dark:bg-black' : 'text-gray-900',
                                                                 'cursor-default select-none relative py-2 pl-8 pr-4'
                                                             )
                                                         }
@@ -337,7 +338,7 @@ const Search = () =>{
                                                     >
                                                         {({selected, active}) => (
                                                             <>
-                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate dark:text-white')}>
                           {type.name}
                         </span>
                                                                 {selected ? (
@@ -373,19 +374,19 @@ const HotSearch = () =>{
     return(
         <>
             <div className="hidden mt-2  xl:flex" >
-                <div className="text-xl mt-1 text-gray-400">
+                <div className="text-xl mt-1 text-gray-700 dark:text-gray-100">
                     Hot Search:</div>
                 <div className="flex justify-between">
                     {hotsearch.map(item=>(
 
                         <div key={item.h1} className="flex ml-5 mt-2">
                             <img  className="w-6 h-6" src={item.img} alt=""/>
-                            <Link href={item.a}><a  className="text-xs text-gray-400 mt-1 ml-2 hover:text-blue-400">
+                            <Link href={item.a}><a  className="text-xs text-gray-600 dark:text-gray-200 mt-1 ml-2 hover:text-blue-400">
                                 {item.h1}</a></Link>
                         </div>
                     ))}
                     <Link href="">
-                        <a  className="ml-5 text-xl mt-1 text-gray-600 hover:text-yellow-600">
+                        <a  className="ml-5 text-xl mt-1 text-gray-600 dark:text-gray-400 dark:hover:text-white ">
                             more
                             <i className="fa fa-angle-right ml-3 " aria-hidden="true"></i>
                         </a></Link>
@@ -399,21 +400,21 @@ const Announcement = () =>{
     const router = useRouter()
     return(
         <div>
-            <div className="flex justify-between mt-5 bg-white dark:bg-gray-600 rounded-lg ">
+            <div className="flex justify-between mt-5 bg-white dark:bg-neutral-800 rounded-lg ">
 
                 <div className="flex p-2">
                     <div className="flex">
-                        <div className="text-xl xl:text-2xl text-gray-400 ">
+                        <div className="text-xl xl:text-2xl text-gray-400 dark:text-neutral-300">
                             <i className="fa fa-bullhorn " aria-hidden="true"></i></div>
 
                     </div>
-                    <div className="text-xs xl:text-sm mt-1.5 text-gray-700 dark:text-gray-400 ml-2 w-11/12 xl:truncate overflow-hidden h-4 xl:h-6">
+                    <div className="text-xs xl:text-sm mt-1.5 text-gray-700 dark:text-neutral-300 ml-2 w-11/12 xl:truncate overflow-hidden h-4 xl:h-6">
                         Temporarily suspend the use of interface of nile/tronex/shasta on Tronscan and Trongrid
                     </div>
                 </div>
                 <div className="mt-3.5 mr-3">
                     <Link  href="">
-                        <a className="text-xs xl:text-sm flex text-gray-800 dark:text-gray-400 hover:text-yellow-600">
+                        <a className="text-xs xl:text-sm flex text-gray-800 dark:text-gray-400 dark:hover:text-white ">
                             more
                             <i className="fa fa-angle-right ml-2 mt-1" aria-hidden="true"></i>
                         </a>
@@ -434,7 +435,7 @@ const Token = () =>{
     }
     return(
         <>
-            <div className="px-5 pt-3 bg-white dark:bg-gray-600  mt-6 rounded-lg shadow-lg">
+            <div className="px-5 pt-3 bg-white dark:bg-neutral-800  mt-6 rounded-lg shadow-lg">
                 <div className=" grid xl:grid-cols-2 ">
 
                     {tokens.one.map(token=>(
@@ -455,7 +456,7 @@ const Token = () =>{
                                     </div>
                                 </div>
                                 <div className=" ">
-                                    <div className="text-gray-200 text-base flex justify-end">
+                                    <div className="text-gray-400  text-base flex justify-end">
                                         24h
                                     </div>
                                     <div className="text-green-400 text-sm xl:text-xl">
@@ -499,7 +500,7 @@ const Token = () =>{
                                                         </div>
                                                     </div>
                                                     <div className=" ">
-                                                        <div className="text-gray-200 text-base flex justify-end">
+                                                        <div className="text-gray-400 text-base flex justify-end">
                                                             24h
                                                         </div>
                                                         <div className="text-green-400 text-sm xl:text-xl">
@@ -548,7 +549,7 @@ const Project = () =>{
     return(
         <>
             <div className="mb-20 xl:mb-0  mt-5 shadow-xl h-80">
-                <div className=" p-5 px-7 bg-white dark:bg-gray-600 rounded-lg ">
+                <div className=" p-5 px-7 bg-white dark:bg-neutral-800 rounded-lg ">
                     <div className="flex ">
                         <div className="flex justify-between ">
                             <img className="w-16 h-16 mr-6"
@@ -593,10 +594,10 @@ const Project = () =>{
                                             </div>
                                         </div>
                                         <div className="">
-                                            <div className="text-gray-300 text-sm xl:text-base">
+                                            <div className="text-gray-400 text-sm  xl:text-base">
                                                 {item.h1}
                                             </div>
-                                            <div className={classNames(projectStyle[item.states],"text-sm xl:text-base dark:text-gray-300 flex justify-end")} >
+                                            <div className={classNames(projectStyle[item.states],"text-sm xl:text-base text-gray-500  flex justify-end")} >
                                                 {item.percentage}
                                             </div>
                                         </div>
@@ -666,7 +667,7 @@ const Blocks = () =>{
                     <div className="flex flex-col ">
                         <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
                             <div className="py-2   min-w-full sm:px-6 xl:px-8">
-                                <div className="shadow overflow-auto border-b border-gray-200 dark:border-neutral-500 sm:rounded-lg">
+                                <div className="shadow overflow-auto  sm:rounded-lg">
                                     <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
                                         <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                                         <tr>
@@ -685,18 +686,18 @@ const Blocks = () =>{
                                         <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
                                         {blocks.map(block=>(
                                             <tr key={block.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 dark:text-indigo-400 font-medium">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
                                                     <button id={block.id} onClick={GetBlock}>
                                                         {block.blockHeight}
                                                     </button>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                     {DataDiff(block.timestamp)} Second ago
                                                 </td>
-                                                <td className=" px-6 pr-20 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
+                                                <td className=" px-6 pr-20 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                     {block.extrinsicNumber}
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                     {block.eventNumber}
                                                 </td>
 
@@ -718,16 +719,16 @@ const Blocks = () =>{
 const News = () =>{
     const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
     return(
-        <><div>
+        <><div >
                 <div className="bg-white dark:bg-neutral-800 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
                     <div className="text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                         News
                     </div>
-                    <div className=" xl:w-80">
+                    <div className="w-full ">
                         <div className="dark:bg-black"  id="container" >
 
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                <a className="twitter-timeline" data-width="600" data-height="600" data-theme={classNames(enabledNightMode?"":"")}>
+                                <a className="twitter-timeline"  data-height="580" data-theme={classNames(enabledNightMode?"":"")}>
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
                         </div>
@@ -764,15 +765,15 @@ const Home= ()  =>{
                 <div className=" mb-14">
                     <div className="my-20">
                         <Search/>
-                        {/* future*/}
-                        {/*<HotSearch/>*/}
-                        {/*<div className=" xl:flex justify-between">*/}
-                        {/*    <div className="xl:w-7/12">*/}
-                        {/*        <Announcement/>*/}
-                        {/*        <Token/>*/}
-                        {/*    </div>*/}
-                        {/*    <Project/>*/}
-                        {/*</div>*/}
+
+                        <HotSearch/>
+                        <div className=" xl:flex justify-between">
+                            <div className="xl:w-7/12">
+                                <Announcement/>
+                                <Token/>
+                            </div>
+                            <Project/>
+                        </div>
                         <div className="mt-20  xl:flex justify-between ">
                             <Blocks/>
                             <News></News>

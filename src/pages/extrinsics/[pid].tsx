@@ -183,26 +183,26 @@ const Overview = (props:any) => {
         <>
             <div className="mx-auto lg:flex justify-between ">
 
-                <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
+                <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold text-gray-700 dark:text-gray-300">
                     Extrinsics Details
                 </div>
             </div>
             <div className="mt-5">
-                <div className="my-5  bg-white dark:bg-gray-600 rounded-lg  ">
+                <div className="my-5  bg-white dark:bg-neutral-800 rounded-lg  ">
                     <div className="py-5 min-w-full  p-5 dark:text-gray-200">
-                        <div className="flex my-5 text-xl font-semibold text-gray-700">
+                        <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-100">
                             <div>
                                 Overview
                             </div>
                         </div>
-                        <div className="text-gray-400 text-sm ">
+                        <div className="text-gray-400 text-sm dark:text-gray-300">
                             {overview.map(item => (
                                 <div key={item.extrinsic}>
                                     <div className="md:flex  justify-between lg:justify-start my-3 ">
                                         <div className="font-semibold lg:font-medium w-60 mr-32">
                                             Extrinsic Name
                                         </div>
-                                        <div className="text-gray-800 " id="block">
+                                        <div className="text-gray-800 dark:text-white" id="block">
                                             {item.extrinsic}
                                         </div>
                                     </div>
@@ -211,7 +211,7 @@ const Overview = (props:any) => {
                                             Signer
                                         </div>
                                         <div id={item.signature}
-                                             className="text-gray-800  text-xs lg:text-sm  break-words">
+                                             className="text-gray-800 dark:text-white text-xs lg:text-sm  break-words">
                                             {item.signature} &nbsp;
                                             <button onClick={() => {
                                                 // @ts-ignore
@@ -226,7 +226,7 @@ const Overview = (props:any) => {
                                             extrinsic_hash
                                         </div>
                                         <div id={item.extrinsic_hash}
-                                             className="text-gray-800   text-xs lg:text-sm  break-words">
+                                             className="text-gray-800  dark:text-white text-xs lg:text-sm  break-words">
                                             {item.extrinsic_hash} &nbsp;
                                             <button onClick={() => {
                                                 // @ts-ignore
@@ -240,7 +240,7 @@ const Overview = (props:any) => {
                                         <div className="font-semibold lg:font-medium w-60 mr-32">
                                             Weight
                                         </div>
-                                        <div className="text-gray-800 ">
+                                        <div className="text-gray-800 dark:text-white">
                                             {item.weight}
                                         </div>
                                     </div>
@@ -248,7 +248,7 @@ const Overview = (props:any) => {
                                         <div className="font-semibold lg:font-medium w-60 mr-32 ">
                                             Events
                                         </div>
-                                        <div className="md:flex text-gray-800">
+                                        <div className="md:flex text-gray-800 dark:text-white">
 
                                             <div className="flex ">
                                                 <div>Total</div>
@@ -263,60 +263,58 @@ const Overview = (props:any) => {
                                             Parameters
                                         </div>
 
-                                        <div
-                                            className="my-5 h-24  overflow-auto bg-white dark:bg-gray-600 rounded-lg ">
-                                            <div className="">
-                                                <table className="min-w-full divide-y divide-gray-200 ">
-                                                    <thead className="bg-gray-100 dark:bg-gray-300 ">
+                                        <div className=" bg-white dark:bg-neutral-800 rounded-lg mt-2 md:mt-0 w-full xl:w-6/12">
+                                            <div className="overflow-y-auto h-44 w-full">
+                                                <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
+                                                    <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                                                     <tr>
                                                         <th
                                                             scope="col"
-                                                            className="px-6 py-1 text-left text-sm font-semibold text-gray-500  "
+                                                            className="px-6 py-1 text-left text-sm font-semibold   "
                                                         >
                                                             #
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            className="px-6 py-1  text-left text-sm font-semibold text-gray-500  "
+                                                            className="px-6 py-1  text-left text-sm font-semibold   "
                                                         >
                                                             Name
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            className="px-6 py-1 text-left text-sm font-semibold text-gray-500  "
+                                                            className="px-6 py-1 text-left text-sm font-semibold   "
                                                         >
                                                             Type
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            className="px-6 py-1 text-left text-sm font-semibold text-gray-500  "
+                                                            className="px-6 py-1 text-left text-sm font-semibold   "
                                                         >
                                                             Data
                                                         </th>
                                                     </tr>
                                                     </thead>
+                                                        <tbody
+                                                            className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
+                                                        {Data.map(item => (
+                                                            <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
+                                                                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                                    {item.id}
+                                                                </td>
+                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                    {item.Name}
+                                                                </td>
+                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                    {item.Type}
+                                                                </td>
+                                                                <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
+                                                                    {item.Data}
+                                                                </td>
+                                                            </tr>
 
-                                                    <tbody
-                                                        className=" bg-white dark:bg-gray-300 divide-y divide-gray-200  ">
-                                                    {Data.map(item => (
-                                                        <tr key={item.id} className="hover:bg-gray-200">
-                                                            <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                {item.id}
-                                                            </td>
-                                                            <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
-                                                                {item.Name}
-                                                            </td>
-                                                            <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
-                                                                {item.Type}
-                                                            </td>
-                                                            <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500">
-                                                                {item.Data}
-                                                            </td>
-
-                                                        </tr>
-                                                    ))}
-                                                    </tbody>
-                                                </table>
+                                                        ))}
+                                                        </tbody>
+                                                    </table>
 
                                             </div>
                                         </div>
@@ -408,35 +406,32 @@ const Events = (props) =>{
         return(
             <>
                 <div className="py-2 min-w-full  p-5 dark:text-gray-200">
-                    <div className="flex my-5 text-xl font-semibold text-gray-700">
-
-                        <div>
+                    <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
                             Events
-                        </div>
                     </div>
-                    <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-100 dark:bg-gray-300">
+                    <div className="shadow overflow-auto    sm:rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
+                            <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                             <tr>
                                 {tokenstitle.map(title=>(
                                     <th key={title.title}
                                         scope="col"
-                                        className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                        className="px-6 py-3 text-left text-sm font-semibold   "
                                     >
                                         {title.title}
                                     </th>
                                 ))}
                             </tr>
                             </thead>
-                            <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                            <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
                             {Events.map(Events=>(
-                                <tr key={Events.eventid} className="hover:bg-gray-200" >
+                                <tr key={Events.eventid} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-medium font-medium">
                                         <button id={Events.id} onClick={GetEvent}>
                                             {Events.eventid}
                                         </button>
                                     </td>
-                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {Events.action}
                                     </td>
                                 </tr>
@@ -497,13 +492,13 @@ const Extrinsics=()=>{
         )
     }else{
         return(
-            <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+            <div className="mx-auto bg-gray-50 dark:bg-neutral-900 transition duration-700">
                 <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-20 mb-14">
                         <Overview data={data}/>
                         <div className="mt-5">
-                            <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
+                            <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
                                 <Events data={data}/>
                             </div>
                         </div>

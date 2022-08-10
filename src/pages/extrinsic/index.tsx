@@ -276,10 +276,10 @@ const Transactions=()=> {
     console.log(data)
     const extrinsic = data_list(data)
     return (
-        <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
 
           <Header></Header>
-          <div className="max-w-7xl mx-auto py-16  px-4 ">
+          <div className="max-w-7xl mx-auto py-16  px-2 ">
             <div className="my-20 mb-14">
               <div className="mx-auto lg:flex justify-between ">
 
@@ -289,7 +289,8 @@ const Transactions=()=> {
                 {/*<div className="flex ">*/}
                 {/*  <input type="text"*/}
                 {/*         className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"*/}
-                {/*         placeholder="Search transactions, blocks, programs and token"*/}
+                {/*         placeholder="Search transactions, blocks, programs and token"
+                            autoComplete="off"*/}
                 {/*  />*/}
                 {/*  <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
                 {/*    <i className="fa fa-search" aria-hidden="true"></i></div>*/}
@@ -297,23 +298,23 @@ const Transactions=()=> {
 
               </div>
 
-              <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
+              <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
                 <div className="py-2 min-w-full  p-5 dark:text-gray-200">
-                  <div className="flex my-5 text-xl font-semibold text-gray-700">
+                  <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-200">
 
                     <div>
                       Extrinsics
                     </div>
 
                   </div>
-                  <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200">
-                      <thead className="bg-gray-100 dark:bg-gray-300">
+                  <div className="shadow overflow-auto   border-gray-200  sm:rounded-lg">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-400">
+                      <thead className="bg-gray-100 dark:bg-neutral-600 text-gray-500 dark:text-neutral-300">
                       <tr>
                         {tokenstitle.map(title => (
                             <th key={title.title}
                                 scope="col"
-                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                className="px-6 py-3 text-left text-sm font-semibold   "
                             >
                               {title.title}
                               <i className={title.i} aria-hidden="true"></i>
@@ -321,23 +322,23 @@ const Transactions=()=> {
                         ))}
                       </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                      <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
                       {extrinsic.map(item => (
-                          <tr key={item.id} className="hover:bg-gray-200">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
+                            <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
                               <button id={item.extrinsicHeight} onClick={GetExtrinsics}>
                                 {item.id}
                               </button>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
                               <button id={item.extrinsicHeight} onClick={GetExtrinsics}>
                                 {item.extrinsicHeight}
                               </button>
                             </td>
-                            <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               {item.time}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               { item.state ? "success" : "fail"}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-base ">
@@ -348,7 +349,7 @@ const Transactions=()=> {
                               }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
                               </button>
 
-                              <button onClick={getAccount} className="text-blue-400" id={item.address}>
+                              <button onClick={getAccount} className="text-blue-400 dark:text-indigo-400" id={item.address}>
                                 {item.by}
                               </button>
                             </td>

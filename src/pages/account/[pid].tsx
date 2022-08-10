@@ -187,7 +187,7 @@ const Account=()=>{
     const collections = data_list(data)
 
     return (
-        <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
           <Header></Header>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-20 mb-14">

@@ -142,7 +142,7 @@ export default function Faucet() {
         return true
     }
     return (
-      <div className="mx-auto bg-gray-50 dark:bg-current  transition duration-700">
+      <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
             <Header></Header>
               <div className="pt-20">
                   <div className="text-center mt-10 ">
@@ -151,8 +151,9 @@ export default function Faucet() {
                       </div>
                       <div className="mt-5 xl:flex justify-center">
                           <input type="text"
-                                 className="bg-gray-200 text-xs md:text-sm  2xl:text-lg rounded-lg p-3  w-9/12  xl:w-5/12  border hover:border-indigo-500 focus:bg-white dark:bg-gray-300  outline-none"
+                                 className="bg-gray-200 dark:bg-neutral-800 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-9/12  xl:w-5/12  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700 dark:bg-gray-300  outline-none "
                                  placeholder="Please input your address, eg.. evm address 0x.... "
+                                 autoComplete="off"
                                  id="faucet"
                           />
                           <div className=" xl:-ml-44 justify-center mt-3 flex">
@@ -161,8 +162,8 @@ export default function Faucet() {
                                   {({ open }) => (
                                     <>
                                         <div className=" relative ">
-                                            <Listbox.Button className="relative w-full border-gray-300  xl:border-l    xl:pl-12    text-left cursor-default   sm:text-base">
-                                                <span className="block truncate text-lg w-18 xl:w-24 mr-5 xl:mr-2"> {selected.name}</span>
+                                            <Listbox.Button className="relative w-full border-gray-300  xl:border-l    px-6 dark:border-neutral-700       text-left cursor-default   sm:text-base">
+                                                <span className="block truncate text-lg w-18 xl:w-24 mr-5 xl:mr-2 dark:text-white"> {selected.name}</span>
                                                 <span className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
                                                 <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                                 </span>
@@ -175,13 +176,13 @@ export default function Faucet() {
                                               leaveFrom="opacity-100"
                                               leaveTo="opacity-0"
                                             >
-                                                <Listbox.Options className="absolute z-10 mt-1 w-36 xl:w-44 bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto  sm:text-sm">
+                                                <Listbox.Options className="absolute z-10 mt-4 w-36 xl:w-44 bg-white dark:bg-neutral-800  shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto  sm:text-sm">
                                                     {types.map((type) => (
                                                       <Listbox.Option
                                                         key={type.id}
                                                         className={({ active }) =>
                                                           classNames(
-                                                            active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                                                            active ? 'text-white bg-indigo-600  dark:bg-black' : 'text-gray-900',
                                                             'cursor-default select-none relative py-2 pl-8 pr-4'
                                                           )
                                                         }
@@ -189,7 +190,7 @@ export default function Faucet() {
                                                       >
                                                           {({ selected, active }) => (
                                                             <>
-                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate')}>
+                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate dark:text-white')}>
                           {type.name}
                         </span>
 
@@ -216,7 +217,7 @@ export default function Faucet() {
                           </div>
                           <p className="flex justify-center text-center text-base font-medium text-gray-500">
 
-                              <button  onClick={sendtoken} className="mt-10 xl:mt-0 xl:ml-10  px-5 py-3 dark:bg-zinc-800 dark:text-gray-200 rounded-lg font-bold text-gray-600 text-base font-normal border border-black transition duration-500 hover:bg-gray-700  hover:text-white  dark:hover:bg-gray-300 dark:hover:text-black"
+                              <button  onClick={sendtoken} className="mt-10 xl:mt-0 xl:ml-10  px-5 py-3 dark:bg-zinc-800 dark:text-gray-200 rounded-lg font-bold text-gray-600 text-base font-normal border border-black transition duration-500 hover:bg-gray-700  hover:text-white  dark:hover:bg-gray-200 dark:hover:text-black"
                               >
                                   Give me W3G
                               </button>
