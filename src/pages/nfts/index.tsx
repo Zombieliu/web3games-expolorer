@@ -71,7 +71,7 @@ const Content = () =>{
             <div className="mt-5">
                 <div className="flex grid md:grid-cols-2 xl:grid-cols-4 text-xs lg:text-sm">
                     {allnfts.map(item=>(
-                        <div key={item.title} className="rounded-lg border my-3 mx-auto lg:m-3 ">
+                        <div key={item.title} className="rounded-lg border dark:border-neutral-700 my-3 mx-auto lg:m-3 ">
 
                             <div className="">
                                 <Link  href={item.atitle}>
@@ -95,7 +95,7 @@ const Content = () =>{
                                     </Link>
                                 </div>
                                 <div className="flex">
-                                    <div className="text-gray-400 mr-1">
+                                    <div className="text-gray-700 dark:text-gray-200 mr-1">
                                         Sold on:
                                     </div>
                                     <div className="text-blue-400  ">
@@ -107,17 +107,17 @@ const Content = () =>{
                                     </div>
 
                                 </div>
-                                <div className="flex justify-between mt-3">
+                                <div className="flex justify-between mt-3 items-center">
                                     <div className="flex">
                                         <div className="mr-2">
                                             <img className="w-6 h-6 rounded-lg" src="/web3gsmall.png" alt=""/>
                                         </div>
-                                        <div className="mt-0.5">
+                                        <div className="mt-0.5 dark:text-gray-100">
                                             {item.money}
                                         </div>
                                     </div>
 
-                                    <div className="flex">
+                                    <div className="flex dark:text-gray-100">
                                         <div className="mr-2">
                                             <i className="fa fa-clock-o" aria-hidden="true"></i>
                                         </div>
@@ -149,22 +149,22 @@ const NFTs=()=>{
         }
     },[router.isReady])
     return(
-        <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
             <Header></Header>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className="my-20 mb-14">
                     <NFTHeader></NFTHeader>
-                    <div className="bg-white p-5 rounded-lg mt-2">
-                        <div className="flex ">
-                            <div className="mt-0.5 text-base">
+                    <div className="bg-white border dark:border-neutral-700 dark:bg-neutral-800 p-5 rounded-lg mt-2">
+                        <div className="flex items-center">
+                            <div className="mt-0.5 text-base dark:text-gray-200">
                                 Sort by:
                             </div>
                             <div>
-                                <div className="-mt-2 ml-2 ">
+                                <div className=" ml-2 ">
                                     <select
                                         id="location"
                                         name="location"
-                                        className="mt-1 block w-full  border py-2 text-base border-gray-300  sm:text-sm rounded-md"
+                                        className="mt-1 block w-full  border px-1 py-2 text-base border-gray-300 dark:border-neutral-800 dark:bg-neutral-500 dark:text-gray-200 outline-none sm:text-sm rounded-md"
                                         defaultValue="Last Trade"
                                     >
                                         <option>Last Trade</option>

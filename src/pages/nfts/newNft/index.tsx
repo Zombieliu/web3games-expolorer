@@ -59,11 +59,11 @@ const newnfts=[
 
 const Content = () =>{
     return (
-        <div className="bg-white p-5 rounded-lg mt-2">
+        <div className="bg-white dark:bg-neutral-800 p-5 rounded-lg mt-2">
             <div className="mt-5">
                 <div className="flex grid md:grid-cols-2 xl:grid-cols-4 text-xs lg:text-sm  ">
                     {newnfts.map(item=>(
-                        <div key={item.title} className="rounded-lg border my-3 mx-auto lg:m-3 ">
+                        <div key={item.title} className="rounded-lg border dark:border-neutral-700 my-3 mx-auto lg:m-3 ">
 
                             <div className="">
                                 <Link href={item.atitle}>
@@ -88,7 +88,7 @@ const Content = () =>{
                                         </a>
                                     </Link>
                                 </div>
-                                <div className="flex justify-between mt-3">
+                                <div className="flex justify-between mt-3 dark:text-zinc-300">
                                     <div className="flex">
                                         <div>
                                             Minted:
@@ -96,7 +96,7 @@ const Content = () =>{
                                         <div className="mx-1">
                                             <i className="fa fa-clock-o" aria-hidden="true"></i>
                                         </div>
-                                        <div>
+                                        <div >
                                             {item.time}
                                         </div>
                                         <div className="text-blue-400 ml-2">
@@ -131,7 +131,7 @@ const NewNFT=()=>{
     },[router.isReady])
 
     return(
-        <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
             <Header/>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className="my-20 mb-14">

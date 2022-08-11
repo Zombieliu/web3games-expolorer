@@ -267,14 +267,14 @@ const Blocks=()=>{
           <Header></Header>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-20 mb-14">
-              <div className="mx-auto lg:flex justify-between ">
+              <div className="mx-auto lg:flex justify-between items-center">
 
                 <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
                   Blocks
                 </div>
                 <div className="flex ">
                   <input type="text"
-                         className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-800  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700 outline-none"
+                         className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700 outline-none"
                          placeholder="Search transactions, blocks, programs and token"
                          autoComplete="off"
                   />

@@ -194,7 +194,7 @@ const Transfers=()=>{
     // const first_data_check = data_list(first_data)
     const trades = second_data(first)
     return (
-        <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
           <Header></Header>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-20 mb-14">

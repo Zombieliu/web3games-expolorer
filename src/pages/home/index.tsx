@@ -287,8 +287,8 @@ const Search = () =>{
     }
     return (
         <>
-            <div className="text-5xl text-black font-medium">
-                <div className="mt-5  justify-center hidden xl:flex">
+            <div className="text-5xl text-black font-medium ">
+                <div className="mt-5  justify-center hidden xl:flex ">
                     <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -mr-11">
                         <button onClick={ButtonDataCheck}>
                             <i className="fa fa-search" aria-hidden="true"></i>
@@ -296,12 +296,12 @@ const Search = () =>{
                     </div>
                     <input type="text"
                            id="homeinput"
-                           className="bg-gray-200 dark:bg-neutral-800  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700   text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
+                           className="bg-gray-200 dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700   text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
                            placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
                            onKeyDown={DataCheck}
                            autoComplete="off"
                     />
-                    <div className="-ml-44 -my-2 flex">
+                    <div className="-ml-44 -my-2 flex ">
 
                         <Listbox value={selected} onChange={setSelected}>
                             {({open}) => (
@@ -719,7 +719,8 @@ const Blocks = () =>{
 const News = () =>{
     const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
     return(
-        <><div >
+        <>
+            <div>
                 <div className="bg-white dark:bg-neutral-800 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
                     <div className="text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                         News
@@ -766,14 +767,14 @@ const Home= ()  =>{
                     <div className="my-20">
                         <Search/>
 
-                        <HotSearch/>
-                        <div className=" xl:flex justify-between">
-                            <div className="xl:w-7/12">
-                                <Announcement/>
-                                <Token/>
-                            </div>
-                            <Project/>
-                        </div>
+                        {/*<HotSearch/>*/}
+                        {/*<div className=" xl:flex justify-between">*/}
+                        {/*    <div className="xl:w-7/12">*/}
+                        {/*        <Announcement/>*/}
+                        {/*        <Token/>*/}
+                        {/*    </div>*/}
+                        {/*    <Project/>*/}
+                        {/*</div>*/}
                         <div className="mt-20  xl:flex justify-between ">
                             <Blocks/>
                             <News></News>

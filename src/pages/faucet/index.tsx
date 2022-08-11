@@ -149,14 +149,14 @@ export default function Faucet() {
                       <div className="text-4xl mt-16 font-extrabold dark:text-gray-100">
                           W3G Authenticated Faucet
                       </div>
-                      <div className="mt-5 xl:flex justify-center">
+                      <div className="mt-5 xl:flex justify-center items-center">
                           <input type="text"
-                                 className="bg-gray-200 dark:bg-neutral-800 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-9/12  xl:w-5/12  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700 dark:bg-gray-300  outline-none "
+                                 className="bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-9/12  xl:w-5/12  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700 dark:bg-gray-300  outline-none "
                                  placeholder="Please input your address, eg.. evm address 0x.... "
                                  autoComplete="off"
                                  id="faucet"
                           />
-                          <div className=" xl:-ml-44 justify-center mt-3 flex">
+                          <div className=" xl:-ml-44 justify-center mt-3 xl:mt-0 flex">
 
                               <Listbox value={selected} onChange={setSelected} >
                                   {({ open }) => (

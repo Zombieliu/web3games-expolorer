@@ -123,25 +123,25 @@ const collections=[
  const Content = () =>{
     return(
         <>
-            <div className="bg-white p-5 rounded-lg mt-2">
+            <div className="bg-white dark:bg-neutral-800  p-5 rounded-lg mt-2">
                 <div className="mt-5">
-                    <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-100 dark:bg-gray-300">
+                    <div className="shadow overflow-auto    sm:rounded-lg">
+                        <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
+                            <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                             <tr>
                                 {title.map(title=>(
                                     <th key={title.title}
                                         scope="col"
-                                        className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                        className="px-6 py-3 text-left text-sm font-semibold   "
                                     >
                                         {title.title}
                                     </th>
                                 ))}
                             </tr>
                             </thead>
-                            <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                            <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
                             {collections.map(item=>(
-                                <tr key={item.id} className="hover:bg-gray-200" >
+                                <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium  ">
                                         {item.id}
                                     </td>
@@ -155,20 +155,20 @@ const collections=[
                                             </div>
                                         </a></Link>
                                     </td>
-                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {item.items}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {item.attributes}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {item.floorattributes}
                                     </td>
 
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {item.volume}
                                     </td>
-                                    <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">
+                                    <td className=" px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         <div>
                                             {item.lasttrade}
                                             <Link href=""><a className="text-blue-400">
@@ -211,7 +211,7 @@ const Collections=()=>{
         }
     },[router.isReady])
     return(
-        <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
             <Header></Header>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className="my-20 mb-14">

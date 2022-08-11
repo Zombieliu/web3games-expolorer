@@ -451,8 +451,8 @@ const Tokens=[
 
 ]
 const tokensState={
-    rise:"fa fa-arrow-down text-red-300",
-    decline:"fa fa-arrow-up text-green-300 ",
+    rise:"fa fa-arrow-down text-red-400",
+    decline:"fa fa-arrow-up text-green-400 ",
 }
 
 const Content = ()=>{
@@ -469,21 +469,21 @@ const Content = ()=>{
                     recognized tokens
                 </div>
             </div>
-            <div className="shadow overflow-auto border-b  border-gray-200 sm:rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-100 dark:bg-gray-300">
+            <div className="shadow overflow-auto    sm:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
+                    <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                     <tr>
                         {tokenstitle.map(title=>(
                             <th key={title.title}
                                 scope="col"
-                                className="px-6 py-3 text-left text-sm font-semibold text-gray-500  "
+                                className="px-6 py-3 text-left text-sm font-semibold   "
                             >
                                 {title.title}
                             </th>
                         ))}
                     </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-gray-300 divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
                     {Tokens.map(token=>(
                         <tr key={token.id} className="hover:bg-gray-200" >
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
@@ -500,23 +500,23 @@ const Content = ()=>{
                                     </a>
                                 </Link>
                             </td>
-                            <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                 {token.holders}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                 {token.price}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
                                 <i className={classNames(tokensState[token.timestate],)}  aria-hidden="true">
                                     {token.time}
                                 </i>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
                                 <i className={classNames(tokensState[token.weekstate],)}  aria-hidden="true">
                                     {token.week}
                                 </i>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                 {token.marketcap}
                             </td>
 
@@ -541,7 +541,7 @@ const Token=()=>{
         }
     },[router.isReady])
     return(
-        <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
             <Header></Header>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className="my-20 mb-14">
@@ -552,16 +552,17 @@ const Token=()=>{
                         </div>
                         <div className="flex ">
                             <input type="text"
-                                   className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"
+                                   className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700 outline-none"
                                    placeholder="Search transactions, blocks, programs and token"
+                                   autoComplete="off"
                             />
-                            <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">
+                            <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -ml-11">
                                 <i className="fa fa-search" aria-hidden="true"></i></div>
                         </div>
                         </div>
                     <div className="mt-5">
-                        <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
-                            <div className="py-2    min-w-full  p-5 dark:text-gray-200">
+                        <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
+                            <div className="py-2    min-w-full  p-5 dark:text-gray-300">
 
                                 <Content/>
                                 {/*<Sort></Sort>*/}
