@@ -194,7 +194,7 @@ const Account=()=>{
               <div>
                 <AccountOverview></AccountOverview>
               </div>
-              <div className="bg-white p-5 rounded-lg mt-2">
+              <div className="bg-white dark:bg-neutral-800 p-5 rounded-lg mt-2">
                 <div className="mt-5">
                   <div className="shadow overflow-auto    sm:rounded-lg">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-400">
