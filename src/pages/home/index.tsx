@@ -6,14 +6,12 @@ import Script from 'next/script'
 import Header from "../../components/header";
 import Tail from "../../components/tail";
 import {useQuery} from "graphql-hooks";
-import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useManualQuery } from 'graphql-hooks'
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom} from "../../jotai";
 import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
-import {NextPage} from "next";
 import Head from "next/head";
 
 
@@ -672,8 +670,8 @@ const Blocks = () =>{
                                         <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
                                         <tr>
                                             {BlocksTitle.map(items=>(
-
                                             <th
+                                                key={items.title}
                                                 scope="col"
                                                 className=" px-6 py-3 text-left text-sm font-semibold   "
                                             >
