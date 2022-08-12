@@ -35,7 +35,7 @@ const NFTHeader=()=>{
                 </div>
                 <div className="flex ">
                     <input type="text"
-                           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700 outline-none"
+                           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700   dark:border-neutral-700 outline-none"
                            placeholder="Search transactions, blocks, programs and token"
                            autoComplete="off"
                     />

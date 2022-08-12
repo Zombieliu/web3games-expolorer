@@ -294,7 +294,7 @@ const Search = () =>{
                     </div>
                     <input type="text"
                            id="homeinput"
-                           className="bg-gray-200 dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700  dark:bg-gray-300  dark:border-neutral-700   text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
+                           className="bg-gray-200 dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700   text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
                            placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
                            onKeyDown={DataCheck}
                            autoComplete="off"

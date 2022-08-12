@@ -151,7 +151,7 @@ export default function Faucet() {
                       </div>
                       <div className="mt-5 xl:flex justify-center items-center">
                           <input type="text"
-                                 className="bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-9/12  xl:w-5/12  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700 dark:bg-gray-300  outline-none "
+                                 className="bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-9/12  xl:w-5/12  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700  outline-none "
                                  placeholder="Please input your address, eg.. evm address 0x.... "
                                  autoComplete="off"
                                  id="faucet"
