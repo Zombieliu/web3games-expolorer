@@ -164,8 +164,7 @@ const Header=()=>{
                                 <a  className=" ">
                                     <Tab  className={({ selected }) =>
                                         classNames(
-                                            'w-full py-2.5  leading-5  rounded-lg text-base font-medium text-black  dark:text-white ',
-                                            ' focus: ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
+                                            'w-full py-2.5  leading-5  rounded-lg text-base font-medium text-black  dark:text-white outline-none',
                                             selected
                                                 ? 'text-black font-semibold '
                                                 : ''
