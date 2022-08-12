@@ -765,14 +765,14 @@ const Home= ()  =>{
                     <div className="my-20">
                         <Search/>
 
-                        {/*<HotSearch/>*/}
-                        {/*<div className=" xl:flex justify-between">*/}
-                        {/*    <div className="xl:w-7/12">*/}
-                        {/*        <Announcement/>*/}
-                        {/*        <Token/>*/}
-                        {/*    </div>*/}
-                        {/*    <Project/>*/}
-                        {/*</div>*/}
+                        <HotSearch/>
+                        <div className=" xl:flex justify-between">
+                            <div className="xl:w-7/12">
+                                <Announcement/>
+                                <Token/>
+                            </div>
+                            <Project/>
+                        </div>
                         <div className="mt-20  xl:flex justify-between ">
                             <Blocks/>
                             <News></News>
