@@ -110,7 +110,7 @@ const AccountOverview=()=>{
         {/*</div>*/}
       </div>
       <div className="flex">
-        <div id="account" className="text-xs mt-2 lg:text-base mr-2">
+        <div id="account" className="text-xs mt-2 lg:text-base mr-2 dark:text-white">
           {account}
         </div>
         <div>
@@ -121,13 +121,13 @@ const AccountOverview=()=>{
         </div>
       </div>
 
-      <div className="lg:flex justify-between py-6 w-full">
-        <div className="bg-white p-5 rounded-lg w-full mb-2 lg:w-1/2 mr-10 shadow-lg">
-          <div className="text-xl font-semibold mb-3">
+      <div className="lg:flex justify-between py-6 w-full  ">
+        <div className="bg-white dark:bg-neutral-800 p-5 rounded-lg w-full mb-2 lg:w-1/2 mr-10 shadow-lg">
+          <div className="text-xl font-semibold mb-3  dark:text-gray-100">
             Overview
           </div>
           <div className="flex  ">
-          <div className='flex-col justify-between mr-20 text-gray-400'>
+          <div className='flex-col justify-between mr-20 text-gray-400 dark:text-gray-200'>
             <div className="mb-3">
               W3G Balance
             </div>
@@ -138,7 +138,7 @@ const AccountOverview=()=>{
 
           <div className="">
             <div className="flex mb-3">
-            <div className="font-semibold mr-1 "> {balance} W3G </div> <div className="text-gray-600">($55.2)</div>
+            <div className="font-semibold mr-1 dark:text-white"> {balance} W3G </div> <div className="text-gray-600 dark:text-gray-200">($55.2)</div>
             </div>
             {/*<div>*/}
             {/*  <div className="flex mb-3">*/}
@@ -155,9 +155,9 @@ const AccountOverview=()=>{
                   <Popover.Button
                     className={`
                 ${open ? '' : 'text-opacity-90'}
-                text-black group bg-orange-700 px-3 py-2 w-full border bg-gray-100 rounded-md inline-flex items-center text-base font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                text-black group bg-orange-700 px-3 py-2 w-full border bg-gray-100 dark:bg-neutral-800 dark:border-neutral-700 rounded-md inline-flex items-center text-base font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
                   >
-                    <div className="flex justify-between w-full">
+                    <div className="flex justify-between w-full dark:text-white">
 
                       <div className="flex">
                         <img className='w-8 h-8 ' src='/web3gsmall.png' alt='' />
@@ -191,7 +191,7 @@ const AccountOverview=()=>{
                     <Popover.Panel className="absolute z-10     mt-3   w-full">
                       <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
 
-                        <div className="p-4 bg-gray-100 flex justify-between font-semibold text-sm">
+                        <div className="p-4 bg-gray-100 dark:bg-neutral-700 dark:text-gray-200 flex justify-between font-semibold text-sm">
 
                           <div className=" w-1/3">
                             Token
@@ -203,8 +203,8 @@ const AccountOverview=()=>{
                             Value
                           </div>
                         </div>
-                        <div className="relative  bg-white px-1 py-2 lg:p-4 ">
-                          <div className="flex justify-items-start py-2 lg:p-2 border-b hover:bg-gray-200">
+                        <div className="relative  bg-white dark:bg-neutral-600 dark:text-gray-200 px-1 py-2 lg:p-4 ">
+                          <div className="flex justify-items-start py-2 lg:p-2 border-b dark:border-b-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700">
 
                             <Link href="">
                               <a  className="flex w-1/3 mr-1 ">
@@ -267,12 +267,12 @@ const AccountOverview=()=>{
 
 
         </div>
-        <div className="bg-white p-5 rounded-lg w-full mb-2 lg:w-1/2 shadow-lg">
-          <div className="text-xl font-semibold mb-3">
+        <div className="bg-white dark:bg-neutral-800 dark:text-gray-200 p-5 rounded-lg w-full mb-2 lg:w-1/2 shadow-lg">
+          <div className="text-xl font-semibold mb-3 ">
             More info
           </div>
           <div className="flex justify-between">
-            <div className='flex-col justify-between mr-20 text-gray-400'>
+            <div className='flex-col justify-between mr-20 text-gray-400 dark:text-gray-100'>
               <div className="mb-3">
                 W3G Balance
               </div>
