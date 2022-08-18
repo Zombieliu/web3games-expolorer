@@ -727,7 +727,7 @@ const News = () =>{
                         <div className="dark:bg-black"  id="container" >
 
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                <a className="twitter-timeline"  data-height="580" data-theme={classNames(enabledNightMode?"":"")}>
+                                <a className="twitter-timeline"  data-width="320"  data-height="580" data-theme={classNames(enabledNightMode?"":"")}>
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
                         </div>
@@ -754,7 +754,7 @@ const Home= ()  =>{
     },[router.isReady])
 
     return(
-        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
             <Head>
                 <title>Web3Games Explorer  | Dashboard</title>
                 <link rel="icon" href="/favicon.ico" />

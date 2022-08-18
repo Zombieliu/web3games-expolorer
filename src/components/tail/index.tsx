@@ -95,9 +95,9 @@ const Tail=()=>{
         }
     },[router.isReady])
     return(
-        <div className="border-t border-gray-400 dark:border-zinc-700 pt-12 pb-1 px-10   2xl:pt-32 ">
+        <div className="border-t border-gray-200 bg-white dark:bg-W3GTopBG/80 backdrop-blur-sm  dark:border-W3GNavigationBorder pt-12 pb-1 px-10    ">
             <div className="md:flex justify-between  max-w-7xl mx-auto">
-                <div className="text-center md:flex justify-between mb-10">
+                <div className="text-center md:flex justify-between ">
                     {ends.map(end=>(
                     <div key={end.title} className="mx-10" >
                     <div className="text-gray-700 font-semibold text-base dark:text-gray-300">
@@ -134,7 +134,7 @@ const Tail=()=>{
                 </div>
 
             </div>
-            <div className="max-w-7xl mx-auto md:pl-10 my-10 text-gray-500">
+            <div className="max-w-7xl mx-auto md:pl-10 my-5 text-gray-500">
             © 2021 Web3Games</div>
         </div>
     )

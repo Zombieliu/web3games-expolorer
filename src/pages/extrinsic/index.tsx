@@ -276,7 +276,7 @@ const Transactions=()=> {
     console.log(data)
     const extrinsic = data_list(data)
     return (
-        <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
+        <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
 
           <Header></Header>
           <div className="max-w-7xl mx-auto py-16  px-2 ">

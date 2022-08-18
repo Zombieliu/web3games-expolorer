@@ -26,6 +26,15 @@ const blockchain=[
         name:"Blocks",
         href:"/blocks",
     },
+    {
+        name:"EVM Blocks",
+        href:"/evm_blocks",
+    },
+    {
+        name:"EVM Transactions",
+        href:"/evm_transactions",
+    },
+
 ]
 
 const publishingOptions = [
@@ -137,7 +146,7 @@ const Header=()=>{
     return(
         <header>
             <Popover className="relative bg-white  ">
-                <div className="flex  fixed z-20 inset-x-0 bg-white/95 dark:bg-black/90 backdrop-blur-sm    transition duration-700 mb-10 pl-5 mb-5 justify-between items-center  p-2  sm:px-6 lg:justify-end md:space-x-10 lg:px-10  ">
+                <div className="flex  fixed z-20 inset-x-0 bg-white/95 dark:bg-W3GTopBG/80 backdrop-blur-sm    transition duration-700 mb-10 pl-5 mb-5 justify-between items-center  p-2  sm:px-6 lg:justify-end md:space-x-10 lg:px-10  ">
 
                     <div className=" flex w-full justify-between lg:justify-start items-center">
                         <div className="flex justify-start  ">
@@ -202,11 +211,11 @@ const Header=()=>{
                                             leaveFrom="opacity-100 translate-y-0"
                                             leaveTo="opacity-0 translate-y-1"
                                           >
-                                              <Disclosure.Panel className="absolute bg-white dark:bg-neutral-700 w-36 shadow-2xl rounded-lg mt-3 py-2 px-3">
+                                              <Disclosure.Panel className="absolute border-t border-gray-400 bg-white dark:bg-neutral-700 w-40 shadow-2xl rounded-b-lg mt-3 p-2">
                                                   {blockchain.map(item=>(
-                                                    <a key={item.name} href={item.href} className="flex text-base hover:bg-gray-100 hover:text-black dark:hover:text-white dark:hover:bg-black rounded-md dark:border-gray-500 dark:text-gray-300  mb-2" >
+                                                    <a key={item.name} href={item.href} className="text-sm flex text-base hover:bg-gray-100 hover:text-black dark:hover:text-white dark:hover:bg-black rounded-md dark:border-gray-500 dark:text-gray-300  mb-2" >
                                                         <div className="  w-48">
-                                                            <div className="px-2">
+                                                            <div className="p-2">
                                                                 {item.name}
                                                             </div>
 
