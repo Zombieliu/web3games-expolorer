@@ -336,7 +336,7 @@ const Extrinsic = (props:any) =>{
     return(
       <>
           <div className="mt-5">
-              <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
+              <div className="my-5 overflow-x-auto bg-white dark:bg-W3GBG rounded-lg ">
                   <div className="py-2 min-w-full  p-5 dark:text-gray-200">
                       <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
                               Extrinsic

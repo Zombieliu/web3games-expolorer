@@ -303,7 +303,7 @@ const Blocks=()=>{
                                                    Hash：
                                                 </div>
                                                 <div className="flex flex-warp items-center mt-2 md:mt-0 ">
-                                                    <div className="text-gray-800  dark:text-white md:flex items-centerw-full truncate md:text-clip" >
+                                                    <div className="text-gray-800  dark:text-white md:flex items-center w-full truncate md:text-clip" >
                                                         {overview.hash}
                                                     </div>
                                                 </div>
@@ -314,9 +314,9 @@ const Blocks=()=>{
                                                    Parent Hash：
                                                 </div>
                                                 <div className="flex flex-warp items-center mt-2 md:mt-0 ">
-                                                    <button onClick={GetBlock} id={overview.parentHash} className="text-blue-400 md:flex items-center w-full truncate md:text-clip" >
+                                                    <div onClick={GetBlock} id={overview.parentHash} className="cursor-pointer text-blue-400 md:flex items-center w-full truncate md:text-clip" >
                                                         {overview.parentHash}
-                                                    </button>
+                                                    </div>
                                                 </div>
                                             </div>
 
