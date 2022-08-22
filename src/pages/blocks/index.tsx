@@ -155,33 +155,53 @@ const Sort=(props:any)=>{
 
   return(
       <div>
-        <div className="rounded-md   flex justify-end my-5" aria-label="Pagination">
-          <button
-              onClick={firstPage}
-              className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span className="">First</span>
-          </button>
-          <button
-              onClick={decPageCounter}
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span className="sr-only">Previous</span>
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <div className="bg-white border-gray-300 hidden lg:inline-block text-gray-500  relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-            Page {BlockPageNumber} of {block_number_pages}
+        <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
+          <div className="flex text-black dark:text-white items-center">
+            Show
+            <div className="p-0.5 mx-1 rounded-md bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+              <select
+                  id="location"
+                  name="location"
+                  className=" block  w-13   p-1 outline-none  text-base    sm:text-sm rounded-md text-black bg-white  dark:bg-black dark:text-white"
+                  defaultValue="20"
+              >
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+              </select>
+            </div>
+            Records
+
           </div>
-          <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-            <span className="sr-only">Next</span>
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <button
-              onClick={lastPage}
-              className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span className="">Last</span>
-          </button>
+          <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
+            <button
+                onClick={firstPage}
+                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md   bg-W3GButtonColor/60 text-sm font-semibold  "
+            >
+              <span className="">First</span>
+            </button>
+            <button
+                onClick={decPageCounter}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md  bg-W3GButtonColor/60 text-sm font-semibold "
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className="  hidden lg:inline-block   relative inline-flex items-center px-4 py-2 border-x border-neutral-600  dark:border-gray-200 bg-W3GButtonColor/60 text-sm font-semibold ">
+              Page {BlockPageNumber} of {block_number_pages}
+            </div>
+            <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md bg-W3GButtonColor/60 text-sm font-semibold ">
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+                onClick={lastPage}
+                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-W3GButtonColor/60 text-sm font-semibold "
+            >
+              <span className="">Last</span>
+            </button>
+          </div>
+
         </div>
       </div>
   )
