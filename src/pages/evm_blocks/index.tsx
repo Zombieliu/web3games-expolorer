@@ -175,30 +175,30 @@ const Sort=(props:any)=>{
                     Records
 
                 </div>
-                <div className="rounded-md   flex justify-end ">
+                <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
                     <button
                         onClick={firstPage}
-                        className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md   bg-W3GButtonColor/60 text-sm font-semibold text-white "
+                        className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md   bg-W3GButtonColor/60 text-sm font-semibold  "
                     >
                         <span className="">First</span>
                     </button>
                     <button
                         onClick={decPageCounter}
-                        className="relative inline-flex items-center px-2 py-2 rounded-l-md  bg-W3GButtonColor/60 text-sm font-semibold text-white"
+                        className="relative inline-flex items-center px-2 py-2 rounded-l-md  bg-W3GButtonColor/60 text-sm font-semibold "
                     >
                         <span className="sr-only">Previous</span>
                         <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
-                    <div className=" border-gray-300 hidden lg:inline-block   relative inline-flex items-center px-4 py-2 border-x   bg-W3GButtonColor/60 text-sm font-semibold text-white">
+                    <div className="  hidden lg:inline-block   relative inline-flex items-center px-4 py-2 border-x border-neutral-600  dark:border-gray-200 bg-W3GButtonColor/60 text-sm font-semibold ">
                         Page {extrinsicPageNumber} of {extrinsic_number_pages}
                     </div>
-                    <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md bg-W3GButtonColor/60 text-sm font-semibold text-white">
+                    <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md bg-W3GButtonColor/60 text-sm font-semibold ">
                         <span className="sr-only">Next</span>
                         <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
                     <button
                         onClick={lastPage}
-                        className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-W3GButtonColor/60 text-sm font-semibold text-white"
+                        className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-W3GButtonColor/60 text-sm font-semibold "
                     >
                         <span className="">Last</span>
                     </button>
