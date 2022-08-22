@@ -726,7 +726,7 @@ const News = () =>{
                 <div className="flex w-full text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                     News
                 </div>
-                <div className="  rounded-lg p-2  shadow-2xl bg-purple-300">
+                <div className="  rounded-lg p-2  shadow-2xl ">
                     <div className="w-full ">
                         <div className=" "  id="container" >
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
