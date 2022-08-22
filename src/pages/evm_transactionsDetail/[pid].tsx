@@ -1,14 +1,21 @@
 import React, {Fragment, useEffect, useState} from "react";
 import Header from "../../components/header";
 import Tail from "../../components/tail";
-import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
-import {Dialog, Transition } from "@headlessui/react";
+import {
+    CheckCircleIcon,
+    ChevronDownIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    ChevronUpIcon
+} from "@heroicons/react/solid";
+import {Dialog, Disclosure, Transition} from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {BlockPageNumberValue, DarkModeAtom, darkModeImg, extrinsicPageNumberValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
+import Link from "next/link";
 
 
 function classNames(...classes) {
@@ -57,7 +64,15 @@ const overview=
         to:"0xae83286572hsudag5474h48fb9bn0anfb040u346h0fwq969347u75",
         value:"0",
         fee:"0",
-
+        Gas:"0.00000000723",
+        Ether:"1.846.36",
+        TxnType:"0",
+        Nonce:"17",
+        Position:"237",
+        Input:"Function: transfer(address_to, uint256_value)" +
+            "MethodID: 0xa9059cbb \n" +
+            "(0): 00000000000000000000008079c6686aabe6328938649f389698cb\n" +
+            "(1): 000000000000000000000000000000000006328938649f389698cb"
     }
 
 const EvmTransactionsDetail=()=>{
@@ -159,7 +174,7 @@ const EvmTransactionsDetail=()=>{
 
                         <div className="my-5  bg-white dark:bg-W3GInfoBG rounded-lg border dark:border-W3GInfoBorderBG ">
                             <div className=" min-w-full   dark:text-neutral-300 ">
-                                <div className="flex  text-xl font-semibold py-2.5 px-5 border-b dark:border-W3GInfoBorderBG rounded-t-lg">
+                                <div className="flex  text-xl font-semibold  items-center p-5 border-b dark:border-W3GInfoBorderBG rounded-t-lg">
                                     <div className="bg-clip-text text-transparent bg-gradient-to-r from-W3G1    via-W3G2 to-W3G3 ">
                                         Overview
                                     </div>
@@ -206,7 +221,7 @@ const EvmTransactionsDetail=()=>{
                                                         {overview.block}
 
                                                     </button>
-                                                   <div className=" bg-gray-200 dark:bg-gray-500 text-gray-700 dark:text-white rounded-md px-2 py-1 md:ml-1">
+                                                   <div className=" bg-gray-200 dark:bg-neutral-500 text-gray-700 dark:text-white rounded-md px-2 py-1 md:ml-1">
                                                        30 Block Confirmations
                                                    </div>
                                                 </div>
@@ -256,7 +271,7 @@ const EvmTransactionsDetail=()=>{
                                                     <div>
                                                         Contract:
                                                     </div>
-                                                    <div className="text-blue-400 mx-1 w-56 md:w-full truncate md:text-clip">
+                                                    <div className="text-blue-400 mx-2 w-56 md:w-72 truncate">
                                                         {overview.to}
                                                     </div>
                                                     <div className={classNames(`${Status[overview.status].bg}`,"text-sm items-center flex p-1.5 mx-1 rounded-full text-gray-50")}>
@@ -277,7 +292,7 @@ const EvmTransactionsDetail=()=>{
                                             </div>
                                             <div className="flex flex-warp items-center mt-2 md:mt-0 ">
                                                 <div className="text-gray-800  dark:text-white flex items-center " >
-                                                    <div className="mr-1 bg-gray-200 dark:bg-gray-500 text-gray-700 dark:text-white rounded-md px-2 py-1 md:ml-1">
+                                                    <div className="mr-1 bg-gray-200 dark:bg-neutral-500 text-gray-700 dark:text-white rounded-md px-2 py-1 md:ml-1">
                                                         {overview.value} W3G
                                                     </div>
                                                     <div className="text-gray-700 dark:text-white  ">
@@ -295,7 +310,7 @@ const EvmTransactionsDetail=()=>{
                                             <div className="flex flex-warp items-center mt-2 md:mt-0 ">
                                                 <div className="text-gray-800  dark:text-white flex items-center " >
                                                     <div className="text-gray-700 dark:text-white mr-1 ">
-                                                        {overview.fee} GLMR
+                                                        {overview.fee} W3G
                                                     </div>
                                                     <div className="text-gray-700 dark:text-white  ">
                                                         ($0.00)
@@ -304,9 +319,103 @@ const EvmTransactionsDetail=()=>{
                                             </div>
                                         </div>
 
+                                        <div className="md:flex justify-between lg:justify-start  py-4   items-center">
+                                            <div className="font-semibold lg:font-medium w-60 mr-32  ">
+                                               Gas Price:
+                                            </div>
+                                            <div className="flex flex-warp items-center mt-2 md:mt-0 ">
+                                                <div className="text-gray-800  dark:text-white flex items-center " >
+                                                    <div className="text-gray-700 dark:text-white mr-1 ">
+                                                        {overview.Gas} W3G
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <div className="md:flex justify-between lg:justify-start  py-4  border-b border-gray-200 dark:divide-W3GInfoBorderBG items-center">
+                                            <div className="font-semibold lg:font-medium w-60 mr-32  ">
+                                                Ether Price:
+                                            </div>
+                                            <div className="flex flex-warp items-center mt-2 md:mt-0 ">
+                                                <div className="text-gray-800  dark:text-white flex items-center " >
+                                                    <div className="text-gray-700 dark:text-white  ">
+                                                        ${overview.Ether} /  W3G
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="py-4">
+                                            <Disclosure  >
+                                                {({ open }) => (
+                                                    <>
+                                                        <div className="">
+                                                            <Transition
+                                                                as={Fragment}
+                                                                enter="transition ease-out duration-500"
+                                                                enterFrom="opacity-0 translate-y-1"
+                                                                enterTo="opacity-100 translate-y-0"
+                                                                leave="transition ease-in duration-500"
+                                                                leaveFrom="opacity-100 translate-y-0"
+                                                                leaveTo="opacity-0 translate-y-1"
+                                                            >
+                                                                <Disclosure.Panel className="">
+                                                                    <div className="md:flex justify-between lg:justify-start  py-4   ">
+                                                                        <div className="font-semibold lg:font-medium w-60 mr-32  ">
+                                                                           Other:
+                                                                        </div>
+                                                                        <div className="flex flex-warp grid grid-cols-1 xl:grid-cols-3 gap-4 md:grid-none items-center mt-2 md:mt-0 ">
+                                                                            <div className="mr-2 bg-gray-200 dark:bg-neutral-500 text-gray-700 dark:text-white rounded-md px-2 py-1 md:ml-1">
+                                                                               Txn Type: {overview.TxnType}(Legacy)
+                                                                            </div>
 
+                                                                            <div className="mr-2 bg-gray-200 dark:bg-neutral-500 text-gray-700 dark:text-white rounded-md px-2 py-1 md:ml-1">
+                                                                             Nonce: {overview.Nonce}
+                                                                            </div>
 
+                                                                            <div className="mr-2 bg-gray-200 dark:bg-neutral-500 text-gray-700 dark:text-white rounded-md px-2 py-1 md:ml-1">
+                                                                              Position: {overview.Position}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="md:flex justify-between lg:justify-start  py-4   ">
+                                                                        <div className="font-semibold lg:font-medium w-60 mr-32  ">
+                                                                            Input Data:
+                                                                        </div>
+                                                                        <div className=" flex flex-warp items-center mt-2 md:mt-0 ">
+                                                                            <div className="">
+                                                                                <textarea
+                                                                                    name="comment"
+                                                                                    id="comment"
+                                                                                    autoComplete="off"
+                                                                                    required={true}
+                                                                                    className="p-1 shadow-sm whitespace-pre-wrap outline-none  text-gray-400 dark:text-gray-300 bg-gray-200 dark:bg-neutral-500 block w-80 h-40  md:w-99 sm:text-sm border-gray-300 rounded-md  "
+                                                                                    value={overview.Input}
+                                                                                />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </Disclosure.Panel>
+                                                            </Transition>
+
+                                                                <Disclosure.Button className="flex  py-1.5 text-indigo-400 font-semibold  items-center">
+                                                                    <div className="   items-center">
+                                                                        Click to see More
+                                                                    </div>
+                                                                    <ChevronUpIcon
+                                                                        className={`${
+                                                                            open ? '' : 'rotate-180 transform '
+                                                                        } h-5 w-5 ml-2`}
+                                                                    />
+                                                                </Disclosure.Button>
+
+                                                        </div>
+                                                    </>
+
+                                                )}
+                                            </Disclosure>
+
+                                        </div>
                                        </div>
                                 </div>
 

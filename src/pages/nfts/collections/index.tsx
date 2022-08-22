@@ -214,7 +214,7 @@ const Collections=()=>{
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
             <Header></Header>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
-                <div className="my-20 mb-14">
+                <div className="my-10 mb-14">
                     <NFTHeader></NFTHeader>
                     <Content/>
                 </div>

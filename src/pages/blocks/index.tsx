@@ -266,7 +266,7 @@ const Blocks=()=>{
 
           <Header></Header>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
-            <div className="my-20 mb-14">
+            <div className="my-10 mb-14">
               <div className="mx-auto lg:flex justify-between items-center">
 
                 <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">

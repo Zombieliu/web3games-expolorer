@@ -286,27 +286,15 @@ const Search = () =>{
     return (
         <>
             <div className="text-5xl text-black font-medium ">
-                <div className="mt-5  justify-center hidden xl:flex ">
-                    <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -mr-11">
-                        <button onClick={ButtonDataCheck}>
-                            <i className="fa fa-search" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <input type="text"
-                           id="homeinput"
-                           className="bg-gray-200 dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700   text-lg rounded-lg  pl-14 w-full  border focus:bg-white outline-none"
-                           placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
-                           onKeyDown={DataCheck}
-                           autoComplete="off"
-                    />
-                    <div className="-ml-44 -my-2 flex ">
+                <div className="mt-5  justify-center hidden xl:flex  p-0.5 rounded-lg bg-gradient-to-r from-W3G1 w-full via-W3G2 to-W3G3">
+                    <div className="-mr-40 -my-1.5 flex ">
 
                         <Listbox value={selected} onChange={setSelected}>
                             {({open}) => (
                                 <>
                                     <div className=" relative ">
                                         <Listbox.Button
-                                            className="relative w-full  border-gray-300  xl:border-l   px-6 dark:border-neutral-700   dark:text-white    text-left cursor-default   sm:text-base">
+                                            className="relative w-full  border-gray-300    px-6 dark:border-neutral-700   dark:text-white    text-left cursor-default   sm:text-base">
                                             <span className="block truncate  w-28 "> {selected.name}</span>
                                             <span
                                                 className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
@@ -360,7 +348,19 @@ const Search = () =>{
                             )}
                         </Listbox>
                     </div>
+                    <input type="text"
+                           id="homeinput"
+                           className="bg-gray-50 dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700   text-lg rounded-lg  pl-48 w-full   focus:bg-white outline-none"
+                           placeholder="Search by Block/BlockHash/ExtrinsicHash/Address"
+                           onKeyDown={DataCheck}
+                           autoComplete="off"
+                    />
 
+                    <div className="flex justify-center z-10 text-white dark:text-gray-300 text-3xl bg-blue-400 rounded-lg m-1  px-4 py-2 -ml-16 ">
+                        <button onClick={ButtonDataCheck}>
+                            <i className="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </>
@@ -434,8 +434,8 @@ const Token = () =>{
     return(
         <>
             <div className="px-5 pt-3 bg-white dark:bg-neutral-800  mt-6 rounded-lg shadow-lg">
-                <div className=" grid xl:grid-cols-2 ">
 
+                <div className=" grid xl:grid-cols-2 ">
                     {tokens.one.map(token=>(
 
                         <Link key={token.title} href={token.a}>
@@ -460,7 +460,6 @@ const Token = () =>{
                                     <div className="text-green-400 text-sm xl:text-xl">
                                         {token.addition}
                                     </div>
-
                                 </div>
                             </a>
                         </Link>
@@ -548,13 +547,15 @@ const Project = () =>{
         <>
             <div className="mb-20 xl:mb-0  mt-5 shadow-xl h-80">
                 <div className=" p-5 px-7 bg-white dark:bg-neutral-800 rounded-lg ">
-                    <div className="flex ">
-                        <div className="flex justify-between ">
-                            <img className="w-16 h-16 mr-6"
+                    <div className="flex items-center">
+                        <div className="flex justify-between items-center">
+                            <img className="w-16 h-16 mr-2"
                                  src="/web3g2.png" alt=""/>
                             <div>
-                                <h1 className="text-xl font-semibold dark:text-gray-50">W3G</h1>
-                                <h2 className="text-base text-gray-400 dark:text-gray-400">
+                                <div className="flex">
+                                    <h1 className="text-xl font-semibold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">W3G</h1>
+                                </div>
+                               <h2 className="text-base text-gray-400 dark:text-gray-400">
                                     Latest Price
                                 </h2>
                             </div>
@@ -580,13 +581,13 @@ const Project = () =>{
                             <Link  key={item.img} href={item.a}>
                                 <a>
                                     <div className="flex justify-between pb-2">
-                                        <div className="flex">
+                                        <div className="flex items-center">
                                             <img className="w-10 h-10" src={item.img} alt=""/>
                                             <div className="pl-5">
-                                                <h1 className="text-sm xl:text-base text-gray-400 dark:text-gray-300">
+                                                <h1 className="text-sm xl:text-base text-gray-400 dark:text-gray-500">
                                                     {item.title}
                                                 </h1>
-                                                <h2 className="text-sm xl:text-base dark:text-gray-300">
+                                                <h2 className="text-sm xl:text-base dark:text-gray-200">
                                                     {item.value}
                                                 </h2>
                                             </div>
@@ -659,21 +660,24 @@ const Blocks = () =>{
         return(
             <>
                 <div className="bg-white dark:bg-neutral-800 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
-                    <div className="text-gray-500 text-2xl mb-5 dark:text-gray-300 font-semibold">
-                        Finallized  Blocks
+                    <div className="flex">
+                        <div className=" text-2xl mb-5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                            Finallized  Blocks
+                        </div>
                     </div>
+
                     <div className="flex flex-col ">
-                        <div className="-my-2 overflow-x-auto sm:-mx-6 xl:-mx-8">
-                            <div className="py-2   min-w-full sm:px-6 xl:px-8">
-                                <div className="shadow overflow-auto  sm:rounded-lg">
-                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
-                                        <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
+                        <div className="overflow-x-auto ">
+                            <div className="   min-w-full  ">
+                                <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG">
+                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG">
+                                        <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                                         <tr>
                                             {BlocksTitle.map(items=>(
                                             <th
                                                 key={items.title}
                                                 scope="col"
-                                                className=" px-6 py-3 text-left text-sm font-semibold   "
+                                                className=" px-6 py-3 text-left text-sm font-semibold  text-center "
                                             >
                                                 {items.title}
                                             </th>
@@ -681,9 +685,9 @@ const Blocks = () =>{
                                                 ))}
                                         </tr>
                                         </thead>
-                                        <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
+                                        <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                                         {blocks.map(block=>(
-                                            <tr key={block.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
+                                            <tr key={block.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center" >
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
                                                     <button id={block.id} onClick={GetBlock}>
                                                         {block.blockHeight}
@@ -692,7 +696,7 @@ const Blocks = () =>{
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                     {DataDiff(block.timestamp)} Second ago
                                                 </td>
-                                                <td className=" px-6 pr-20 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                <td className=" px-14  py-4  whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                     {block.extrinsicNumber}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
@@ -719,15 +723,14 @@ const News = () =>{
     return(
         <>
             <div>
-                <div className="bg-white dark:bg-neutral-800 px-5 py-7 rounded-lg  xl:px-12 shadow-xl">
-                    <div className="text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
-                        News
-                    </div>
+                <div className="flex w-full text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
+                    News
+                </div>
+                <div className="  rounded-lg p-2  shadow-2xl bg-purple-300">
                     <div className="w-full ">
-                        <div className="dark:bg-black"  id="container" >
-
+                        <div className=" "  id="container" >
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                <a className="twitter-timeline"  data-width="320"  data-height="580" data-theme={classNames(enabledNightMode?"":"")}>
+                                <a className="twitter-timeline"  data-width="400"  data-height="620" data-theme={classNames(enabledNightMode?"":"")}>
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
                         </div>
@@ -762,7 +765,12 @@ const Home= ()  =>{
             <Header/>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className=" mb-14">
-                    <div className="my-20">
+                    <div className="my-10">
+                        <div className="flex">
+                        <div className=" text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                            Web3Games Chain
+                        </div>
+                        </div>
                         <Search/>
 
                         <HotSearch/>

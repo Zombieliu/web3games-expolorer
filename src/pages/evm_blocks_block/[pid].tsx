@@ -34,19 +34,13 @@ const overview=
     {
 
         height:3342,
-        block:`props.data.extrinsicInfos.nodes[0].blockHash.blockHeight`,
         timestamp:"28",
         transactions:"20",
-        collator:"0x1d44ddqgweibrf2873gbshbf92gbb183447",
         reward:"0.0027516712",
-        difficulty:"0",
-        totalDifficulty:"0",
-        size:"3,736",
         gasUsed:"458,943 (3.08%）",
         gasLimit:"15,000,000",
         hash:"0x1dchsdkh239hfiqf9hfwbf943bgjksdhishfih4h0whefn40tihqwh0wth40h",
         parentHash:"0x1dchsdkh239hfiqf9hfwbf943bgjksdhishfih4h0whefn40tihqwh0wth40h",
-        Uncles:"0x1dchsdkh239hfiqf9hfwbf943bgjksdhishfih4h0whefn40tihqwh0wth40h",
         Nonce:"0x00000000000000",
 
     }
@@ -147,14 +141,14 @@ const Blocks=()=>{
                         </div>
 
                         <div className="my-5  bg-white dark:bg-W3GInfoBG rounded-lg border dark:border-W3GInfoBorderBG ">
-                            <div className=" min-w-full   dark:text-neutral-300 ">
-                                <div className="flex  text-xl font-semibold py-2.5 px-5 border-b dark:border-W3GInfoBorderBG rounded-t-lg">
+                            <div className=" min-w-full  dark:text-neutral-300 ">
+                                <div className="flex  text-xl font-semibold items-center p-5 border-b dark:border-W3GInfoBorderBG rounded-t-lg">
                                     <div className="bg-clip-text text-transparent bg-gradient-to-r from-W3G1    via-W3G2 to-W3G3 ">
                                         Overview
                                     </div>
                                 </div>
                                 <div className="text-black dark:text-white  text-sm ">
-                                        <div key={overview.block} className="divide-y divide-gray-200 dark:divide-W3GInfoBorderBG px-5  items-center">
+                                        <div key={overview.height} className="divide-y divide-gray-200 dark:divide-W3GInfoBorderBG px-5  items-center">
 
                                             <div className="md:flex justify-between lg:justify-start  py-4   items-center">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32  ">
@@ -218,19 +212,6 @@ const Blocks=()=>{
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="md:flex justify-between lg:justify-start  py-4   items-center">
-                                                <div className="font-semibold lg:font-medium w-60 mr-32  ">
-                                                    By Collator:
-                                                </div>
-                                                <div className="flex flex-warp items-center mt-2 md:mt-0 ">
-                                                    <div className="text-gray-800  dark:text-white md:flex items-center " >
-                                                        <div className="text-blue-400 mr-1 ">
-                                                            {overview.collator}
-                                                        </div>
-                                                        (Pathrocknetwork) in 12 secs
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                             <div className="md:flex justify-between lg:justify-start  py-4   items-center">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32  ">
@@ -243,38 +224,6 @@ const Blocks=()=>{
                                                 </div>
                                             </div>
 
-                                            <div className="md:flex justify-between lg:justify-start  py-4   items-center">
-                                                <div className="font-semibold lg:font-medium w-60 mr-32  ">
-                                                    Difficulty：
-                                                </div>
-                                                <div className="flex flex-warp items-center mt-2 md:mt-0 ">
-                                                    <div className="text-gray-800  dark:text-white md:flex items-center " >
-                                                        {overview.difficulty}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="md:flex justify-between lg:justify-start  py-4   items-center">
-                                                <div className="font-semibold lg:font-medium w-60 mr-32  ">
-                                                  Total  Difficulty：
-                                                </div>
-                                                <div className="flex flex-warp items-center mt-2 md:mt-0 ">
-                                                    <div className="text-gray-800  dark:text-white md:flex items-center " >
-                                                        {overview.totalDifficulty}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="md:flex justify-between lg:justify-start  py-4   items-center">
-                                                <div className="font-semibold lg:font-medium w-60 mr-32  ">
-                                                   Size：
-                                                </div>
-                                                <div className="flex flex-warp items-center mt-2 md:mt-0 ">
-                                                    <div className="text-gray-800  dark:text-white md:flex items-center " >
-                                                        {overview.size} Butes
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                             <div className="md:flex justify-between lg:justify-start  py-4   items-center">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32  ">
@@ -320,16 +269,7 @@ const Blocks=()=>{
                                                 </div>
                                             </div>
 
-                                            <div className="md:flex justify-between lg:justify-start  py-4   items-center">
-                                                <div className="font-semibold lg:font-medium w-60 mr-32  ">
-                                                    Sha3Uncles:
-                                                </div>
-                                                <div className="flex flex-warp items-center mt-2 md:mt-0 ">
-                                                    <div className="text-gray-800  dark:text-white md:flex items-center w-full truncate md:text-clip" >
-                                                        {overview.parentHash}
-                                                    </div>
-                                                </div>
-                                            </div>
+
 
                                             <div className="md:flex justify-between lg:justify-start  py-4   items-center">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32  ">

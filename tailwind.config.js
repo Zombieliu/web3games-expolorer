@@ -5,9 +5,18 @@ module.exports = {
     darkMode: 'class', // or 'media' or 'class'
     theme: {
         extend: {
+            spacing:{
+                '18': '4.5rem',
+                '99': "32rem",
+            },
             colors: {
                 transparent: 'transparent',
                 current: 'currentColor',
+                W3GButtonColor:{
+                    light: '#7BE0D6',
+                    DEFAULT: '#7BE0D6',
+                    dark: '#7BE0D6',
+                },
                 W3GBG: {
                     light: '#151515',
                     DEFAULT: '#151515',

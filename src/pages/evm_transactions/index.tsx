@@ -169,11 +169,11 @@ const Sort=(props:any)=>{
             <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
                 <div className="flex text-black dark:text-white items-center">
                     Show
-                    <div className="">
+                    <div className="p-0.5 mx-1 rounded-md bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                         <select
                             id="location"
                             name="location"
-                            className=" block  w-14  mx-1 p-1 outline-none  text-base border border-gray-500  sm:text-sm rounded-md text-black bg-white  dark:bg-black dark:text-white"
+                            className=" block  w-13   p-1 outline-none  text-base    sm:text-sm rounded-md text-black bg-white  dark:bg-black dark:text-white"
                             defaultValue="20"
                         >
                             <option>20</option>
@@ -187,27 +187,27 @@ const Sort=(props:any)=>{
                 <div className="rounded-md   flex justify-end ">
                     <button
                         onClick={firstPage}
-                        className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md   bg-W3G3 text-sm font-semibold text-white "
+                        className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md   bg-W3GButtonColor/60 text-sm font-semibold text-white "
                     >
                         <span className="">First</span>
                     </button>
                     <button
                         onClick={decPageCounter}
-                        className="relative inline-flex items-center px-2 py-2 rounded-l-md  bg-W3G3 text-sm font-semibold text-white"
+                        className="relative inline-flex items-center px-2 py-2 rounded-l-md  bg-W3GButtonColor/60 text-sm font-semibold text-white"
                     >
                         <span className="sr-only">Previous</span>
                         <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
-                    <div className=" border-gray-300 hidden lg:inline-block   relative inline-flex items-center px-4 py-2 border-x   bg-W3G3 text-sm font-semibold text-white">
+                    <div className=" border-gray-300 hidden lg:inline-block   relative inline-flex items-center px-4 py-2 border-x   bg-W3GButtonColor/60 text-sm font-semibold text-white">
                         Page {extrinsicPageNumber} of {extrinsic_number_pages}
                     </div>
-                    <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md bg-W3G3 text-sm font-semibold text-white">
+                    <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md bg-W3GButtonColor/60 text-sm font-semibold text-white">
                         <span className="sr-only">Next</span>
                         <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
                     <button
                         onClick={lastPage}
-                        className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-W3G3 text-sm font-semibold text-white"
+                        className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-W3GButtonColor/60 text-sm font-semibold text-white"
                     >
                         <span className="">Last</span>
                     </button>
@@ -321,10 +321,10 @@ const Blocks=()=>{
                         </div>
 
                         <div className="my-5 overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
-                            <div className=" min-w-full   border border-W3GInfoBorderBG">
-                                <div className="shadow overflow-auto   ">
-                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG border-b border-W3GInfoBorderBG">
-                                        <thead className="bg-gray-100 dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                            <div className=" min-w-full  ">
+                                <div className="shadow overflow-auto  rounded-lg  border  dark:border-W3GInfoBorderBG">
+                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                        <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                                         <tr>
                                             {tokenstitle.map(title => (
                                                 <th key={title.title}
@@ -375,7 +375,7 @@ const Blocks=()=>{
                                                     </button>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                                                    {item.Value} Ether
+                                                    {item.Value} W3G
                                                 </td>
                                                 <td className="px-10 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
                                                     {item.TxnFee}

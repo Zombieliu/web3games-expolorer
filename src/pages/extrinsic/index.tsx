@@ -163,33 +163,53 @@ const Sort=(props:any)=>{
 
   return(
       <div>
-        <div className="rounded-md   flex justify-end my-5" aria-label="Pagination">
-          <button
-              onClick={firstPage}
-              className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span className="">First</span>
-          </button>
-          <button
-              onClick={decPageCounter}
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span className="sr-only">Previous</span>
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <div className="bg-white border-gray-300 hidden lg:inline-block text-gray-500  relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-            Page {extrinsicPageNumber} of {extrinsic_number_pages}
+        <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
+          <div className="flex text-black dark:text-white items-center">
+            Show
+            <div className="p-0.5 mx-1 rounded-md bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+              <select
+                  id="location"
+                  name="location"
+                  className=" block  w-13   p-1 outline-none  text-base    sm:text-sm rounded-md text-black bg-white  dark:bg-black dark:text-white"
+                  defaultValue="20"
+              >
+                <option>20</option>
+                <option>50</option>
+                <option>100</option>
+              </select>
+            </div>
+            Records
+
           </div>
-          <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-            <span className="sr-only">Next</span>
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-          </button>
-          <button
-              onClick={lastPage}
-              className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-          >
-            <span className="">Last</span>
-          </button>
+          <div className="rounded-md   flex justify-end ">
+            <button
+                onClick={firstPage}
+                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md   bg-W3GButtonColor/60 text-sm font-semibold text-white "
+            >
+              <span className="">First</span>
+            </button>
+            <button
+                onClick={decPageCounter}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md  bg-W3GButtonColor/60 text-sm font-semibold text-white"
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className=" border-gray-300 hidden lg:inline-block   relative inline-flex items-center px-4 py-2 border-x   bg-W3GButtonColor/60 text-sm font-semibold text-white">
+              Page {extrinsicPageNumber} of {extrinsic_number_pages}
+            </div>
+            <button onClick={addPageCounter} className="relative inline-flex items-center px-2 py-2 rounded-r-md bg-W3GButtonColor/60 text-sm font-semibold text-white">
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+                onClick={lastPage}
+                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-W3GButtonColor/60 text-sm font-semibold text-white"
+            >
+              <span className="">Last</span>
+            </button>
+          </div>
+
         </div>
       </div>
   )
@@ -280,41 +300,35 @@ const Transactions=()=> {
 
           <Header></Header>
           <div className="max-w-7xl mx-auto py-16  px-2 ">
-            <div className="my-20 mb-14">
-              <div className="mx-auto lg:flex justify-between ">
+            <div className="my-10 mb-14">
+              <div className="mx-auto flex justify-between items-center">
 
-                <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
+                <div className="text-xl my-2 lg:my-0 text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                   Extrinsic
                 </div>
                 {/*<div className="flex ">*/}
-                {/*  <input type="text"*/}
-                {/*         className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"*/}
-                {/*         placeholder="Search transactions, blocks, programs and token"
-                            autoComplete="off"*/}
-                {/*  />*/}
-                {/*  <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
-                {/*    <i className="fa fa-search" aria-hidden="true"></i></div>*/}
+                {/*    <input type="text"*/}
+                {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700 outline-none"*/}
+                {/*           placeholder="Search transactions, blocks, programs and token"*/}
+                {/*           autoComplete="off"*/}
+                {/*    />*/}
+                {/*    <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -ml-11">*/}
+                {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
+
+
                 {/*</div>*/}
 
               </div>
-
-              <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
-                <div className="py-2 min-w-full  p-5 dark:text-gray-200">
-                  <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-200">
-
-                    <div>
-                      Extrinsics
-                    </div>
-
-                  </div>
-                  <div className="shadow overflow-auto   border-gray-200  sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-400">
-                      <thead className="bg-gray-100 dark:bg-neutral-600 text-gray-500 dark:text-neutral-300">
+              <div className="my-5 overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
+                <div className=" min-w-full   ">
+                  <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                      <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                       <tr>
                         {tokenstitle.map(title => (
                             <th key={title.title}
                                 scope="col"
-                                className="px-6 py-3 text-left text-sm font-semibold   "
+                                className="p-6 w-36 text-sm xl:text-base  font-semibold   "
                             >
                               {title.title}
                               <i className={title.i} aria-hidden="true"></i>
@@ -322,16 +336,16 @@ const Transactions=()=> {
                         ))}
                       </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
+                      <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                       {extrinsic.map(item => (
-                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
-                            <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
+                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 divide-x divide-gray-200 dark:divide-W3GInfoBorderBG">
+                          <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
                               <button id={item.extrinsicHeight} onClick={GetExtrinsics}>
                                 {item.id}
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
-                              <button id={item.extrinsicHeight} onClick={GetExtrinsics}>
+                              <button id={item.extrinsicHeight} className="w-52 md:w-96 truncate" onClick={GetExtrinsics}>
                                 {item.extrinsicHeight}
                               </button>
                             </td>

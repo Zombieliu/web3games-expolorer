@@ -152,7 +152,7 @@ const NFTs=()=>{
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
             <Header></Header>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
-                <div className="my-20 mb-14">
+                <div className="my-10 mb-14">
                     <NFTHeader></NFTHeader>
                     <div className="bg-white border dark:border-neutral-700 dark:bg-neutral-800 p-5 rounded-lg mt-2">
                         <div className="flex items-center">

@@ -523,7 +523,7 @@ const Extrinsics=()=>{
             <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
                 <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
-                    <div className="my-20 mb-14">
+                    <div className="my-10 mb-14">
                         <Overview data={data}/>
                         <div className="mt-5">
                             <div className="my-5 overflow-x-auto bg-white dark:bg-gray-600 rounded-lg ">
