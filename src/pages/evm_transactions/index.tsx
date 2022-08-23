@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom, darkModeImg, extrinsicPageNumberValue} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom, extrinsicPageNumberValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -253,6 +253,11 @@ const Blocks=()=>{
         router.push(`/evm_blocks_block/${value}`)
     }
 
+    const GetAddress = (props) =>{
+        const value = props.target.id;
+        router.push(`/evm_address/${value}`)
+    }
+
     const Copy=(span)=>{
 
         const spanText = document.getElementById(span).innerText;
@@ -359,7 +364,7 @@ const Blocks=()=>{
                                                     {item.Age} secs ago
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                    <button id={item.From}  className="truncate w-36">
+                                                    <button id={item.From}  onClick={GetAddress}  className="truncate w-36">
                                                         {item.From}
                                                     </button>
                                                 </td>
@@ -370,7 +375,7 @@ const Blocks=()=>{
                                                 </td>
 
                                                 <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                    <button id={item.To}  className="truncate w-36">
+                                                    <button id={item.To} onClick={GetAddress}  className="truncate w-36">
                                                         {item.To}
                                                     </button>
                                                 </td>

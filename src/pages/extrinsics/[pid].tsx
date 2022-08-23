@@ -6,7 +6,7 @@ import { CheckCircleIcon} from '@heroicons/react/solid';
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg, EventValue} from "../../jotai";
+import {DarkModeAtom,  EventValue} from "../../jotai";
 import {useManualQuery } from 'graphql-hooks'
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
@@ -195,7 +195,7 @@ const Overview = (props:any) => {
                                 Overview
                             </div>
                         </div>
-                        <div className="text-gray-400 text-sm dark:text-gray-300">
+                        <div className="text-black text-sm dark:text-white">
                             {overview.map(item => (
                                 <div key={item.extrinsic}>
                                     <div className="md:flex  justify-between lg:justify-start my-3 ">
@@ -263,10 +263,10 @@ const Overview = (props:any) => {
                                             Parameters
                                         </div>
 
-                                        <div className=" bg-white dark:bg-neutral-800 rounded-lg mt-2 md:mt-0 w-full xl:w-6/12">
-                                            <div className="overflow-y-auto h-44 w-full">
-                                                <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
-                                                    <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
+                                        <div className="  mt-2 md:mt-0 w-full xl:w-6/12">
+                                            <div className="overflow-y-auto  w-full shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                                                <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                    <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                                                     <tr>
                                                         <th
                                                             scope="col"
@@ -294,11 +294,10 @@ const Overview = (props:any) => {
                                                         </th>
                                                     </tr>
                                                     </thead>
-                                                        <tbody
-                                                            className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
-                                                        {Data.map(item => (
-                                                            <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
-                                                                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                    <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
+                                                    {Data.map(item => (
+                                                        <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-left">
+                                                        <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
                                                                     {item.id}
                                                                 </td>
                                                                 <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
@@ -409,24 +408,24 @@ const Events = (props) =>{
                     <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
                             Events
                     </div>
-                    <div className="shadow overflow-auto    sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
-                            <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
+                    <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                        <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                            <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                             <tr>
                                 {tokenstitle.map(title=>(
                                     <th key={title.title}
                                         scope="col"
-                                        className="px-6 py-3 text-left text-sm font-semibold   "
+                                        className="px-6 py-3 text-left text-sm font-semibold"
                                     >
                                         {title.title}
                                     </th>
                                 ))}
                             </tr>
                             </thead>
-                            <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
+                            <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
                             {Events.map(Events=>(
-                                <tr key={Events.eventid} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-medium font-medium">
+                                <tr key={Events.eventid}className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-medium font-medium">
                                         <button id={Events.id} onClick={GetEvent}>
                                             {Events.eventid}
                                         </button>
@@ -498,7 +497,7 @@ const Extrinsics=()=>{
                     <div className="my-10 mb-14">
                         <Overview data={data}/>
                         <div className="mt-5">
-                            <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
+                            <div className="my-5 overflow-x-auto rounded-lg ">
                                 <Events data={data}/>
                             </div>
                         </div>

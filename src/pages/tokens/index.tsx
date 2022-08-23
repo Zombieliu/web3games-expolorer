@@ -13,7 +13,7 @@ import Header from "../../components/header";
 import Tail from "../../components/tail";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')

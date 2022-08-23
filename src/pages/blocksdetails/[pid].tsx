@@ -198,7 +198,7 @@ const Overview = (props:any) =>{
                           </div>
 
                       </div>
-                      <div className="text-gray-400 text-sm ">
+                      <div className="text-black dark:text-white text-sm ">
                           {overview.map(item=>(
                             <div key={item.block}>
                                 <div className="md:flex justify-between lg:justify-start  my-3 ">
@@ -338,17 +338,17 @@ const Extrinsic = (props:any) =>{
           <div className="mt-5">
               <div className="my-5 overflow-x-auto bg-white dark:bg-W3GBG rounded-lg ">
                   <div className="py-2 min-w-full  p-5 dark:text-gray-200">
-                      <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
+                      <div className="flex my-5 text-2xl font-semibold text-gray-700 dark:text-white">
                               Extrinsic
                       </div>
-                      <div className="shadow overflow-auto rounded-lg pb-2.5">
-                          <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500">
-                              <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
-                              <tr>
+                      <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                          <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                              <thead className="bg-white dark:bg-W3GInfoBG text-gray-500  dark:text-neutral-300">
+                              <tr >
                                   {tokenstitle.map(title=>(
                                     <th key={title.title}
                                         scope="col"
-                                        className="px-6 py-3 text-left text-sm font-semibold   "
+                                        className="px-6 py-3   font-semibold   "
                                     >
                                         {title.title}
                                         <i className={title.title} aria-hidden="true"></i>
@@ -356,10 +356,11 @@ const Extrinsic = (props:any) =>{
                                   ))}
                               </tr>
                               </thead>
-                              <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
+
+                              <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                               {Tokens.map(token=>(
-                                <tr key={token.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600" >
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                <tr key={token.id}className="hover:bg-gray-200 dark:hover:bg-neutral-600">
+                                    <td className="px-12 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
                                         <button id={token.extrinsicHash} onClick={GetExtrinsics}>
                                             {token.id}
                                         </button>
@@ -375,7 +376,7 @@ const Extrinsic = (props:any) =>{
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {token.state ? "success" : "fail"}
                                     </td>
-                                    <td  className="px-6 py-4 whitespace-nowrap text-base ">
+                                    <td  className="px-12 py-4 whitespace-nowrap text-base ">
                                         <button onClick={getAccount} className="text-blue-400" id={token.address}>
                                             {token.by}
                                         </button>
@@ -402,6 +403,9 @@ const BlocksDetails=()=>{
 
     useEffect(()=>{
         if (router.isReady){
+            const pid = router.query.pid
+            console.log(pid)
+            changeBlock(`${pid}`)
             if (enabledNightMode == true){
                 document.documentElement.classList.add('dark');
             }else{
@@ -411,14 +415,6 @@ const BlocksDetails=()=>{
     },[router.isReady])
 
     const [Block,changeBlock] = useState('')
-
-    useEffect(()=>{
-        if (router.isReady) {
-            const pid = router.query.pid
-            console.log(pid)
-            changeBlock(`${pid}`)
-        }
-    },[router.isReady])
 
     const{loading,error,data}: any = useQuery(Block_Info,{
         variables:{
@@ -448,7 +444,7 @@ const BlocksDetails=()=>{
       )
     }else{
         return (
-            <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
+            <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
                 <Header></Header>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-10 mb-14">

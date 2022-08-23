@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#7370EC;}
+	.st1{fill:url(#SVGID_1_);}
+	.st2{fill:none;stroke:#7B7CFF;stroke-opacity:0.5;}
+	.st3{fill:none;stroke:#DDD8FF;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+</style>
+<path class="st0" d="M6.7,7.4L27,1.9c3.7-1,7.6,1.2,8.6,4.9L41.2,27c1,3.7-1.2,7.6-4.9,8.6L16,41.2c-3.7,1-7.6-1.2-8.6-4.9L1.9,16
+	C0.8,12.3,3,8.4,6.7,7.4z"/>
+<g>
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="46.1359" y1="41.8698" x2="12.1359" y2="6.3698" gradientTransform="matrix(1 0 0 -1 0 52)">
+		<stop  offset="0" style="stop-color:#C9CCFE;stop-opacity:0.69"/>
+		<stop  offset="1" style="stop-color:#626AFF;stop-opacity:0.39"/>
+	</linearGradient>
+	<path shape-rendering="crispEdges" class="st1" d="M17,8h25c3.9,0,7,3.1,7,7v25c0,3.9-3.1,7-7,7H17c-3.9,0-7-3.1-7-7V15
+		C10,11.1,13.1,8,17,8z"/>
+	<path shape-rendering="crispEdges" class="st2" d="M17,8.5h25c3.6,0,6.5,2.9,6.5,6.5v25c0,3.6-2.9,6.5-6.5,6.5H17
+		c-3.6,0-6.5-2.9-6.5-6.5V15C10.5,11.4,13.4,8.5,17,8.5z"/>
+</g>
+<g>
+	<path shape-rendering="crispEdges" class="st3" d="M28.8,17.9l-7.6,2.5c-0.5,0.2-0.9,0.5-1.2,1c-0.2,0.5-0.3,1-0.1,1.5l5,15.2
+		c0.2,0.5,0.5,0.9,1,1.2c0.5,0.2,1,0.3,1.5,0.1l11.4-3.8c0.5-0.2,0.9-0.5,1.2-1c0.2-0.5,0.3-1,0.1-1.5l-3.8-11.4 M28.8,17.9l7.6,3.8
+		 M28.8,17.9l1.9,5.7l5.7-1.9 M34.1,27.7l-7.6,2.5 M35.4,31.5L27.8,34 M27.2,25.8l-1.9,0.6"/>
+</g>
+</svg>

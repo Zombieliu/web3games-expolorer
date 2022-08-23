@@ -1,46 +1,37 @@
 import React, {Fragment, useEffect, useRef, useState} from 'react'
 import Header from"../../components/header"
 import Tail from '../../components/tail'
-import { Listbox, Dialog,Transition } from '@headlessui/react';
+import { Listbox, Dialog,Transition, RadioGroup } from '@headlessui/react';
 import {ExclamationIcon } from "@heroicons/react/outline";
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import {CheckCircleIcon, CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import axios from "axios";
 import check_address from "../../utils";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom,} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
+
 const types = [
     { id: 1, name: 'EVM' },
     { id: 2, name: 'Substrate' },
-
 ]
 
-const Found =()=>{
-    return(
-        <>
-            <div className="mt-40 max-w-5xl mx-auto  px-4 mb-32">
-                <h1 className="text-2xl text-black  text-center mb-5 dark:text-gray-50">How to fund</h1>
-                <h2 className="text-gray-900 dark:text-gray-300 text-center md:text-left text-sm mb-5">This faucet is running on the Web3Games Dev testnet. To prevent malicious actors from exhausting all funds, The faucet will record some information to ensure that it will not be repeatedly claimed.</h2>
-                <h3 className="text-gray-900 dark:text-gray-300 text-center md:text-left text-sm mb-5">The obtained tokens can be used for network testing and other operations.</h3>
-                <h4 className="text-gray-900 dark:text-gray-300 text-center md:text-left text-sm mb-5">Each account can get 5 W3G every 24 hours.</h4>
-            </div>
-        </>
-    )
-}
+const token = [
+    { id: 1, name: 'W3G' },
+]
 
 export default function Faucet() {
     const cancelButtonRef = useRef(null)
     const [selected, setSelected] = useState(types[0])
+    const [selectedToken,setSelectedToken] = useState(token[0])
     const [openload ,setOpenload]= useState(false)
     const [success, successchange] = useState(false)
     const [fail, failchange] = useState(false)
     const router=useRouter()
     const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [, setimg] = useAtom(darkModeImg)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){
@@ -142,89 +133,147 @@ export default function Faucet() {
         return true
     }
     return (
-      <div className="mx-auto bg-gray-50 dark:bg-neutral-800  transition duration-700">
+      <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
             <Header></Header>
-              <div className="pt-20">
-                  <div className="text-center mt-10 ">
-                      <div className="text-4xl mt-16 font-extrabold dark:text-gray-100">
-                          W3G Authenticated Faucet
-                      </div>
-                      <div className="mt-5 xl:flex justify-center items-center">
-                          <input type="text"
-                                 className="bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-9/12  xl:w-5/12  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700  outline-none "
-                                 placeholder="Please input your address, eg.. evm address 0x.... "
-                                 autoComplete="off"
-                                 id="faucet"
-                          />
-                          <div className=" xl:-ml-44 justify-center mt-3 xl:mt-0 flex">
+          <div className="max-w-4xl mx-auto py-16  px-4 ">
+              <div className="p-1 rounded-md bg-gradient-to-r from-W3G1 my-10 via-W3G2 to-W3G3  backdrop-blur-sm">
+                  <div className="p-10 bg-neutral-50 dark:bg-W3GBG bg-white backdrop-blur-sm  rounded-md ">
+                      <div className="mx-auto flex justify-between items-center">
 
-                              <Listbox value={selected} onChange={setSelected} >
-                                  {({ open }) => (
-                                    <>
-                                        <div className=" relative ">
-                                            <Listbox.Button className="relative w-full border-gray-300  xl:border-l    px-6 dark:border-neutral-700       text-left cursor-default   sm:text-base">
-                                                <span className="block truncate text-lg w-18 xl:w-24 mr-5 xl:mr-2 dark:text-white"> {selected.name}</span>
-                                                <span className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
+                          <div className="text-xl my-2 lg:my-0 text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                              Get Test Tokens
+                          </div>
+                      </div>
+                      <div className="text-black dark:text-white mt-5">
+                          This faucet transfers TestToken on Matic testnets and parent chain. Confirm details before submitting.This faucet transfers TestToken on Matic testnets and parent chain. Confirm details before submitting.
+                      </div>
+
+                      <div className="mt-16  items-center">
+                          <label htmlFor="location" className="block text-xl font-semibold dark:text-white text-black mb-4">
+                              Account Type
+                          </label>
+                          <RadioGroup value={selected} onChange={setSelected}>
+                              <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4 ">
+                                  {types.map((type) => (
+                                      <RadioGroup.Option
+                                          key={type.id}
+                                          value={type}
+                                          className={({ checked, active }) =>
+                                              classNames(
+                                                  checked ? 'border-transparent' : 'border-gray-300',
+                                                  active ? '' : '',
+                                                  'relative bg-gray-200 dark:bg-neutral-800 border border-gray-200 rounded-lg shadow-sm p-2 flex cursor-pointer focus:outline-none '
+                                              )
+                                          }
+                                      >
+                                          {({ checked, active }) => (
+                                              <>
+                                                  <div className="flex-1 flex justify-center">
+                                                      <div className="flex flex-col ">
+                                                          <RadioGroup.Label  className="block text-xl dark:text-white text-black ">
+                                                              {type.name}
+                                                          </RadioGroup.Label>
+                                                      </div>
+                                                  </div>
+                                                  <div
+                                                      className={classNames(
+                                                          active ? 'border-2 ' : 'border-2',
+                                                          checked ? 'border-neutral-700 dark:border-indigo-500' : 'border-transparent',
+                                                          'absolute -inset-px rounded-lg pointer-events-none '
+                                                      )}
+                                                      aria-hidden="true"
+                                                  />
+                                              </>
+                                          )}
+                                      </RadioGroup.Option>
+                                  ))}
+                              </div>
+                          </RadioGroup>
+                      </div>
+
+                      <div className="mt-5  items-center">
+                          <label htmlFor="location" className="block text-xl font-semibold dark:text-white text-black mb-4">
+                              Seletct Token
+                          </label>
+                          <Listbox value={selectedToken} onChange={setSelectedToken} >
+                              {({ open }) => (
+                                  <>
+                                      <div className=" relative ">
+                                          <Listbox.Button className="relative bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white   w-full  border dark:border-neutral-700  bg-white focus:border-neutral-700  outline-none ">
+                                              <span className="block truncate  text-lg w-full mr-5 xl:mr-2"> {selectedToken.name}</span>
+                                              <span className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
                                                 <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                                 </span>
-                                            </Listbox.Button>
+                                          </Listbox.Button>
 
-                                            <Transition
+                                          <Transition
                                               show={open}
                                               as={Fragment}
                                               leave="transition ease-in duration-100"
                                               leaveFrom="opacity-100"
                                               leaveTo="opacity-0"
-                                            >
-                                                <Listbox.Options className="absolute z-10 mt-4 w-36 xl:w-44 bg-white dark:bg-neutral-800  shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto  sm:text-sm">
-                                                    {types.map((type) => (
+                                          >
+                                              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white dark:bg-black shadow-lg max-h-60 rounded-md py-1 text-base    overflow-auto  sm:text-sm">
+                                                  {token.map((type) => (
                                                       <Listbox.Option
-                                                        key={type.id}
-                                                        className={({ active }) =>
-                                                          classNames(
-                                                            active ? 'text-white bg-indigo-600  dark:bg-black' : 'text-gray-900',
-                                                            'cursor-default select-none relative py-2 pl-8 pr-4'
-                                                          )
-                                                        }
-                                                        value={type}
+                                                          key={type.id}
+                                                          className={({ active }) =>
+                                                              classNames(
+                                                                  active ? 'text-white bg-gray-300 dark:bg-neutral-600' : 'text-gray-600',
+                                                                  'cursor-default select-none relative py-2 pl-8 pr-4'
+                                                              )
+                                                          }
+                                                          value={type}
                                                       >
                                                           {({ selected, active }) => (
-                                                            <>
-                        <span className={classNames(selected ? 'font-semibold' : 'font-normal', 'block truncate dark:text-white')}>
-                          {type.name}
-                        </span>
-
-                                                                {selected ? (
-                                                                  <span
-                                                                    className={classNames(
-                                                                      active ? 'text-white' : 'text-indigo-600',
-                                                                      'absolute inset-y-0 left-0 flex items-center pl-1.5'
-                                                                    )}
-                                                                  >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                                                                ) : null}
-                                                            </>
+                                                              <>
+                                                                  <span className={classNames(selected ? 'font-semibold ' : 'font-normal', 'block truncate text-black dark:text-white')}>
+                                                                      {type.name}
+                                                                  </span>
+                                                                  {selected ? (
+                                                                      <span
+                                                                          className={classNames(
+                                                                              active ? 'text-white' : 'text-indigo-600',
+                                                                              'absolute inset-y-0 left-0 flex items-center pl-1.5'
+                                                                          )}>
+                                                                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                                      </span>) : null}
+                                                              </>
                                                           )}
                                                       </Listbox.Option>
-                                                    ))}
-                                                </Listbox.Options>
-                                            </Transition>
-                                        </div>
-                                    </>
-                                  )}
-                              </Listbox>
-                          </div>
-                          <p className="flex justify-center text-center text-base font-medium text-gray-500">
-
-                              <button  onClick={sendtoken} className="mt-10 xl:mt-0 xl:ml-10  px-5 py-3 dark:bg-zinc-800 dark:text-gray-200 rounded-lg font-bold text-gray-600 text-base font-normal border border-black transition duration-500 hover:bg-gray-700  hover:text-white  dark:hover:bg-gray-200 dark:hover:text-black"
-                              >
-                                  Give me W3G
-                              </button>
-                          </p>
+                                                  ))}
+                                              </Listbox.Options>
+                                          </Transition>
+                                      </div>
+                                  </>
+                              )}
+                          </Listbox>
                       </div>
+
+                      <div className="mt-5  items-center">
+                          <label htmlFor="location" className="block text-xl font-semibold dark:text-white text-black mb-4">
+                              Wallet Address
+                          </label>
+                          <input type="text"
+                                 className="bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-full  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700  outline-none "
+                                 placeholder=""
+                                 autoComplete="off"
+                                 id="faucet"
+                          />
+
+                      </div>
+
+
+
+                      <p className="flex justify-center text-center text-base font-medium text-gray-500">
+
+                          <button  onClick={sendtoken} className="mt-10 rounded-full  px-32 py-2 bg-gradient-to-r from-W3G2   to-W3G3 text-white font-bold text-gray-600 text-base  "
+                          >
+                              Claim
+                          </button>
+                      </p>
                   </div>
-                  <Found/>
+              </div>
               </div>
 
           <Transition.Root show={openload} as={Fragment}>

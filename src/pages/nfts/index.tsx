@@ -4,7 +4,7 @@ import NFTHeader from "../../components/NFT-header";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, } from "../../jotai";
 
 
 const allnfts=[

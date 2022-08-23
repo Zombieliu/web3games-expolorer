@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import NFTHeader from "../../../components/NFT-header";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import { darkModeImg ,DarkModeAtom} from "../../../jotai";
+import {DarkModeAtom} from "../../../jotai";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }

@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom, darkModeImg, extrinsicPageNumberValue} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom,  extrinsicPageNumberValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 

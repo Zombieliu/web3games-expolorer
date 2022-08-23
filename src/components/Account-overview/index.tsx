@@ -3,7 +3,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import { Dialog, Popover, Transition } from '@headlessui/react';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue, DarkModeAtom, darkModeImg} from "../../jotai";
+import {AccountBalanceValue, AccountValue, DarkModeAtom} from "../../jotai";
 import {useRouter} from "next/router";
 
 
@@ -40,7 +40,6 @@ const AccountOverview=()=>{
 
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
-  const [, setimg] = useAtom(darkModeImg)
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){
@@ -48,7 +47,6 @@ const AccountOverview=()=>{
 
       }else{
         document.documentElement.classList.remove('dark');
-        setimg("/web3gb.svg")
       }
     }
   },[router.isReady])

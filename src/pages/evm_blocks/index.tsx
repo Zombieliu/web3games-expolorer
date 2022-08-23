@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom, darkModeImg, extrinsicPageNumberValue} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom,  extrinsicPageNumberValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -328,7 +328,7 @@ const Blocks=()=>{
                                         <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                                         {extrinsic.map(item => (
                                             <tr key={item.block} className="hover:bg-gray-200 dark:hover:bg-neutral-600 divide-x divide-gray-200 dark:divide-W3GInfoBorderBG">
-                                                <td className="px-6 py-4  whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
+                                                <td className="px-6 py-4  whitespace-nowrap text-sm font-medium text-blue-400  ">
                                                     <button id={item.block} onClick={GetBlock}>
                                                         {item.block}
                                                     </button>
@@ -336,7 +336,7 @@ const Blocks=()=>{
                                                 <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                     {item.age} Second ago
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
                                                     <button id={item.txn} onClick={GetTxn}>
                                                         {item.txn}
                                                     </button>

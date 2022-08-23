@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom, darkModeImg} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -287,42 +287,35 @@ const Blocks=()=>{
           <Header></Header>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-10 mb-14">
-              <div className="mx-auto lg:flex justify-between items-center">
+              <div className="mx-auto flex justify-between items-center">
 
-                <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
-                  Blocks
+                <div className="text-xl my-2 lg:my-0 text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                  BLOCKS
                 </div>
-                <div className="flex ">
-                  <input type="text"
-                         className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700 outline-none"
-                         placeholder="Search transactions, blocks, programs and token"
-                         autoComplete="off"
-                  />
-                  <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -ml-11">
-                    <i className="fa fa-search" aria-hidden="true"></i></div>
+                {/*<div className="flex ">*/}
+                {/*    <input type="text"*/}
+                {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700 outline-none"*/}
+                {/*           placeholder="Search transactions, blocks, programs and token"*/}
+                {/*           autoComplete="off"*/}
+                {/*    />*/}
+                {/*    <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -ml-11">*/}
+                {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
 
 
-                </div>
+                {/*</div>*/}
 
               </div>
 
-              <div className="my-5 overflow-x-auto bg-white dark:bg-neutral-800 rounded-lg ">
-                <div className="py-2 min-w-full  p-5 ">
-                  <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-200">
-
-                    <div>
-                      Blocks
-                    </div>
-
-                  </div>
-                  <div className="shadow overflow-auto  sm:rounded-lg">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-400">
-                      <thead className="bg-gray-100 dark:bg-neutral-600 text-gray-500 dark:text-neutral-300">
+              <div className="my-5 overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
+                <div className=" min-w-full   ">
+                  <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                      <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                       <tr>
                         {tokenstitle.map(title => (
                             <th key={title.title}
                                 scope="col"
-                                className="px-6 py-3 text-left text-sm font-semibold   "
+                                className="p-6 w-36 text-sm xl:text-base  font-semibold   "
                             >
                               {title.title}
                               <i className={title.i} aria-hidden="true"></i>
@@ -330,15 +323,15 @@ const Blocks=()=>{
                         ))}
                       </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
+                      <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                       {extrinsic.map(item => (
-                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
+                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 divide-x divide-gray-200 dark:divide-W3GInfoBorderBG">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
                               <button id={item.id} onClick={GetBlock}>
                                 {item.blockHeight}
                               </button>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
 
                               <button id={item.id} onClick={GetBlock}>{item.id}
                                 {/*<i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}

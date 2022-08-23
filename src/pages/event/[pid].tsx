@@ -6,7 +6,7 @@ import { CheckCircleIcon} from '@heroicons/react/solid';
 import {useRouter} from "next/router";
 import {useQuery} from 'graphql-hooks'
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, } from "../../jotai";
 import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
 
@@ -161,7 +161,7 @@ const Events=()=>{
                                     <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-neutral-200 ">
                                             Overview
                                     </div>
-                                    <div className="text-gray-400 text-sm ">
+                                    <div className="text-black dark:text-white text-sm ">
                                         {overview.map(item => (
                                             <div key={item.event}>
                                                 <div className="md:flex justify-between lg:justify-start  my-3 ">
@@ -176,11 +176,10 @@ const Events=()=>{
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Parameters
                                                     </div>
-                                                    <div
-                                                        className="bg-white dark:bg-neutral-800 rounded-lg mt-2 md:mt-0 w-full xl:w-6/12 ">
-                                                        <div className="overflow-y-auto h-44 w-full">
-                                                            <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-500 ">
-                                                                <thead className="bg-gray-100 dark:bg-neutral-700 text-gray-500 dark:text-neutral-300">
+                                                    <div className=" rounded-lg mt-2 md:mt-0 w-full xl:w-6/12 ">
+                                                        <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                                                            <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                                <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                                                                 <tr>
                                                                     <th
                                                                         scope="col"
@@ -209,10 +208,9 @@ const Events=()=>{
                                                                 </tr>
                                                                 </thead>
 
-                                                                <tbody
-                                                                    className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500 ">
+                                                                <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
                                                                 {Data.map(item => (
-                                                                    <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
+                                                                    <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
                                                                         <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
                                                                             {item.id}
                                                                         </td>

@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg} from "../../jotai";
+import {DarkModeAtom, } from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')

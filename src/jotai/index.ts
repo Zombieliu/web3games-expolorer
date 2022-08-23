@@ -4,7 +4,7 @@ import { atomWithStorage } from 'jotai/utils'
 
 // Set the string key and the initial value
 const DarkModeAtom = atomWithStorage('darkMode', false)
-const darkModeImg = atomWithStorage("login-img","/web3gb.svg")
+
 
 
 
@@ -20,4 +20,4 @@ const EventValue = atom([])
 const BlockPageNumberValue = atom(1)
 const extrinsicPageNumberValue = atom(1)
 
-export{AccountValue,AccountBalanceValue,DarkModeAtom,darkModeImg,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue}
+export{AccountValue,AccountBalanceValue,DarkModeAtom,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue}

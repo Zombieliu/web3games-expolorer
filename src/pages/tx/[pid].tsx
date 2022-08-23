@@ -7,7 +7,7 @@ import {useQuery} from "graphql-hooks";
 import {useManualQuery } from 'graphql-hooks'
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom, darkModeImg, EventValue} from "../../jotai";
+import {DarkModeAtom,  EventValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 

@@ -62,7 +62,7 @@ const tokens=({
     one: [
         {
             a: "",
-            img: "https://tronscan.io/static/media/account_icon.e336f78f.png",
+            img: "/homeIcon/Total Accounts.svg",
             title: "Total Accounts",
             money: "77,488",
             addition: "+145",
@@ -70,7 +70,7 @@ const tokens=({
         },
         {
             a: "",
-            img: "https://tronscan.io/static/media/tvl_icon.4d03b91a.png",
+            img: "/homeIcon/TVL.svg",
             title: "TVL",
             money: "8,316,287",
             addition: "+2.93%",
@@ -78,7 +78,7 @@ const tokens=({
         },
         {
             a: "",
-            img: "https://tronscan.io/static/media/transition_icon.2d0e2152.png",
+            img: "/homeIcon/Total Txns.svg",
             title: "Total Txns",
             money: "2,875,433",
             addition: "+2,965",
@@ -86,7 +86,7 @@ const tokens=({
         },
         {
             a: "",
-            img:"data:image/png;base64,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",
+            img:"/homeIcon/Total Transfer Value.svg",
             title: "Total Transfer Value",
             money: "3,618,752",
             addition: "+5,5505",

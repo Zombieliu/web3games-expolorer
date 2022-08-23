@@ -12,7 +12,7 @@ import {Dialog, Disclosure, Transition} from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom, darkModeImg, extrinsicPageNumberValue} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom, extrinsicPageNumberValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Link from "next/link";
@@ -126,6 +126,11 @@ const EvmTransactionsDetail=()=>{
     const GetBlock = (props) => {
         const value = props.target.id;
         router.push(`/evm_blocks_block/${value}`)
+    }
+
+    const GetAddress = (props) =>{
+        const value = props.target.id;
+        router.push(`/evm_address/${value}`)
     }
 
     if (loading) {
@@ -248,10 +253,10 @@ const EvmTransactionsDetail=()=>{
                                                 From:
                                             </div>
                                             <div className="flex items-center mt-2 md:mt-0">
-                                                <div  className="text-blue-400 flex " id={overview.from}>
-                                                    <div className="mr-1 w-64 md:w-full truncate md:text-clip">
+                                                <div  className="text-blue-400 flex " >
+                                                    <button className="mr-1 w-64 md:w-full truncate md:text-clip" id={overview.from} onClick={GetAddress}>
                                                         {overview.from}
-                                                    </div>
+                                                    </button>
                                                     <button onClick={() => {
                                                         // @ts-ignore
                                                         Copy(`${overview.from}`);}}>
@@ -267,13 +272,13 @@ const EvmTransactionsDetail=()=>{
                                                 To:
                                             </div>
                                             <div className="flex   mt-2 md:mt-0  ">
-                                                <div  className="flex text-gray-800  dark:text-white items-center" id={overview.to}>
+                                                <div  className="flex text-gray-800  dark:text-white items-center" >
                                                     <div>
                                                         Contract:
                                                     </div>
-                                                    <div className="text-blue-400 mx-2 w-56 md:w-72 truncate">
+                                                    <button className="text-blue-400 mx-2 w-56 md:w-72 truncate" id={overview.to} onClick={GetAddress}>
                                                         {overview.to}
-                                                    </div>
+                                                    </button>
                                                     <div className={classNames(`${Status[overview.status].bg}`,"text-sm items-center flex p-1.5 mx-1 rounded-full text-gray-50")}>
                                                         <i className={classNames(`${Status[overview.status].icon2} `)} aria-hidden="true"></i>
                                                     </div>
@@ -382,8 +387,8 @@ const EvmTransactionsDetail=()=>{
                                                                         <div className="font-semibold lg:font-medium w-60 mr-32  ">
                                                                             Input Data:
                                                                         </div>
-                                                                        <div className=" flex flex-warp items-center mt-2 md:mt-0 ">
-                                                                            <div className="">
+                                                                        <div className="  ">
+                                                                            <div className="flex flex-warp items-center mt-2 md:mt-0">
                                                                                 <textarea
                                                                                     name="comment"
                                                                                     id="comment"
@@ -393,6 +398,18 @@ const EvmTransactionsDetail=()=>{
                                                                                     value={overview.Input}
                                                                                 />
                                                                             </div>
+                                                                            <div>
+                                                                                <select
+                                                                                    id="location"
+                                                                                    name="location"
+                                                                                    className="mt-1 block w-full pl-3  w-36 py-2 text-base bg-blue-400 text-white border-gray-300 outline-none  sm:text-sm rounded-md"
+                                                                                    defaultValue="View Input AS"
+                                                                                >
+                                                                                    <option>United States</option>
+
+                                                                                </select>
+                                                                            </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </Disclosure.Panel>
