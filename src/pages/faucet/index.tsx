@@ -3,12 +3,10 @@ import Header from"../../components/header"
 import Tail from '../../components/tail'
 import { Listbox, Dialog,Transition, RadioGroup } from '@headlessui/react';
 import {ExclamationIcon } from "@heroicons/react/outline";
-import {CheckCircleIcon, CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import axios from "axios";
 import check_address from "../../utils";
 import {useRouter} from "next/router";
-import {useAtom} from "jotai";
-import {DarkModeAtom,} from "../../jotai";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -23,7 +21,7 @@ const token = [
     { id: 1, name: 'W3G' },
 ]
 
-export default function Faucet() {
+ const Faucet = ()  => {
     const cancelButtonRef = useRef(null)
     const [selected, setSelected] = useState(types[0])
     const [selectedToken,setSelectedToken] = useState(token[0])
@@ -31,19 +29,10 @@ export default function Faucet() {
     const [success, successchange] = useState(false)
     const [fail, failchange] = useState(false)
     const router=useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
+
     useEffect(()=>{
-        if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
-        }
+
     },[router.isReady])
-
-
-
 
     function sendtoken(){
         let inputValue = (document.getElementById('faucet') as HTMLInputElement).value;
@@ -133,23 +122,23 @@ export default function Faucet() {
         return true
     }
     return (
-      <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
+      <div className="mx-auto bg-W3GBG transition duration-700">
             <Header></Header>
           <div className="max-w-4xl mx-auto py-16  px-4 ">
               <div className="p-1 rounded-md bg-gradient-to-r from-W3G1 my-10 via-W3G2 to-W3G3  backdrop-blur-sm">
-                  <div className="p-10 bg-neutral-50 dark:bg-W3GBG bg-white backdrop-blur-sm  rounded-md ">
+                  <div className="p-10 bg-W3GBG  backdrop-blur-sm  rounded-md ">
                       <div className="mx-auto flex justify-between items-center">
 
                           <div className="text-xl my-2 lg:my-0 text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                               Get Test Tokens
                           </div>
                       </div>
-                      <div className="text-black dark:text-white mt-5">
+                      <div className="text-white mt-5">
                           This faucet transfers TestToken on Matic testnets and parent chain. Confirm details before submitting.This faucet transfers TestToken on Matic testnets and parent chain. Confirm details before submitting.
                       </div>
 
                       <div className="mt-16  items-center">
-                          <label htmlFor="location" className="block text-xl font-semibold dark:text-white text-black mb-4">
+                          <label htmlFor="location" className="block text-xl font-semibold text-white  mb-4">
                               Account Type
                           </label>
                           <RadioGroup value={selected} onChange={setSelected}>
@@ -162,7 +151,7 @@ export default function Faucet() {
                                               classNames(
                                                   checked ? 'border-transparent' : 'border-gray-300',
                                                   active ? '' : '',
-                                                  'relative bg-gray-200 dark:bg-neutral-800 border border-gray-200 rounded-lg shadow-sm p-2 flex cursor-pointer focus:outline-none '
+                                                  'relative bg-neutral-800 border border-gray-200 rounded-lg shadow-sm p-2 flex cursor-pointer focus:outline-none '
                                               )
                                           }
                                       >
@@ -170,7 +159,7 @@ export default function Faucet() {
                                               <>
                                                   <div className="flex-1 flex justify-center">
                                                       <div className="flex flex-col ">
-                                                          <RadioGroup.Label  className="block text-xl dark:text-white text-black ">
+                                                          <RadioGroup.Label  className="block text-xl text-white  ">
                                                               {type.name}
                                                           </RadioGroup.Label>
                                                       </div>
@@ -178,7 +167,7 @@ export default function Faucet() {
                                                   <div
                                                       className={classNames(
                                                           active ? 'border-2 ' : 'border-2',
-                                                          checked ? 'border-neutral-700 dark:border-indigo-500' : 'border-transparent',
+                                                          checked ? 'border-indigo-500' : 'border-transparent',
                                                           'absolute -inset-px rounded-lg pointer-events-none '
                                                       )}
                                                       aria-hidden="true"
@@ -192,14 +181,14 @@ export default function Faucet() {
                       </div>
 
                       <div className="mt-5  items-center">
-                          <label htmlFor="location" className="block text-xl font-semibold dark:text-white text-black mb-4">
+                          <label htmlFor="location" className="block text-xl font-semibold text-white  mb-4">
                               Seletct Token
                           </label>
                           <Listbox value={selectedToken} onChange={setSelectedToken} >
                               {({ open }) => (
                                   <>
                                       <div className=" relative ">
-                                          <Listbox.Button className="relative bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white   w-full  border dark:border-neutral-700  bg-white focus:border-neutral-700  outline-none ">
+                                          <Listbox.Button className="relative bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 text-white   w-full  border border-neutral-700   focus:border-neutral-700  outline-none ">
                                               <span className="block truncate  text-lg w-full mr-5 xl:mr-2"> {selectedToken.name}</span>
                                               <span className="absolute inset-y-0  right-0 flex items-center  pointer-events-none">
                                                 <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -213,13 +202,13 @@ export default function Faucet() {
                                               leaveFrom="opacity-100"
                                               leaveTo="opacity-0"
                                           >
-                                              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white dark:bg-black shadow-lg max-h-60 rounded-md py-1 text-base    overflow-auto  sm:text-sm">
+                                              <Listbox.Options className="absolute z-10 mt-1 w-full bg-black shadow-lg max-h-60 rounded-md py-1 text-base    overflow-auto  sm:text-sm">
                                                   {token.map((type) => (
                                                       <Listbox.Option
                                                           key={type.id}
                                                           className={({ active }) =>
                                                               classNames(
-                                                                  active ? 'text-white bg-gray-300 dark:bg-neutral-600' : 'text-gray-600',
+                                                                  active ? 'text-white bg-neutral-600' : 'text-gray-600',
                                                                   'cursor-default select-none relative py-2 pl-8 pr-4'
                                                               )
                                                           }
@@ -227,7 +216,7 @@ export default function Faucet() {
                                                       >
                                                           {({ selected, active }) => (
                                                               <>
-                                                                  <span className={classNames(selected ? 'font-semibold ' : 'font-normal', 'block truncate text-black dark:text-white')}>
+                                                                  <span className={classNames(selected ? 'font-semibold ' : 'font-normal', 'block truncate text-white')}>
                                                                       {type.name}
                                                                   </span>
                                                                   {selected ? (
@@ -251,19 +240,17 @@ export default function Faucet() {
                       </div>
 
                       <div className="mt-5  items-center">
-                          <label htmlFor="location" className="block text-xl font-semibold dark:text-white text-black mb-4">
+                          <label htmlFor="location" className="block text-xl font-semibold text-white  mb-4">
                               Wallet Address
                           </label>
                           <input type="text"
-                                 className="bg-gray-200 dark:bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 dark:text-white dark:focus:border-neutral-400  w-full  border dark:border-neutral-700  focus:bg-white focus:border-neutral-700  outline-none "
+                                 className="bg-neutral-900 text-xs md:text-sm  2xl:text-lg rounded-lg p-3 text-white focus:border-neutral-400  w-full  border border-neutral-700    outline-none "
                                  placeholder=""
                                  autoComplete="off"
                                  id="faucet"
                           />
 
                       </div>
-
-
 
                       <p className="flex justify-center text-center text-base font-medium text-gray-500">
 
@@ -450,3 +437,5 @@ export default function Faucet() {
 
     )
 }
+
+export default Faucet

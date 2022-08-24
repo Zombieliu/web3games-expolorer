@@ -404,7 +404,7 @@ const Events = (props) =>{
 
         return(
             <>
-                <div className="py-2 min-w-full  p-5 dark:text-gray-200">
+                <div className=" min-w-full  py-5 dark:text-gray-200">
                     <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
                             Events
                     </div>

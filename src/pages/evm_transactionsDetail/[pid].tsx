@@ -402,7 +402,7 @@ const EvmTransactionsDetail=()=>{
                                                                                 <select
                                                                                     id="location"
                                                                                     name="location"
-                                                                                    className="mt-1 block w-full pl-3  w-36 py-2 text-base bg-blue-400 text-white border-gray-300 outline-none  sm:text-sm rounded-md"
+                                                                                    className="mt-4 block w-full pl-3  w-36 py-2 text-base bg-blue-400 text-white border-gray-300 outline-none  sm:text-sm rounded-md"
                                                                                     defaultValue="View Input AS"
                                                                                 >
                                                                                     <option>United States</option>

@@ -9,7 +9,7 @@ import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useManualQuery } from 'graphql-hooks'
 import {useAtom} from "jotai";
-import {DarkModeAtom} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom} from "../../jotai";
 import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Head from "next/head";
@@ -746,6 +746,7 @@ const News = () =>{
 const Home= ()  =>{
     const router = useRouter()
     const [enabledNightMode,] = useAtom(DarkModeAtom)
+
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){
@@ -760,14 +761,14 @@ const Home= ()  =>{
         <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
             <Head>
                 <title>Web3Games Explorer  | Dashboard</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/favicon.ico"/>
             </Head>
             <Header/>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className=" mb-14">
                     <div className="my-10">
                         <div className="flex">
-                        <div className=" text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                        <div className="text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                             Web3Games Chain
                         </div>
                         </div>
