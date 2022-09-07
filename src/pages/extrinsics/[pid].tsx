@@ -28,17 +28,16 @@ const tokenstitle=[
 
 const Extrinsics_Info = `
  query HomePage($Extrinsics: String) {
-  eventInfos(filter:{
+  events(filter:{
     extrinsicHashId:{
       equalTo:$Extrinsics
     }
   }){
     nodes{
       id
-      eventID
+      idx
+      module
       method
-      section
-      meta
       data
       extrinsicHash{
         id
@@ -53,20 +52,20 @@ const Extrinsics_Info = `
 
 class EventInfo {
     private id:string
-    private eventid: string;
+    private idx: string;
     private action: string;
     private by: string;
     private fee: string;
 
     constructor(
         id:string,
-        eventid:string,
+        idx:string,
         action:string,
         by:string,
         fee:string,
     ) {
         this.id = id
-        this.eventid = eventid
+        this.idx = idx
         this.action = action
         this.by = by
         this.fee = fee
@@ -74,15 +73,16 @@ class EventInfo {
 }
 
 function weight_check(data: any){
-    let len = data.eventInfos.nodes.length - 1;
-    let result = JSON.parse(data.eventInfos.nodes[len].data)[0].weight
+    let len = data.events.nodes.length - 1;
+    let result = JSON.parse(data.events.nodes[len].data)[0].weight
+    console.log('result',data.events.nodes[len].data[0])
     return `${result}`
 
 }
 
 
 function data_list(data: any){
-    let times = data.eventInfos.nodes.length;
+    let times = data.events.nodes.length;
     // console.log(times)
     let data_list = [];
     for (let i = 0;i < times;i++){
@@ -109,9 +109,9 @@ function data_list(data: any){
         // }
 
         let result = new EventInfo(
-            data.eventInfos.nodes[i].id,
-            data.eventInfos.nodes[i].eventID,
-            `${data.eventInfos.nodes[i].section}.${data.eventInfos.nodes[i].method}`,
+            data.events.nodes[i].id,
+            data.events.nodes[i].idx,
+            `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
             "alice",
             "0.005"
         )
@@ -122,17 +122,27 @@ function data_list(data: any){
 
 function data_type(data:any){
     let Data = [];
-    const times = JSON.parse(data.eventInfos.nodes[0].extrinsicHash.meta).fields.length
+    const times = JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields.length
+    console.log(JSON.parse(data.events.nodes[0].extrinsicHash.meta))
     for (let i =0;i<times;i++){
         let content = {
             id : i ,
-            Name : `${JSON.parse(data.eventInfos.nodes[i].extrinsicHash.meta).fields[i].name}`,
-            Type : `${JSON.parse(data.eventInfos.nodes[i].extrinsicHash.meta).fields[i].typeName}`,
-            Data : `${JSON.parse(data.eventInfos.nodes[i].extrinsicHash.meta).fields[i].type}`,
+            Name : `${JSON.parse(data.events.nodes[i].extrinsicHash.meta).fields[i].name}`,
+            Type : `${JSON.parse(data.events.nodes[i].extrinsicHash.meta).fields[i].typeName}`,
+            Data : `${JSON.parse(data.events.nodes[i].extrinsicHash.meta).fields[i].type}`,
 
         }
         Data.push(content)
     }
+    // let content = {
+    //             id : 0 ,
+    //             Name : `1`,
+    //             Type : `2`,
+    //             Data : `3`,
+    //
+    //         }
+    //         Data.push(content)
+
     return Data
 
 }
@@ -171,14 +181,14 @@ const Overview = (props:any) => {
     const Data = data_type(props.data)
     const weight = weight_check(props.data)
     const overview = [
-                {
-                    extrinsic: `${JSON.parse(props.data.eventInfos.nodes[0].extrinsicHash.meta).name}`,
-                    signature: props.data.eventInfos.nodes[0].extrinsicHash.signerId,
-                    extrinsic_hash: props.data.eventInfos.nodes[0].extrinsicHash.id,
-                    weight,
-                    events: props.data.eventInfos.nodes.length,
-                }
-            ]
+        {
+            extrinsic: `${JSON.parse(props.data.events.nodes[0].extrinsicHash.meta).name}`,
+            signature: props.data.events.nodes[0].extrinsicHash.signerId,
+            extrinsic_hash: props.data.events.nodes[0].extrinsicHash.id,
+            weight,
+            events: props.data.events.nodes.length,
+        }
+    ]
     return(
         <>
             <div className="mx-auto lg:flex justify-between ">
@@ -297,23 +307,23 @@ const Overview = (props:any) => {
                                                     <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                                                     {Data.map(item => (
                                                         <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-left">
-                                                        <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                    {item.id}
-                                                                </td>
-                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                    {item.Name}
-                                                                </td>
-                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                    {item.Type}
-                                                                </td>
-                                                                <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
-                                                                    {item.Data}
-                                                                </td>
-                                                            </tr>
+                                                            <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                                {item.id}
+                                                            </td>
+                                                            <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                {item.Name}
+                                                            </td>
+                                                            <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                {item.Type}
+                                                            </td>
+                                                            <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
+                                                                {item.Data}
+                                                            </td>
+                                                        </tr>
 
-                                                        ))}
-                                                        </tbody>
-                                                    </table>
+                                                    ))}
+                                                    </tbody>
+                                                </table>
 
                                             </div>
                                         </div>
@@ -402,48 +412,48 @@ const Events = (props) =>{
         router.push(`/event/${value}`)
     }
 
-        return(
-            <>
-                <div className=" min-w-full  py-5 dark:text-gray-200">
-                    <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
-                            Events
-                    </div>
-                    <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
-                        <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                            <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
-                            <tr>
-                                {tokenstitle.map(title=>(
-                                    <th key={title.title}
-                                        scope="col"
-                                        className="px-6 py-3 text-left text-sm font-semibold"
-                                    >
-                                        {title.title}
-                                    </th>
-                                ))}
-                            </tr>
-                            </thead>
-                            <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                            {Events.map(Events=>(
-                                <tr key={Events.eventid}className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-medium font-medium">
-                                        <button id={Events.id} onClick={GetEvent}>
-                                            {Events.eventid}
-                                        </button>
-                                    </td>
-                                    <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                        {Events.action}
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-
-                        </table>
-                    </div>
-
-                    {/*<Sort/>*/}
+    return(
+        <>
+            <div className=" min-w-full  py-5 dark:text-gray-200">
+                <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-gray-300">
+                    Events
                 </div>
-            </>
-        )
+                <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                        <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                        <tr>
+                            {tokenstitle.map(title=>(
+                                <th key={title.title}
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-sm font-semibold"
+                                >
+                                    {title.title}
+                                </th>
+                            ))}
+                        </tr>
+                        </thead>
+                        <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                        {Events.map(Events=>(
+                            <tr key={Events.eventid}className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-medium font-medium">
+                                    <button id={Events.id} onClick={GetEvent}>
+                                        {Events.id}
+                                    </button>
+                                </td>
+                                <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                    {Events.action}
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+
+                    </table>
+                </div>
+
+                {/*<Sort/>*/}
+            </div>
+        </>
+    )
 }
 
 const Extrinsics=()=>{
@@ -453,7 +463,7 @@ const Extrinsics=()=>{
 
     useEffect(()=>{
         if (router.isReady){
-            const pid = router.query.pid
+            const {pid} = router.query;
             SetExtrinsicInfo(`${pid}`)
             if (enabledNightMode == true){
                 document.documentElement.classList.add('dark');
@@ -485,7 +495,7 @@ const Extrinsics=()=>{
 
     }
 
-    if(data.eventInfos.nodes.length == 0){
+    if(data.events.nodes.length == 0){
         return (
             <Error/>
         )

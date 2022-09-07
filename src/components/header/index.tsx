@@ -19,13 +19,18 @@ const navigation = [
 ]
 const blockchain=[
     {
+        name:"Blocks",
+        href:"/blocks",
+    },
+    {
         name:"Extrinsic",
         href:"/extrinsic",
     },
     {
-        name:"Blocks",
-        href:"/blocks",
+        name:"Events",
+        href:"/events",
     },
+
     {
         name:"EVM Blocks",
         href:"/evm_blocks",
@@ -230,17 +235,10 @@ const Header=()=>{
 
                                               </Disclosure.Panel>
                                           </Transition>
-
-
                                       </div>
                                   </>
-
                                 )}
                             </Disclosure>
-
-
-
-
                         </Tab.Group>
                     </div>
                     {/*切换*/}
@@ -341,10 +339,6 @@ const Header=()=>{
                             <MenuIcon className="h-6 w-6" aria-hidden="true" />
                         </Popover.Button>
                     </div>
-
-
-
-
 
                 </div>
 

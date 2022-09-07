@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -36,8 +36,8 @@ const tokenstitle=[
 
 
 const Blcok_Info = `
- query HomePage($first: Int) {
-  blockInfos(first:20,offset:$first,orderBy:TIMESTAMP_DESC){
+ query HomePage($select: Int,$first: Int) {
+  blockInfos(first:$select,offset:$first,orderBy:TIMESTAMP_DESC){
     nodes{
       id
       blockHeight
@@ -108,18 +108,12 @@ function GetBlockData(blockTime) {
 }
 
 const Sort=(props:any)=>{
-  const block_number:number = props.data.blockInfos.totalCount
 
-  let block_number_pages:number = (block_number / 20)
-
-  if (block_number_pages > 500){
-    block_number_pages = 500
-  }
 
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
-
+  const [select_number,setSelect_number] = useAtom(SelectNumber)
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){
@@ -131,6 +125,20 @@ const Sort=(props:any)=>{
   },[router.isReady])
 
 
+
+  const block_number:number = props.data.blockInfos.totalCount
+
+
+  const Select = (e) =>{
+    setSelect_number(Number(e.target.value))
+    SetBlockPageNumber(1)
+  }
+
+  let block_number_pages:number = Math.ceil(block_number / select_number)
+
+  if (block_number_pages > 500){
+    block_number_pages = 500
+  }
 
   const addPageCounter = async ()=>{
     if (BlockPageNumber != block_number_pages){
@@ -160,14 +168,14 @@ const Sort=(props:any)=>{
             Show
             <div className="p-0.5 mx-1 rounded-md bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
               <select
-                  id="location"
-                  name="location"
+                  onChange={Select}
+                  id="select"
                   className=" block  w-13   p-1 outline-none  text-base    sm:text-sm rounded-md text-black bg-white  dark:bg-black dark:text-white"
-                  defaultValue="20"
+                  defaultValue={select_number}
               >
-                <option>20</option>
-                <option>50</option>
-                <option>100</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
               </select>
             </div>
             Records
@@ -213,7 +221,7 @@ const Blocks=()=>{
 
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [BlockPageNumber,] = useAtom(BlockPageNumberValue)
-
+  const [selectNumber,] = useAtom(SelectNumber)
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){
@@ -226,7 +234,8 @@ const Blocks=()=>{
 
   const{loading,error,data} = useQuery(Blcok_Info,{
     variables:{
-      first:(BlockPageNumber - 1) * 20
+      select:selectNumber,
+      first:(BlockPageNumber - 1) * selectNumber
     },
   })
 

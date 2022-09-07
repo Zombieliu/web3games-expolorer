@@ -12,6 +12,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
+
 const types = [
     { id: 1, name: 'EVM' },
     { id: 2, name: 'Substrate' },

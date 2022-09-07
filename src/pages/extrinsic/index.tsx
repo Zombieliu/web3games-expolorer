@@ -8,7 +8,7 @@ import {useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom, extrinsicPageNumberValue} from "../../jotai";
+import {DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -22,11 +22,10 @@ const tokenstitle=[
     title:"Extrinsic ID"
   },
   {
-    title:"Hash"
+    title:"Extrinsic Hash"
   },
   {
     title:"Time",
-    i:"fa fa-clock-o ml-1"
   },
   {
     title:"Result"
@@ -34,12 +33,15 @@ const tokenstitle=[
   {
     title:"Signer By"
   },
+  {
+    title:"Weight Fee(W3G)"
+  },
 ]
 
 
 const Block_Info = `
- query HomePage($first: Int) { 
-  extrinsicInfos(first:20,offset:$first,orderBy:TIMESTAMP_DESC){
+ query HomePage($select: Int,$first: Int) { 
+  extrinsicInfos(first:$select,offset:$first,orderBy:TIMESTAMP_DESC){
     nodes{
       id
       extrinsicHeight
@@ -59,7 +61,7 @@ class extrinsicInfo {
   private time: string;
   private nonce: string;
   private state: string;
-  private by: string;
+  private signerId: string;
   private address : string;
 
   constructor(
@@ -68,7 +70,7 @@ class extrinsicInfo {
       time:string,
       nonce:string,
       state:string,
-      by:string,
+      signerId:string,
       address:string
   ) {
     this.extrinsicHeight = extrinsicHeight
@@ -76,7 +78,7 @@ class extrinsicInfo {
     this.time = time
     this.nonce = nonce
     this.state = state
-    this.by = by
+    this.signerId = signerId
     this.address = address
   }
 }
@@ -118,18 +120,12 @@ function data_list(data: any){
 }
 
 const Sort=(props:any)=>{
-  const extrinsic_number = props.data.extrinsicInfos.totalCount
 
-  let extrinsic_number_pages = (extrinsic_number / 20)
-
-
-  if (extrinsic_number_pages > 500){
-    extrinsic_number_pages = 500
-  }
 
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [extrinsicPageNumber,SetextrinsicPageNumber] = useAtom(extrinsicPageNumberValue)
+  const [select_number,setSelect_number] = useAtom(SelectNumber)
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){
@@ -139,6 +135,22 @@ const Sort=(props:any)=>{
       }
     }
   },[router.isReady])
+
+  const extrinsic_number = props.data.extrinsicInfos.totalCount
+
+  const Select = (e) =>{
+    SetextrinsicPageNumber(1)
+    setSelect_number(Number(e.target.value))
+  }
+
+  let extrinsic_number_pages = Math.ceil(extrinsic_number / select_number)
+
+
+  if (extrinsic_number_pages > 500){
+    extrinsic_number_pages = 500
+  }
+
+
 
 
   const addPageCounter = ()=>{
@@ -169,14 +181,14 @@ const Sort=(props:any)=>{
             Show
             <div className="p-0.5 mx-1 rounded-md bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
               <select
-                  id="location"
-                  name="location"
+                  onChange={Select}
+                  id="select"
                   className=" block  w-13   p-1 outline-none  text-base    sm:text-sm rounded-md text-black bg-white  dark:bg-black dark:text-white"
-                  defaultValue="20"
+                  defaultValue={select_number}
               >
-                <option>20</option>
-                <option>50</option>
-                <option>100</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
               </select>
             </div>
             Records
@@ -220,6 +232,7 @@ const Transactions=()=> {
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [extrinsicPageNumber,] = useAtom(extrinsicPageNumberValue)
+  const [selectNumber,] = useAtom(SelectNumber)
   useEffect(()=>{
       if (router.isReady){
         if (enabledNightMode == true){
@@ -237,7 +250,8 @@ const Transactions=()=> {
 
   const {loading, error, data}: any = useQuery(Block_Info, {
     variables:{
-      first:(extrinsicPageNumber - 1) * 20
+      select:selectNumber,
+      first:(extrinsicPageNumber - 1) * selectNumber
     },
   })
 
@@ -332,7 +346,7 @@ const Transactions=()=> {
                                 className="p-6 w-36 text-sm xl:text-base  font-semibold   "
                             >
                               {title.title}
-                              <i className={title.i} aria-hidden="true"></i>
+                              {/*<i className={title.i} aria-hidden="true"></i>*/}
                             </th>
                         ))}
                       </tr>
@@ -341,12 +355,12 @@ const Transactions=()=> {
                       {extrinsic.map(item => (
                           <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 divide-x divide-gray-200 dark:divide-W3GInfoBorderBG">
                           <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
-                              <button id={item.extrinsicHeight} onClick={GetExtrinsics}>
+                              <button id={item.extrinsicHeight} className="w-20" onClick={GetExtrinsics}>
                                 {item.id}
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
-                              <button id={item.extrinsicHeight} className="w-52 md:w-96 truncate" onClick={GetExtrinsics}>
+                              <button id={item.extrinsicHeight} className="w-52 md:w-72 truncate" onClick={GetExtrinsics}>
                                 {item.extrinsicHeight}
                               </button>
                             </td>
@@ -356,17 +370,26 @@ const Transactions=()=> {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               { item.state ? "success" : "fail"}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-base ">
+                              <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                <div className="w-52 md:w-60 truncate">
+                                  {item.signerId}
+                                </div>
+                              </td>
+                              {/*<button onClick={() => {*/}
+                              {/*  // @ts-ignore*/}
+                              {/*  Copy(item.address);*/}
+                              {/*}}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
+                              {/*</button>*/}
+                              {/*<button onClick={getAccount} className="text-blue-400 dark:text-indigo-400" id={item.address}>*/}
+                              {/*  {item.by}*/}
+                            {/*</button>*/}
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                              <div className="flex justify-center ">
 
-                              <button onClick={() => {
-                                // @ts-ignore
-                                Copy(item.address);
-                              }}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>
-                              </button>
-
-                              <button onClick={getAccount} className="text-blue-400 dark:text-indigo-400" id={item.address}>
-                                {item.by}
-                              </button>
+                                <div className="ml-1s bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                                W3G
+                                </div>
+                              </div>
                             </td>
                           </tr>
                       ))}

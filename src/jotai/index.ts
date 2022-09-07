@@ -20,4 +20,6 @@ const EventValue = atom([])
 const BlockPageNumberValue = atom(1)
 const extrinsicPageNumberValue = atom(1)
 
-export{AccountValue,AccountBalanceValue,DarkModeAtom,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue}
+const SelectNumber = atom(20)
+
+export{AccountValue,AccountBalanceValue,DarkModeAtom,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue,SelectNumber}

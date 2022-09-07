@@ -16,32 +16,36 @@ function classNames(...classes) {
 
 const Event_Info = `
  query HomePage($Event: String) {
-  eventInfos(filter:{
+  events(filter:{
     id:{
       equalTo:$Event
     }
   }){
     nodes{
-      id
-      method
-      section
-      meta
-      data
+    id
+    module
+    method
+    rawType
+    data
+    extrinsicHash{
+    meta
     }
+      }
+
   }
 }
 `
 
 function data_type(data:any){
     let Data = [];
-    const times = JSON.parse(data.eventInfos.nodes[0].meta).fields.length
-    console.log(JSON.parse(data.eventInfos.nodes[0].data)[0])
+    const times = JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields.length
+    console.log(JSON.parse(data.events.nodes[0].data))
     for (let i =0;i<times;i++){
         let content = {
             id : i ,
-            Name : `${JSON.parse(data.eventInfos.nodes[0].meta).fields[i].name}`,
-            Type : `${JSON.parse(data.eventInfos.nodes[0].meta).fields[i].typeName}`,
-            Data : `${JSON.parse(data.eventInfos.nodes[0].data)[i]}`,
+            Name : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].name}`,
+            Type : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].typeName}`,
+            Data : `${JSON.parse(data.events.nodes[0].data)[i]}`,
         }
         Data.push(content)
     }
@@ -119,7 +123,7 @@ const Events=()=>{
         )
 
     }
-    if(data.eventInfos.nodes.length == 0){
+    if(data.events.nodes.length == 0){
         return (
             <Error/>
         )
@@ -127,8 +131,8 @@ const Events=()=>{
         const Data = data_type(data)
         const overview=[
             {
-                event:`${data.eventInfos.nodes[0].section}.${data.eventInfos.nodes[0].method}`,
-                id:`${data.eventInfos.nodes[0].id}`,
+                event:`${data.events.nodes[0].module}.${data.events.nodes[0].method}`,
+                id:`${data.events.nodes[0].id}`,
             }
         ]
         return (
@@ -137,10 +141,10 @@ const Events=()=>{
 
                 <Header></Header>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
-                    <div className="my-10 mb-14">
+                    <div className="my-10 mb-40">
                         <div className="mx-auto lg:flex justify-between ">
 
-                            <div className="text-xl my-2 lg:my-0 lg:text-3xl font-bold  dark:text-gray-300">
+                            <div className="text-xl my-2  lg:text-3xl font-bold  dark:text-gray-300">
                                 Event Details
                             </div>
                             {/*<div className="flex ">*/}
@@ -150,15 +154,12 @@ const Events=()=>{
                             {/*    />*/}
                             {/*    <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
                             {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
-
-
                             {/*</div>*/}
-
                         </div>
-                        <div className="mt-5">
-                            <div className="my-5  bg-white dark:bg-neutral-800 rounded-lg  ">
-                                <div className="py-5 min-w-full  p-5 dark:text-gray-300">
-                                    <div className="flex my-5 text-xl font-semibold text-gray-700 dark:text-neutral-200 ">
+                        <div className="my-5">
+                            <div className="py-5  bg-white dark:bg-neutral-800 rounded-lg  ">
+                                <div className=" min-w-full  p-5 dark:text-gray-300">
+                                    <div className="flex  text-xl font-semibold text-gray-700 dark:text-neutral-200 ">
                                             Overview
                                     </div>
                                     <div className="text-black dark:text-white text-sm ">
@@ -176,62 +177,66 @@ const Events=()=>{
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Parameters
                                                     </div>
-                                                    <div className=" rounded-lg mt-2 md:mt-0 w-full xl:w-6/12 ">
-                                                        <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
-                                                            <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                                <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
-                                                                <tr>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                    >
-                                                                        #
-                                                                    </th>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1  text-left text-sm font-semibold   "
-                                                                    >
-                                                                        Name
-                                                                    </th>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                    >
-                                                                        Type
-                                                                    </th>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                    >
-                                                                        Data
-                                                                    </th>
-                                                                </tr>
-                                                                </thead>
 
-                                                                <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                                {Data.map(item => (
-                                                                    <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                            {item.id}
-                                                                        </td>
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                            {item.Name}
-                                                                        </td>
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                            {item.Type}
-                                                                        </td>
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
+                                                </div>
+                                                <div className=" rounded-lg mt-2 md:mt-4 w-full  ">
+                                                    <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                                                        <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                            <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                                                            <tr>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                >
+                                                                    #
+                                                                </th>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1  text-left text-sm font-semibold   "
+                                                                >
+                                                                    Name
+                                                                </th>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                >
+                                                                    Type
+                                                                </th>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                >
+                                                                    Data
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+
+                                                            <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                            {Data.map(item => (
+                                                                <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                                        {item.id}
+                                                                    </td>
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                        {item.Name}
+                                                                    </td>
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                        {item.Type}
+                                                                    </td>
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                        <div className="">
                                                                             {item.Data}
-                                                                        </td>
+                                                                        </div>
 
-                                                                    </tr>
-                                                                ))}
-                                                                </tbody>
-                                                            </table>
+                                                                    </td>
 
-                                                        </div>
+                                                                </tr>
+                                                            ))}
+                                                            </tbody>
+                                                        </table>
 
                                                     </div>
+
                                                 </div>
                                             </div>))}
                                     </div>
