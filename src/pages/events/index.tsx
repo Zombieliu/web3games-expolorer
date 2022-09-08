@@ -28,9 +28,6 @@ const tokenstitle=[
         title:"Time",
     },
     {
-        title:"Extrinsic ID"
-    },
-    {
         title:"Extrinsic Hash"
     },
     {
@@ -286,6 +283,12 @@ const Transactions=()=> {
         router.push(`/event/${value}`)
     }
 
+    const GetExtrinsics = (props) =>{
+        const value = props.target.id;
+        router.push(`/extrinsics/${value}`)
+
+    }
+
     async function getAccount(e){
         await router.push(`/account/${e.target.id}`)
     }
@@ -370,21 +373,15 @@ const Transactions=()=> {
                                                         {item.time}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm  text-gray-500 dark:text-zinc-300">
-                                                    <div className="w-20">
-                                                        {item.idx}
-                                                    </div>
 
-                                                </td>
-
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                    <div className="w-44  truncate">
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400">
+                                                    <button  id={item.hash} className="w-48  truncate" onClick={GetExtrinsics}>
                                                         {item.hash}
-                                                    </div>
+                                                    </button>
                                                 </td>
 
                                                 <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                    <div className="w-44  truncate">
+                                                    <div className="w-48  truncate">
                                                         {item.signerId}
                                                     </div>
                                                 </td>

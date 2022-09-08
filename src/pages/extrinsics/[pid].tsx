@@ -10,6 +10,7 @@ import {DarkModeAtom,  EventValue} from "../../jotai";
 import {useManualQuery } from 'graphql-hooks'
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
+import Link from "next/link";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -497,7 +498,29 @@ const Extrinsics=()=>{
 
     if(data.events.nodes.length == 0){
         return (
-            <Error/>
+            <>
+                <main
+                    className="min-h-screen  bg-black bg-cover bg-top sm:bg-top"
+                    style={{
+                        backgroundImage:
+                            'url("https://web3games.org/_next/image?url=%2Fgraph%2Fvision.png&w=3840&q=75")',
+                    }}
+                >
+                    <div className="max-w-7xl mx-auto  px-4  text-center sm:px-6  lg:px-8 py-56 md:py-96">
+                        <p className="text-xl font-semibold text-white  uppercase "></p>
+                        <h1 className="mt-2 text-4xl font-extrabold text-white tracking-tight sm:text-5xl">
+                            Uh oh! I think you’re lost data.
+                        </h1>
+                        <div className="mt-6">
+                            <div className="inline-flex items-center px-4 py-2 border border-transparent text-sm text-indigo-500 font-medium rounded-md text-black bg-white hover:bg-gray-700 hover:text-white transition duration-300">
+                                <Link href="/home" >
+                                    Go back home
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </>
         )
     }else{
         return(
