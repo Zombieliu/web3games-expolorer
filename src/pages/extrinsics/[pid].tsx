@@ -223,27 +223,27 @@ const Overview = (props:any) => {
                                         </div>
                                         <div id={item.signature}
                                              className="text-gray-800 dark:text-white text-xs lg:text-sm  break-words">
-                                            {item.signature} &nbsp;
+                                            {item.signature}
                                             <button onClick={() => {
                                                 // @ts-ignore
                                                 Copy(`${item.signature}`);
                                             }}>
-                                                <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                <i className="fa fa-clone ml-1.5 mt-1" aria-hidden="true"></i>
                                             </button>
                                         </div>
                                     </div>
                                     <div className="md:flex justify-between lg:justify-start my-3">
                                         <div className="font-semibold lg:font-medium w-60  mr-32">
-                                            extrinsic_hash
+                                            Extrinsic hash
                                         </div>
                                         <div id={item.extrinsic_hash}
                                              className="text-gray-800  dark:text-white text-xs lg:text-sm  break-words">
-                                            {item.extrinsic_hash} &nbsp;
+                                            {item.extrinsic_hash}
                                             <button onClick={() => {
                                                 // @ts-ignore
                                                 Copy(`${item.extrinsic_hash}`);
                                             }}>
-                                                <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                <i className="fa fa-clone ml-1.5 mt-1" aria-hidden="true"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -498,29 +498,16 @@ const Extrinsics=()=>{
 
     if(data.events.nodes.length == 0){
         return (
-            <>
-                <main
-                    className="min-h-screen  bg-black bg-cover bg-top sm:bg-top"
-                    style={{
-                        backgroundImage:
-                            'url("https://web3games.org/_next/image?url=%2Fgraph%2Fvision.png&w=3840&q=75")',
-                    }}
-                >
-                    <div className="max-w-7xl mx-auto  px-4  text-center sm:px-6  lg:px-8 py-56 md:py-96">
-                        <p className="text-xl font-semibold text-white  uppercase "></p>
-                        <h1 className="mt-2 text-4xl font-extrabold text-white tracking-tight sm:text-5xl">
-                            Uh oh! I think you’re lost data.
-                        </h1>
-                        <div className="mt-6">
-                            <div className="inline-flex items-center px-4 py-2 border border-transparent text-sm text-indigo-500 font-medium rounded-md text-black bg-white hover:bg-gray-700 hover:text-white transition duration-300">
-                                <Link href="/home" >
-                                    Go back home
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </>
+            <Error/>
+            // <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
+            //     <Header/>
+            //     <div className="max-w-7xl mx-auto py-16  px-4 ">
+            //         <div className="my-10 mb-14">
+            //             <OverviewNoEvent data={data}/>
+            //         </div>
+            //     </div>
+            //     <Tail></Tail>
+            // </div>
         )
     }else{
         return(

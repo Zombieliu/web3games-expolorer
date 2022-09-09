@@ -226,12 +226,12 @@ const Overview = (props:any) => {
                                         </div>
                                         <div id={item.signature}
                                              className="text-gray-800  text-xs lg:text-sm  break-words">
-                                            {item.signature} &nbsp;
+                                            {item.signature}
                                             <button onClick={() => {
                                                 // @ts-ignore
                                                 Copy(`${item.signature}`);
                                             }}>
-                                                <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                <i className="fa fa-clone mt-1 ml-1.5" aria-hidden="true"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -241,12 +241,12 @@ const Overview = (props:any) => {
                                         </div>
                                         <div id={item.extrinsic_hash}
                                              className="text-gray-800   text-xs lg:text-sm  break-words">
-                                            {item.extrinsic_hash} &nbsp;
+                                            {item.extrinsic_hash}
                                             <button onClick={() => {
                                                 // @ts-ignore
                                                 Copy(`${item.extrinsic_hash}`);
                                             }}>
-                                                <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                                <i className="fa fa-clone mt-1 ml-1.5" aria-hidden="true"></i>
                                             </button>
                                         </div>
                                     </div>

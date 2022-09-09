@@ -34,7 +34,7 @@ const tokenstitle=[
     title:"Signer By"
   },
   {
-    title:"Weight Fee(W3G)"
+    title:"Fee(W3G)"
   },
 ]
 
@@ -59,34 +59,35 @@ class extrinsicInfo {
   private extrinsicHeight: string;
   private id: string;
   private time: string;
-  private nonce: string;
   private state: string;
   private signerId: string;
-  private address : string;
+  private fee : string;
 
   constructor(
       id:string,
       extrinsicHeight:string,
       time:string,
-      nonce:string,
       state:string,
       signerId:string,
-      address:string
+      fee:string
   ) {
     this.extrinsicHeight = extrinsicHeight
     this.id = id
     this.time = time
-    this.nonce = nonce
     this.state = state
     this.signerId = signerId
-    this.address = address
+    this.fee = fee
   }
 }
+
+
+
 
 function GetBlockData(blockTime) {
   const start = new Date(blockTime).toUTCString();
   return `${start}`
 }
+
 
 function data_list(data: any){
   let times = data.extrinsicInfos.nodes.length;
@@ -97,10 +98,9 @@ function data_list(data: any){
           data.extrinsicInfos.nodes[i].extrinsicHeight,
           data.extrinsicInfos.nodes[i].id,
           GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
-          data.extrinsicInfos.nodes[i].nonce,
           data.extrinsicInfos.nodes[i].success,
           "system",
-          data.extrinsicInfos.nodes[i].signerId,
+          data.extrinsicInfos.nodes[i].fee,
       )
       data_list.push(result)
     }else{
@@ -108,10 +108,9 @@ function data_list(data: any){
           data.extrinsicInfos.nodes[i].extrinsicHeight,
           data.extrinsicInfos.nodes[i].id,
           GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
-          data.extrinsicInfos.nodes[i].nonce,
           data.extrinsicInfos.nodes[i].success,
           data.extrinsicInfos.nodes[i].signerId,
-          data.extrinsicInfos.nodes[i].signerId,
+          data.extrinsicInfos.nodes[i].fee,
       )
       data_list.push(result)
     }
@@ -357,6 +356,8 @@ const Transactions=()=> {
                           <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
                               <button id={item.extrinsicHeight} className="w-20" onClick={GetExtrinsics}>
                                 {item.id}
+
+
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
@@ -367,6 +368,7 @@ const Transactions=()=> {
                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               {item.time}
                             </td>
+
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               { item.state ? "success" : "fail"}
                             </td>
@@ -383,12 +385,14 @@ const Transactions=()=> {
                               {/*<button onClick={getAccount} className="text-blue-400 dark:text-indigo-400" id={item.address}>*/}
                               {/*  {item.by}*/}
                             {/*</button>*/}
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm  text-gray-500 dark:text-zinc-300">
                               <div className="flex justify-center ">
-
-                                <div className="ml-1s bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
-                                W3G
-                                </div>
+                                  <div className="flex">
+                                    {item.fee}
+                                    <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                                      W3G
+                                    </div>
+                                  </div>
                               </div>
                             </td>
                           </tr>

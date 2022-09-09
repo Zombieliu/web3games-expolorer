@@ -237,11 +237,11 @@ const Overview = (props:any) =>{
                                         Block Hash
                                     </div>
                                     <div id={item.blockHash} className="text-gray-800 dark:text-white text-xs lg:text-sm   break-words ">
-                                        {item.blockHash} &nbsp;
+                                        {item.blockHash}
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.blockHash}`);}}>
-                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                            <i className="fa fa-clone ml-1 mt-1" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -250,11 +250,11 @@ const Overview = (props:any) =>{
                                         Parent Block Hash
                                     </div>
                                     <div id={item.parentBlockHash} className="text-gray-800 dark:text-white  text-xs lg:text-sm  break-words">
-                                        {item.parentBlockHash} &nbsp;
+                                        {item.parentBlockHash}
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.parentBlockHash}`);}}>
-                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -263,11 +263,11 @@ const Overview = (props:any) =>{
                                         Extrinsics Hash
                                     </div>
                                     <div id={item.extrinsicsHash} className="text-gray-800 dark:text-white text-xs lg:text-sm break-words ">
-                                        {item.extrinsicsHash} &nbsp;
+                                        {item.extrinsicsHash}
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.extrinsicsHash}`);}}>
-                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -276,11 +276,11 @@ const Overview = (props:any) =>{
                                         Content Hash
                                     </div>
                                     <div id={item.contentHash} className="text-gray-800 dark:text-white text-xs lg:text-sm break-words ">
-                                        {item.contentHash} &nbsp;
+                                        {item.contentHash}
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.contentHash}`);}}>
-                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -289,11 +289,11 @@ const Overview = (props:any) =>{
                                         State Hash
                                     </div>
                                     <div id={item.State} className="text-gray-800 dark:text-white text-xs lg:text-sm  break-words">
-                                        {item.State} &nbsp;
+                                        {item.State}
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.State}`);}}>
-                                            <i className="fa fa-clone mt-1" aria-hidden="true"></i>
+                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
                                         </button>
                                     </div>
                                 </div>

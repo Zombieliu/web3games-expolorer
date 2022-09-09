@@ -32,6 +32,9 @@ const tokenstitle=[
   {
     title:"Event"
   },
+  {
+    title:"Treasury Revenue"
+  },
 ]
 
 
@@ -70,6 +73,7 @@ class BlockInfo {
   private time: string;
   private extrinsicNumber: string;
   private eventNumber: string;
+  private fee: string;
 
   constructor(
       id:string,
@@ -77,12 +81,14 @@ class BlockInfo {
       time:string,
       extrinsicNumber:string,
       eventNumber:string,
+      fee:string,
   ) {
     this.id = id
     this.blockHeight = blockHeight
     this.time = time
     this.extrinsicNumber = extrinsicNumber
     this.eventNumber = eventNumber
+    this.fee = fee
   }
 }
 
@@ -96,6 +102,7 @@ function data_list(data: any){
         GetBlockData(data.blockInfos.nodes[i].timestamp),
         data.blockInfos.nodes[i].extrinsicNumber,
         data.blockInfos.nodes[i].eventNumber,
+        (0.52222222).toFixed(6)
     )
     data_list.push(result)
   }
@@ -342,26 +349,34 @@ const Blocks=()=>{
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
 
-                              <button id={item.id} onClick={GetBlock}>{item.id}
+                              <button id={item.id}  onClick={GetBlock}>
+                                <div className="w-52 truncate">
+                                  {item.id}
+                                </div>
                                 {/*<i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
                             </button>
-
                             </td>
 
                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               {item.time}
-
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
-
                               {item.eventNumber}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
                               {item.extrinsicNumber}
                             </td>
-                            {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">*/}
-                            {/*  {item.result}*/}
-                            {/*</td>*/}
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                              <div className="flex justify-center w-36">
+                                <div className="flex">
+                                  {item.fee}
+                                  <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                                    W3G
+                                  </div>
+                                </div>
+                              </div>
+
+                            </td>
                           </tr>
                       ))}
                       </tbody>

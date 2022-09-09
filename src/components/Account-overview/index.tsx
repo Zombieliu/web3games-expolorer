@@ -6,16 +6,31 @@ import {useAtom} from "jotai";
 import {AccountBalanceValue, AccountValue, DarkModeAtom} from "../../jotai";
 import {useRouter} from "next/router";
 
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
 
+const tokenstitle=[
+  {
+    title:"Token"
+  },
+  {
+    title:"Amount "
+  },
+  {
+    title:"Value",
+  },
+
+]
 const overview = [
-  // {
-  //   img:"/solana.png",
-  //   name: 'SOL',
-  //   amount: '1',
-  //   value:"$92.0149",
-  //   href: 'https://solana.com/',
-  //
-  // },
+  {
+    img:"/web3gsmall.png",
+    name: 'W3G',
+    amount: '1',
+    value:"$92.0149",
+    href: 'https://web3games.com/',
+
+  },
   // {
   //   img:"/icp.png",
   //   name: 'ICP',
@@ -37,17 +52,22 @@ const AccountOverview=()=>{
   const [account,] = useAtom(AccountValue);
   const [balance,setBalance] = useAtom(AccountBalanceValue);
   let [isOpen, setIsOpen] = useState(false);
-
+  const [pathname,setPathname] = useState("")
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){
         document.documentElement.classList.add('dark');
-
       }else{
         document.documentElement.classList.remove('dark');
       }
+      const content = router.asPath
+      const fetchUserBounty = async () => {
+        setPathname(content)
+        console.log(`${content}`)
+      }
+      fetchUserBounty()
     }
   },[router.isReady])
 
@@ -107,8 +127,8 @@ const AccountOverview=()=>{
         {/*    <i className="fa fa-search" aria-hidden="true"></i></div>*/}
         {/*</div>*/}
       </div>
-      <div className="flex">
-        <div id="account" className="text-xs mt-2 lg:text-base mr-2 dark:text-white">
+      <div className="flex dark:text-white">
+        <div id="account" className="text-xs mt-2 lg:text-base mr-2 ">
           {account}
         </div>
         <div>
@@ -121,13 +141,16 @@ const AccountOverview=()=>{
 
       <div className="lg:flex justify-between py-6 w-full  ">
         <div className="bg-white dark:bg-neutral-800 p-5 rounded-lg w-full mb-2 lg:w-1/2 mr-10 shadow-lg">
-          <div className="text-xl font-semibold mb-3  dark:text-gray-100">
+          <div className="text-2xl font-semibold mb-3  dark:text-gray-100">
             Overview
           </div>
           <div className="flex  ">
-          <div className='flex-col justify-between mr-20 text-gray-400 dark:text-gray-200'>
-            <div className="mb-3">
-              W3G Balance
+          <div className='flex-col justify-between mr-20 xl:mr-56 text-gray-400'>
+            <div className="mb-3 flex">
+              <div className="text-black dark:text-white font-semibold mr-1">
+                W3G
+              </div>
+              Balance
             </div>
             {/*<div className='mb-3'>*/}
             {/*  FT Token Balance*/}
@@ -136,7 +159,9 @@ const AccountOverview=()=>{
 
           <div className="">
             <div className="flex mb-3">
-            <div className="font-semibold mr-1 dark:text-white"> {balance} W3G </div> <div className="text-gray-600 dark:text-gray-200">($55.2)</div>
+            <div className="font-semibold mr-1 dark:text-white"> {balance}
+              <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">W3G</div>
+            </div> <div className="text-gray-600 dark:text-gray-200">($55.2)</div>
             </div>
             {/*<div>*/}
             {/*  <div className="flex mb-3">*/}
@@ -153,7 +178,7 @@ const AccountOverview=()=>{
                   <Popover.Button
                     className={`
                 ${open ? '' : 'text-opacity-90'}
-                text-black group bg-orange-700 px-3 py-2 w-full border bg-gray-100 dark:bg-neutral-800 dark:border-neutral-700 rounded-md inline-flex items-center text-base font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75`}
+                text-black group bg-orange-700 px-3 py-2 w-full border bg-gray-100 dark:bg-neutral-800 dark:border-neutral-700 rounded-md inline-flex items-center text-base font-medium hover:text-opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A5D8F5] focus-visible:ring-opacity-75`}
                   >
                     <div className="flex justify-between w-full dark:text-white">
 
@@ -172,7 +197,7 @@ const AccountOverview=()=>{
                       </div>
                     <ChevronDownIcon
                       className={`${open ? '' : 'text-opacity-70'}
-                  ml-2 h-5 w-5 mt-1.5 text-orange-300 group-hover:text-opacity-80 transition ease-in-out duration-150`}
+                  ml-2 h-5 w-5 mt-1.5 text-black dark:text-white group-hover:text-opacity-80 transition ease-in-out duration-150`}
                       aria-hidden="true"
                     />
                     </div>
@@ -186,76 +211,57 @@ const AccountOverview=()=>{
                     leaveFrom="opacity-100 translate-y-0"
                     leaveTo="opacity-0 translate-y-1"
                   >
-                    <Popover.Panel className="absolute z-10     mt-3   w-full">
-                      <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-
-                        <div className="p-4 bg-gray-100 dark:bg-neutral-700 dark:text-gray-200 flex justify-between font-semibold text-sm">
-
-                          <div className=" w-1/3">
-                            Token
-                          </div>
-                          <div className="w-1/3">
-                            Amount
-                          </div>
-                          <div className=" w-1/3">
-                            Value
-                          </div>
-                        </div>
-                        <div className="relative  bg-white dark:bg-neutral-600 dark:text-gray-200 px-1 py-2 lg:p-4 ">
-                          <div className="flex justify-items-start py-2 lg:p-2 border-b dark:border-b-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700">
-
-                            <Link href="">
-                              <a  className="flex w-1/3 mr-1 ">
-                                <div>
-                                <img className='w-7 h-7 lg:w-8 lg:h-8 ' src='/web3gsmall.png' alt='' />
-                                </div>
-
-                                <div className="ml-2 ">
-                                <div className="-mt-0.5 text-sm font-semibold">
-                                  W3G
-                                </div>
-                                  <div className="text-xs">
-                                    $0.00229394
-                                  </div>
-                                </div>
-                              </a>
-                            </Link>
-                            <div className="mt-1 w-1/3">
-                              {balance}
-                            </div>
-                            <div className="mt-1 w-1/3">
-                              $0.28
-                            </div>
-
-                          </div>
-                          {overview.map((item) => (
-                            <div key={item.href} className="flex justify-items-start py-2 lg:p-2 border-b hover:bg-gray-200">
-
-                              <Link href={item.href}>
-                                <a  className="flex w-1/3 mr-1">
-                                  <div>
-                                    <img className='w-7 h-7 lg:w-8 lg:h-8 ' src={item.img} alt='' />
-                                  </div>
-
-                                  <div className="ml-2 ">
-                                    <div className="mt-1.5 text-sm font-semibold">
-                                      {item.name}
-                                    </div>
-                                  </div>
-                                </a>
-                              </Link>
-                              <div className="mt-1 w-1/3">
-                                {item.amount}
-                              </div>
-                              <div className="mt-1 w-1/3">
-                                {item.value}
-                              </div>
-
-                            </div>
+                    <Popover.Panel className="absolute z-10  border border-[#A5D8F5] rounded-lg overflow-hidden  mt-3   w-full">
+                      <table className="min-w-full rounded-lg divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                        <thead className="bg-white  dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                        <tr>
+                          {tokenstitle.map(title => (
+                              <th key={title.title}
+                                  scope="col"
+                                  className="p-6 w-36 text-sm  font-semibold   "
+                              >
+                                {title.title}
+                                {/*<i className={title.i} aria-hidden="true"></i>*/}
+                              </th>
                           ))}
-                        </div>
+                        </tr>
+                        </thead>
+                        <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
+                        {overview.map(item => (
+                            <tr key={item.href} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                              <td className="px-6 py-2  whitespace-nowrap text-sm font-medium   ">
+                                <Link href={item.href}>
+                                  <a  className="flex  items-center text-left">
+                                    <div>
+                                      <img className='w-8 h-8' src={item.img} alt='' />
+                                    </div>
+                                    <div className="ml-2 ">
+                                      <div className=" text-sm font-semibold">
+                                        {item.name}
+                                      </div>
+                                      <div className="text-xs">
+                                        $0.00229394
+                                      </div>
+                                    </div>
 
-                      </div>
+                                  </a>
+                                </Link>
+                              </td>
+                              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                <div className="mt-1 ">
+                                  {item.amount}
+                                </div>
+                              </td>
+
+                              <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                <div className="mt-1 ">
+                                  {item.value}
+                                </div>
+                              </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                      </table>
                     </Popover.Panel>
                   </Transition>
                 </>
@@ -266,13 +272,16 @@ const AccountOverview=()=>{
 
         </div>
         <div className="bg-white dark:bg-neutral-800 dark:text-gray-200 p-5 rounded-lg w-full mb-2 lg:w-1/2 shadow-lg">
-          <div className="text-xl font-semibold mb-3 ">
+          <div className="text-2xl font-semibold mb-3 ">
             More info
           </div>
           <div className="flex justify-between">
-            <div className='flex-col justify-between mr-20 text-gray-400 dark:text-gray-100'>
-              <div className="mb-3">
-                W3G Balance
+            <div className='flex-col justify-between mr-20 text-gray-400 '>
+              <div className="mb-3 flex">
+                <div className="text-black dark:text-white font-semibold mr-1">
+                  W3G
+                </div>
+                 Balance
               </div>
               {/*<div className='mb-3'>*/}
               {/*  FT Tokens Value*/}
@@ -281,7 +290,10 @@ const AccountOverview=()=>{
 
             <div className="">
               <div className="flex mb-3">
-                <div className="font-semibold mr-1 "> {balance} W3G</div>
+                <div className="font-semibold mr-1 "> {balance} </div>
+                <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                  W3G
+                </div>
               </div>
               {/*<div>*/}
               {/*  <div className="flex mb-3">*/}
@@ -290,12 +302,7 @@ const AccountOverview=()=>{
               {/*</div>*/}
             </div>
           </div>
-
-
-
         </div>
-
-
       </div>
 
 
@@ -303,7 +310,7 @@ const AccountOverview=()=>{
         {navigation.map(item=>(
           <div key={item.id} className="pr-8 text-gray-500 ">
             <Link href={item.href}>
-              <a className="hover:text-blue-400 transition duration-300 ">
+              <a className={classNames(`${item.href}` == `${pathname}` ?"bg-[#7BA9DF] text-white   transition duration-300":"bg-gray-200 dark:bg-[#262626]",'p-2 rounded-lg')}>
                 {item.name}
               </a>
             </Link>
