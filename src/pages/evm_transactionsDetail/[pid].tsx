@@ -279,7 +279,7 @@ const EvmTransactionsDetail=()=>{
                                                     <button className="text-blue-400 mx-2 w-56 md:w-72 truncate" id={overview.to} onClick={GetAddress}>
                                                         {overview.to}
                                                     </button>
-                                                    <div className={classNames(`${Status[overview.status].bg}`,"text-sm items-center flex p-1.5 mx-1 rounded-full text-gray-50")}>
+                                                    <div className={classNames(`${Status[overview.status].bg}`,"text-xs items-center flex p-1 mx-1 rounded-full text-gray-50")}>
                                                         <i className={classNames(`${Status[overview.status].icon2} `)} aria-hidden="true"></i>
                                                     </div>
                                                     <button onClick={() => {
@@ -415,8 +415,8 @@ const EvmTransactionsDetail=()=>{
                                                                 </Disclosure.Panel>
                                                             </Transition>
 
-                                                                <Disclosure.Button className="flex  py-1.5 text-indigo-400 font-semibold  items-center">
-                                                                    <div className="   items-center">
+                                                                <Disclosure.Button className="flex  py-1.5 text-[#7DADFF] font-semibold  items-center">
+                                                                    <div className="   ">
                                                                         Click to see More
                                                                     </div>
                                                                     <ChevronUpIcon

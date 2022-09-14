@@ -2023,7 +2023,7 @@ const EVMAddress=()=>{
                                 <button onClick={() => {
                                     // @ts-ignore
                                     Copy(`${number}`);}} >
-                                    <i className="fa fa-clone mx-1 " aria-hidden="true"></i>
+                                    <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                 </button>
                                 </div>
                             </div>

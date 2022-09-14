@@ -275,7 +275,7 @@ const AccountOverview=()=>{
           <div className="text-2xl font-semibold mb-3 ">
             More info
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between border-b">
             <div className='flex-col justify-between mr-20 text-gray-400 '>
               <div className="mb-3 flex">
                 <div className="text-black dark:text-white font-semibold mr-1">
