@@ -5,11 +5,12 @@ import Tail from '../../components/tail';
 import AccountOverview from '../../components/Account-overview';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue, DarkModeAtom} from "../../jotai";
+import {AccountBalanceValue, AccountValue, BlockPageNumberValue, DarkModeAtom, SelectNumber} from "../../jotai";
 import {useQuery} from "graphql-hooks";
 import axios from "axios";
 import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
+import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 
 
 function classNames(...classes) {
@@ -78,6 +79,7 @@ class ExtrinsicsInfo {
     this.active = active
   }
 }
+let extrinsic_number_pages = (20 / 20)
 
 function data_list(data: any){
   if (data.accounts.nodes.length != 0){
@@ -114,7 +116,113 @@ function GetBlockData(blockTime) {
 function insertStr(source, start, newStr){
   return source.slice(0, start) + newStr + source.slice(start);
 }
+const Sort=(props:any)=>{
 
+
+  const router = useRouter()
+  const [enabledNightMode,] = useAtom(DarkModeAtom)
+  const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
+  const [select_number,setSelect_number] = useAtom(SelectNumber)
+  useEffect(()=>{
+    if (router.isReady){
+      if (enabledNightMode == true){
+        document.documentElement.classList.add('dark');
+      }else{
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  },[router.isReady])
+
+
+
+  const block_number:number = props.data.accounts.totalCount
+
+
+  const Select = (e) =>{
+    setSelect_number(Number(e.target.value))
+    SetBlockPageNumber(1)
+  }
+
+  let block_number_pages:number = Math.ceil(block_number / select_number)
+
+  if (block_number_pages > 500){
+    block_number_pages = 500
+  }
+
+  const addPageCounter = async ()=>{
+    if (BlockPageNumber != block_number_pages){
+      SetBlockPageNumber(BlockPageNumber + 1)
+    }
+
+  }
+
+  const decPageCounter = ()=>{
+    if (BlockPageNumber != 1){
+      SetBlockPageNumber(BlockPageNumber - 1)
+    }
+  }
+
+  const lastPage = ()=>{
+    SetBlockPageNumber(block_number_pages)
+  }
+
+  const firstPage = ()=>{
+    SetBlockPageNumber(1)
+  }
+
+  return(
+      <div>
+        <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
+          <div className="flex text-black dark:text-white items-center">
+            Show
+
+            <select
+                onChange={Select}
+                id="select"
+                className=" block  w-13   p-1 outline-none  text-base  border border-[#7ADFD5] mx-1 sm:text-sm rounded-md text-black bg-white  dark:bg-W3GInfoBG dark:text-white"
+                defaultValue={select_number}
+            >
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+
+            Records
+
+          </div>
+          <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
+            <button
+                onClick={firstPage}
+                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F]  text-sm font-semibold  "
+            >
+              <span className="">First</span>
+            </button>
+            <button
+                onClick={decPageCounter}
+                className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+              Page {BlockPageNumber} of {block_number_pages}
+            </div>
+            <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+                onClick={lastPage}
+                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+            >
+              <span className="">Last</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+  )
+}
 const Account=()=>{
   const [account,setAccount] = useAtom(AccountValue)
   const [,setBalance] = useAtom(AccountBalanceValue)
@@ -196,9 +304,9 @@ const Account=()=>{
               </div>
               <div className="  rounded-lg mt-2">
                 <div className="mt-5">
-                  <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
-                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                      <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                  <div className="shadow overflow-auto bg-white dark:bg-W3GInfoBG rounded-lg border dark:border-W3GInfoBorderBG ">
+                    <table className="min-w-full border-b divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                      <thead className=" text-gray-500 dark:text-neutral-300">
                       <tr>
                         {title.map(title => (
                             <th key={title.title}
@@ -245,13 +353,12 @@ const Account=()=>{
                       ))}
                       </tbody>
                     </table>
+                    <Sort data={data}></Sort>
                   </div>
 
 
                 </div>
               </div>
-
-
             </div>
 
           </div>

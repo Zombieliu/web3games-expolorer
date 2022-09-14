@@ -241,7 +241,7 @@ const Overview = (props:any) =>{
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.blockHash}`);}}>
-                                            <i className="fa fa-clone ml-1 mt-1" aria-hidden="true"></i>
+                                            <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                         </button>
                                     </div>
                                 </div>
@@ -254,7 +254,7 @@ const Overview = (props:any) =>{
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.parentBlockHash}`);}}>
-                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
+                                            <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                         </button>
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@ const Overview = (props:any) =>{
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.extrinsicsHash}`);}}>
-                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
+                                            <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                         </button>
                                     </div>
                                 </div>
@@ -280,7 +280,7 @@ const Overview = (props:any) =>{
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.contentHash}`);}}>
-                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
+                                            <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                         </button>
                                     </div>
                                 </div>
@@ -293,7 +293,7 @@ const Overview = (props:any) =>{
                                         <button onClick={() => {
                                             // @ts-ignore
                                             Copy(`${item.State}`);}}>
-                                            <i className="fa fa-clone mt-1 ml-1" aria-hidden="true"></i>
+                                            <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                         </button>
                                     </div>
                                 </div>

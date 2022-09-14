@@ -4,7 +4,7 @@ import Header from "../../components/header";
 import Tail from "../../components/tail";
 import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {Dialog, Transition } from "@headlessui/react";
-import {useQuery} from "graphql-hooks";
+import {useManualQuery, useQuery} from "graphql-hooks";
 import {router} from "next/client";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
@@ -44,22 +44,35 @@ const Block_Info = `
       module
       method
       timestamp
-      extrinsicHash{
-        extrinsicHeight
-        id
-      signerId
-        }
+      extrinsicHash
       }
     totalCount
   }
 }
 `
 
+const Extrinsic_Hash = `
+query HomePage($select: Int,$first: Int) { 
+  extrinsicInfos(first:$select,offset:$first,orderBy:TIMESTAMP_DESC){
+       nodes{
+    extrinsicHeight
+   id
+   signerId
+    }
+  }
+}
+`
+
+// {
+//     extrinsicHeight
+//     id
+//     signerId
+// }
+
 class extrinsicInfo {
     private id: string;
     private action: string;
     private time: string;
-    private idx: string;
     private hash : string;
     private signerId: string;
 
@@ -68,7 +81,6 @@ class extrinsicInfo {
         id:string,
         action:string,
         time:string,
-        idx:string,
         hash:string,
         signerId:string,
 
@@ -76,7 +88,6 @@ class extrinsicInfo {
         this.id = id
         this.action = action
         this.time = time
-        this.idx = idx
         this.hash = hash
         this.signerId = signerId
 
@@ -88,7 +99,7 @@ function GetBlockData(blockTime) {
     return `${start}`
 }
 
-function data_list(data: any){
+function data_list(data: any ,Extrinsic_Hash_data:any){
     let times = data.events.nodes.length;
     let data_list = [];
     for (let i = 0;i < times;i++){
@@ -97,9 +108,7 @@ function data_list(data: any){
                 data.events.nodes[i].id,
                 `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
                 GetBlockData(data.events.nodes[i].timestamp),
-                data.events.nodes[i].extrinsicHash.extrinsicHeight,
-                data.events.nodes[i].extrinsicHash.id,
-
+                Extrinsic_Hash_data.data.extrinsicInfos.nodes[i].extrinsicHeight,
                 // data.events.nodes[i].signerId,
                 "system",
 
@@ -110,11 +119,10 @@ function data_list(data: any){
 
                 data.events.nodes[i].id,
                 `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
-
                 GetBlockData(data.events.nodes[i].timestamp),
-                data.events.nodes[i].extrinsicHash.extrinsicHeight,
-                data.events.nodes[i].extrinsicHash.id,
-                data.events.nodes[i].extrinsicHash.signerId,
+                data.events.nodes[i].extrinsicHeight,
+                data.events.nodes[i].extrinsicHash.signerId
+
             )
             data_list.push(result)
         }
@@ -230,6 +238,8 @@ const Transactions=()=> {
     const [enabledNightMode,] = useAtom(DarkModeAtom)
     const [extrinsicPageNumber,] = useAtom(extrinsicPageNumberValue)
     const [selectNumber,] = useAtom(SelectNumber)
+    const [extrinsic_Hash_info] = useManualQuery(Extrinsic_Hash)
+    const [extrinsic_Hash_Info,setExtrinsic_Hash_info] = useState({})
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){
@@ -237,6 +247,7 @@ const Transactions=()=> {
             }else{
                 document.documentElement.classList.remove('dark');
             }
+            fetchUserThenSomething()
         }
     },[router.isReady])
 
@@ -252,8 +263,19 @@ const Transactions=()=> {
         },
     })
 
-    const Copy = (span) => {
 
+    const fetchUserThenSomething = async () => {
+        const block = await extrinsic_Hash_info({
+            variables: {
+                select:selectNumber,
+                first:(extrinsicPageNumber - 1) * selectNumber
+            }
+        })
+        setExtrinsic_Hash_info(block)
+
+    }
+
+    const Copy = (span) => {
         const spanText = document.getElementById(span).innerText;
         const oInput = document.createElement('input');
         oInput.value = spanText;
@@ -311,8 +333,10 @@ const Transactions=()=> {
     }
 
     if (data) {
-        console.log(data)
-        const extrinsic = data_list(data)
+        // console.log(data)
+        // console.log('sss',(extrinsic_Hash_Info as any).data.extrinsicInfos.nodes)
+        const extrinsic = data_list(data,extrinsic_Hash_Info)
+
         return (
             <div className="mx-auto  bg-white dark:bg-W3GBG  transition duration-700">
 

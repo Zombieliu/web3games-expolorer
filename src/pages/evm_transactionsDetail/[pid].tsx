@@ -197,7 +197,7 @@ const EvmTransactionsDetail=()=>{
                                                     <button onClick={() => {
                                                         // @ts-ignore
                                                         Copy(`${hash}`);}}>
-                                                        <i className="fa fa-clone mx-1" aria-hidden="true"></i>
+                                                         <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                                     </button>
                                                 </div>
                                             </div>
@@ -285,7 +285,7 @@ const EvmTransactionsDetail=()=>{
                                                     <button onClick={() => {
                                                         // @ts-ignore
                                                         Copy(`${overview.to}`);}}>
-                                                        <i className="fa fa-clone mx-1" aria-hidden="true"></i>
+                                                         <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                                     </button>
                                                 </div>
                                             </div>

@@ -85,7 +85,10 @@ const AccountOverview=()=>{
 
   const navigation = [
     { id:1 ,name: 'Extrinsics ', href:`/account/${account}` },
-    { id:2 ,name: 'W3G Transfers', href:`/account/transfers/${account}` },
+    { id:2 ,name: 'W3G Transfers', href:`/account/w3g-transfers/${account}` },
+    { id:3 ,name: 'FT Transfers', href:`/account/ft-transfers/${account}` },
+    { id:4 ,name: 'NFT Transfers', href:`/account/nft-transfers/${account}` },
+    { id:5 ,name: 'MT Transfers', href:`/account/mt-transfers/${account}` },
   ]
 
 
@@ -127,7 +130,7 @@ const AccountOverview=()=>{
         {/*    <i className="fa fa-search" aria-hidden="true"></i></div>*/}
         {/*</div>*/}
       </div>
-      <div className="flex dark:text-white">
+      <div className="flex dark:text-white items-center">
         <div id="account" className="text-xs mt-2 lg:text-base mr-2 ">
           {account}
         </div>
@@ -135,7 +138,7 @@ const AccountOverview=()=>{
           <button onClick={() => {
             // @ts-ignore
             Copy("account");
-          }}> <i className="fa fa-clone mt-2 lg:mt-3" aria-hidden="true"></i></button>
+          }}> <img className="w-4 ml-1 mt-3" src="/copy.svg" alt=""/></button>
         </div>
       </div>
 
@@ -275,7 +278,7 @@ const AccountOverview=()=>{
           <div className="text-2xl font-semibold mb-3 ">
             More info
           </div>
-          <div className="flex justify-between border-b">
+          <div className="flex justify-between border-b dark:border-gray-500">
             <div className='flex-col justify-between mr-20 text-gray-400 '>
               <div className="mb-3 flex">
                 <div className="text-black dark:text-white font-semibold mr-1">
@@ -306,17 +309,18 @@ const AccountOverview=()=>{
       </div>
 
 
-      <div className="flex justify-start mt-5  font-semibold text-sm lg:text-lg ">
+      <div className="flex justify-between mt-5  w-full font-semibold text-sm lg:text-lg bg-white shadow-lg dark:bg-[#262626]  p-2 rounded-md">
         {navigation.map(item=>(
           <div key={item.id} className="pr-8 text-gray-500 ">
             <Link href={item.href}>
-              <a className={classNames(`${item.href}` == `${pathname}` ?"bg-[#7BA9DF] text-white   transition duration-300":"bg-gray-200 dark:bg-[#262626]",'p-2 rounded-lg')}>
+              <a className={classNames(`${item.href}` == `${pathname}` ?"bg-clip-text text-transparent  bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3 ":"",'p-2 ')}>
                 {item.name}
               </a>
             </Link>
           </div>
         ))}
       </div>
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -368,8 +372,6 @@ const AccountOverview=()=>{
           </div>
         </Dialog>
       </Transition>
-
-
     </div>
   )
 }

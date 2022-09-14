@@ -1,23 +1,16 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {CheckCircleIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, SelectorIcon} from "@heroicons/react/solid";
-import {Dialog, Listbox, Tab, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {
-    AccountValue, BlockPageNumberValue,
-
-    DarkModeAtom,
-    extrinsicPageNumberValue,
-    SelectNumber
-} from "../../jotai";
-import EVMAddress from "../../components/evm_address_overview";
-import Header from "../../components/header";
-import Tail from "../../components/tail";
+import {BlockPageNumberValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../../jotai";
+import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
+import {Dialog, Transition} from "@headlessui/react";
+import Header from "../../../components/header";
+import EVMAddress from "../../../components/evm_address_overview";
+import Tail from "../../../components/tail";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
-
 const Sort=(props:any)=>{
 
 
@@ -126,17 +119,10 @@ const Sort=(props:any)=>{
         </div>
     )
 }
-
-const Transactions = () =>{
+const Erc1155TokenTxns = () =>{
     const tokenstitle=[
         {
             title:"Txn Hash"
-        },
-        {
-            title:"Method "
-        },
-        {
-            title:"Block",
         },
         {
             title:"Age"
@@ -151,36 +137,47 @@ const Transactions = () =>{
             title:"To"
         },
         {
+            title:"Token ID"
+        },
+        {
             title:"Value"
         },
         {
-            title:"Txn Fee"
+            title:"Token"
         },
+        {
+            title:"Details"
+        }
     ]
 
     const extrinsic = [
         {
+            State:true,
             TxhHash:"0x0c8ee83b555f0ede1a",
-            Method:"0x741312312",
-            Block:"15313963",
             Age:"9",
-            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ed",
+            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             icon: "fa fa-arrow-right",
             To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-            Value: "0",
+            Value: "99.1803",
+            TokenID:"4153",
+            Token:"",
             TxnFee: "0.00064646"
         },
         {
+            State:true,
             TxhHash:"0x0c8ee83b555f0ede1a3",
             Method:"Mint",
             Block:"15313963",
             Age:"9",
-            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1",
+            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             icon: "fa fa-arrow-right",
             To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
+            TokenID:"4153",
             Value: "0",
             TxnFee: "0.00064646"
-        }, {
+        },
+        {
+            State:true,
             TxhHash:"0x0c8ee83b555f0ede1a4",
             Method:"Mint",
             Block:"15313963",
@@ -188,9 +185,12 @@ const Transactions = () =>{
             From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             icon: "fa fa-arrow-right",
             To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
+            TokenID:"4153",
             Value: "0",
             TxnFee: "0.00064646"
-        }, {
+        },
+        {
+            State:true,
             TxhHash:"0x0c8ee83b555f0ede1a5",
             Method:"Mint",
             Block:"15313963",
@@ -198,9 +198,12 @@ const Transactions = () =>{
             From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             icon: "fa fa-arrow-right",
             To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
+            TokenID:"4153",
             Value: "0",
             TxnFee: "0.00064646"
-        }, {
+        },
+        {
+            State:true,
             TxhHash:"0x0c8ee83b555f0ede1a7",
             Method:"Mint",
             Block:"15313963",
@@ -208,6 +211,7 @@ const Transactions = () =>{
             From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             icon: "fa fa-arrow-right",
             To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
+            TokenID:"4153",
             Value: "0",
             TxnFee: "0.00064646"
         },
@@ -219,10 +223,7 @@ const Transactions = () =>{
     const [isOpen, setIsOpen] = useState(false)
     const router = useRouter()
     const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [account,setAccount] = useAtom(AccountValue)
     useEffect(()=>{
-        const {pid} = router.query;
-        setAccount(`${pid}`)
         if (router.isReady){
             if (enabledNightMode == true){
                 document.documentElement.classList.add('dark');
@@ -249,6 +250,7 @@ const Transactions = () =>{
             setIsOpen(true)
         }
     }
+
     function closeModal() {
         setIsOpen(false)
     }
@@ -258,18 +260,14 @@ const Transactions = () =>{
         router.push(`/evm_transactionsDetail/${value}`)
     }
 
-    const GetBlock = (props) => {
-        const value = props.target.id;
-        router.push(`/evm_blocks_block/${value}`)
-    }
-
     const GetAddress = (props) =>{
         const value = props.target.id;
         router.push(`/evm_address/${value}`).then(r => {
             location.reload()
         })
-
     }
+
+
     return(
         <>
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
@@ -279,7 +277,7 @@ const Transactions = () =>{
                     <div className=" overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
                         <div className=" min-w-full  ">
                             <div className="shadow overflow-auto bg-white dark:bg-W3GInfoBG rounded-lg  border  dark:border-W3GInfoBorderBG">
-                                <table className="min-w-full divide-y border-b divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                <table className="min-w-full border-b divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
                                     <thead className=" text-gray-500 dark:text-neutral-300">
                                     <tr>
                                         {tokenstitle.map(title => (
@@ -296,50 +294,62 @@ const Transactions = () =>{
                                     <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                                     {extrinsic.map(item => (
                                         <tr key={item.TxhHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
-                                            <td className="px-4 py-4 whitespace-nowrap  font-medium text-blue-400  font-medium">
-                                                <button id={item.TxhHash} onClick={GetHash} className="truncate w-36">
-                                                    {item.TxhHash}
-                                                </button>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap  font-medium  text-white  font-medium">
-                                                <button className="bg-cyan-300 px-3 py-1 rounded-md">
-                                                    {item.Method}
-                                                </button>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400  font-medium">
-                                                <button id={item.Block} onClick={GetBlock} >
-                                                    {item.Block}
-                                                </button>
+                                            <td className="px-4 py-4 whitespace-nowrap   text-blue-400  font-medium">
+                                                <div className="flex">
+                                                    <button id={item.TxhHash} onClick={GetHash} className="truncate w-36">
+                                                        {item.TxhHash}
+                                                    </button>
+
+                                                    <div className={classNames(item.State?"hidden":"text-red-400")}>
+                                                        <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
                                                 {item.Age} secs ago
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
+                                            <td className="px-6 py-4 whitespace-nowrap  text-blue-400   font-medium">
                                                 <button id={item.From} onClick={GetAddress}  className="truncate w-36">
                                                     {item.From}
                                                 </button>
                                             </td>
                                             <td className=" py-4 whitespace-nowrap  font-medium text-white   font-medium">
-                                                <div className="bg-neutral-600 rounded-md p-1 items-center">
-                                                    OUT
+                                                <div className={classNames(item.State?"bg-green-300 ":"bg-red-400","rounded-md p-0.5 px-2")}>
+                                                    {classNames(item.State?"IN":"OUT")}
                                                 </div>
                                             </td>
-
-                                            <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                <button id={item.To} onClick={GetAddress} className="truncate w-36" >
-                                                    {item.To}
-                                                </button>
+                                            <td className="px-6 py-4 whitespace-nowrap  font-medium text-gray-500 dark:text-zinc-300  ">
                                                 <button onClick={() => {
                                                     // @ts-ignore
                                                     Copy(`${item.To}`);}} className="text-neutral-600">
                                                      <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                                 </button>
+                                                <button id={item.To}  className="truncate w-36" >
+                                                    Tether: USDT Stablecoin
+                                                </button>
                                             </td>
+
+                                            <td className="px-6 py-4 whitespace-nowrap text-blue-400 ">
+                                                {item.TokenID}
+                                            </td>
+
                                             <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                                                {item.Value} W3G
+                                                {item.Value}
                                             </td>
-                                            <td className="px-10 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                                                {item.TxnFee}
+
+                                            <td className="px-6 py-4 whitespace-nowrap  text-blue-400 ">
+                                                <div className=" flex items-center">
+                                                    <img className="w-3 mr-1 rounded-full" src="/USDT.png" alt=""/>
+                                                    ERC-721: Hip...ids
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-zinc-300">
+                                                <div className="text-white bg-neutral-600 p-1.5 rounded-md flex justify-center">
+                                                    View NFT
+                                                    <div className="ml-1">
+                                                        <i className="fa fa-chevron-right" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
@@ -404,12 +414,11 @@ const Transactions = () =>{
                     </Dialog>
                 </Transition>
             </div>
+
+
         </>
     )
-    }
+}
 
 
-
-
-
-export default Transactions
+export default Erc1155TokenTxns

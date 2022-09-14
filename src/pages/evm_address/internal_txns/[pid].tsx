@@ -1,22 +1,12 @@
 import React, {Fragment, useEffect, useState} from "react";
-import {CheckCircleIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, SelectorIcon} from "@heroicons/react/solid";
-import {Dialog, Listbox, Tab, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {
-    AccountValue, BlockPageNumberValue,
-
-    DarkModeAtom,
-    extrinsicPageNumberValue,
-    SelectNumber
-} from "../../jotai";
-import EVMAddress from "../../components/evm_address_overview";
-import Header from "../../components/header";
-import Tail from "../../components/tail";
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
+import {AccountValue, BlockPageNumberValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../../jotai";
+import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
+import {Dialog, Transition} from "@headlessui/react";
+import Header from "../../../components/header";
+import EVMAddress from "../../../components/evm_address_overview";
+import Tail from "../../../components/tail";
 
 const Sort=(props:any)=>{
 
@@ -127,13 +117,10 @@ const Sort=(props:any)=>{
     )
 }
 
-const Transactions = () =>{
+const InternalTxns = () =>{
     const tokenstitle=[
         {
-            title:"Txn Hash"
-        },
-        {
-            title:"Method "
+            title:"Parent Txn Hash"
         },
         {
             title:"Block",
@@ -153,9 +140,6 @@ const Transactions = () =>{
         {
             title:"Value"
         },
-        {
-            title:"Txn Fee"
-        },
     ]
 
     const extrinsic = [
@@ -164,7 +148,7 @@ const Transactions = () =>{
             Method:"0x741312312",
             Block:"15313963",
             Age:"9",
-            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ed",
+            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             icon: "fa fa-arrow-right",
             To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             Value: "0",
@@ -175,7 +159,7 @@ const Transactions = () =>{
             Method:"Mint",
             Block:"15313963",
             Age:"9",
-            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1",
+            From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             icon: "fa fa-arrow-right",
             To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
             Value: "0",
@@ -233,7 +217,6 @@ const Transactions = () =>{
     },[router.isReady])
 
 
-
     const Copy=(span)=>{
         console.log(span)
         const spanText = document.getElementById(span).innerText;
@@ -268,19 +251,20 @@ const Transactions = () =>{
         router.push(`/evm_address/${value}`).then(r => {
             location.reload()
         })
-
     }
+
+
     return(
         <>
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
                 <Header></Header>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <EVMAddress/>
-                    <div className=" overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
+                    <div className="my-5 overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
                         <div className=" min-w-full  ">
-                            <div className="shadow overflow-auto bg-white dark:bg-W3GInfoBG rounded-lg  border  dark:border-W3GInfoBorderBG">
-                                <table className="min-w-full divide-y border-b divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                    <thead className=" text-gray-500 dark:text-neutral-300">
+                            <div className="shadow overflow-auto bg-white dark:bg-W3GInfoBG  rounded-lg  border  dark:border-W3GInfoBorderBG">
+                                <table className="min-w-full border-b divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                    <thead className="text-gray-500 dark:text-neutral-300">
                                     <tr>
                                         {tokenstitle.map(title => (
                                             <th key={title.title}
@@ -301,11 +285,7 @@ const Transactions = () =>{
                                                     {item.TxhHash}
                                                 </button>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap  font-medium  text-white  font-medium">
-                                                <button className="bg-cyan-300 px-3 py-1 rounded-md">
-                                                    {item.Method}
-                                                </button>
-                                            </td>
+
                                             <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400  font-medium">
                                                 <button id={item.Block} onClick={GetBlock} >
                                                     {item.Block}
@@ -315,18 +295,23 @@ const Transactions = () =>{
                                                 {item.Age} secs ago
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                <button id={item.From} onClick={GetAddress}  className="truncate w-36">
+                                                <button id={item.From} onClick={GetAddress} className="truncate w-36">
                                                     {item.From}
+                                                </button>
+                                                <button onClick={() => {
+                                                    // @ts-ignore
+                                                    Copy(`${item.From}`);}} className="text-neutral-600">
+                                                     <img className="w-4 ml-1" src="/copy.svg" alt=""/>
                                                 </button>
                                             </td>
                                             <td className=" py-4 whitespace-nowrap  font-medium text-white   font-medium">
-                                                <div className="bg-neutral-600 rounded-md p-1 items-center">
-                                                    OUT
+                                                <div className="bg-green-300 rounded-full w-4 items-center">
+                                                    <i className={item.icon} aria-hidden="true"></i>
                                                 </div>
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                <button id={item.To} onClick={GetAddress} className="truncate w-36" >
+                                                <button id={item.To} onClick={GetAddress}  className="truncate w-36" >
                                                     {item.To}
                                                 </button>
                                                 <button onClick={() => {
@@ -337,9 +322,6 @@ const Transactions = () =>{
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
                                                 {item.Value} W3G
-                                            </td>
-                                            <td className="px-10 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                                                {item.TxnFee}
                                             </td>
                                         </tr>
                                     ))}
@@ -404,12 +386,11 @@ const Transactions = () =>{
                     </Dialog>
                 </Transition>
             </div>
+
+
+
         </>
     )
-    }
+}
 
-
-
-
-
-export default Transactions
+export default InternalTxns
