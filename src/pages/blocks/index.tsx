@@ -348,9 +348,8 @@ const Blocks=()=>{
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
-
-                              <button id={item.id}  onClick={GetBlock}>
-                                <div className="w-52 truncate">
+                              <button onClick={GetBlock}>
+                                <div id={item.id} className="w-52 truncate">
                                   {item.id}
                                 </div>
                                 {/*<i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}

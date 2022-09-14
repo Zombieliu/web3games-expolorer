@@ -5,8 +5,7 @@
 <style type="text/css">
 	.st0{fill:#D55F83;}
 	.st1{fill:url(#SVGID_1_);}
-	.st2{fill:none;stroke:#E77396;}
-	.st3{fill:none;stroke:#FFECE6;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+	.st2{fill:none;stroke:#FFECE6;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 </style>
 <path class="st0" d="M6.7,7.4L27,1.9c3.7-1,7.6,1.2,8.6,4.9L41.2,27c1,3.7-1.2,7.6-4.9,8.6L16,41.2c-3.7,1-7.6-1.2-8.6-4.9L1.9,16
 	C0.8,12.3,3,8.4,6.7,7.4z"/>
@@ -18,11 +17,9 @@
 	</linearGradient>
 	<path shape-rendering="crispEdges" class="st1" d="M17,8h25c3.9,0,7,3.1,7,7v25c0,3.9-3.1,7-7,7H17c-3.9,0-7-3.1-7-7V15
 		C10,11.1,13.1,8,17,8z"/>
-	<path shape-rendering="crispEdges" class="st2" d="M17,8.5h25c3.6,0,6.5,2.9,6.5,6.5v25c0,3.6-2.9,6.5-6.5,6.5H17
-		c-3.6,0-6.5-2.9-6.5-6.5V15C10.5,11.4,13.4,8.5,17,8.5z"/>
 </g>
 <g>
-	<path shape-rendering="crispEdges" class="st3" d="M32.3,24l5.7,9.9 M27.7,24h11.5 M25.4,28l5.7-9.9 M27.7,32L22,22.1 M32.3,32
+	<path shape-rendering="crispEdges" class="st2" d="M32.3,24l5.7,9.9 M27.7,24h11.5 M25.4,28l5.7-9.9 M27.7,32L22,22.1 M32.3,32
 		H20.8 M34.6,28l-5.7,9.9 M40,28c0,5.5-4.5,10-10,10s-10-4.5-10-10s4.5-10,10-10S40,22.5,40,28z"/>
 </g>
 </svg>

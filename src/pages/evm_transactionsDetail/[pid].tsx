@@ -208,7 +208,7 @@ const EvmTransactionsDetail=()=>{
                                                 Status：
                                             </div>
                                             <div className="flex mt-2 md:mt-0 ">
-                                            <div className={classNames(`${Status[overview.status].bg}`,"text-base items-center flex px-1 rounded-md text-gray-50")}>
+                                            <div className={classNames(`${Status[overview.status].bg}`,"text-base items-center flex px-3  rounded-md text-gray-50")}>
                                                 <div className="text-xl mr-1">
                                                 <i className={classNames(`${Status[overview.status].icon} `)} aria-hidden="true"></i>
                                                 </div>{overview.status}

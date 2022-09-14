@@ -62,7 +62,7 @@ const tokens=({
     one: [
         {
             a: "",
-            img: "/homeIcon/Total Accounts.svg",
+            img: "/homeIcon/1.svg",
             title: "Total Accounts",
             money: "77,488",
             addition: "+145",
@@ -70,7 +70,7 @@ const tokens=({
         },
         {
             a: "",
-            img: "/homeIcon/TVL.svg",
+            img: "/homeIcon/2.svg",
             title: "TVL",
             money: "8,316,287",
             addition: "+2.93%",
@@ -78,7 +78,7 @@ const tokens=({
         },
         {
             a: "",
-            img: "/homeIcon/Total Txns.svg",
+            img: "/homeIcon/3.svg",
             title: "Total Txns",
             money: "2,875,433",
             addition: "+2,965",
@@ -86,7 +86,7 @@ const tokens=({
         },
         {
             a: "",
-            img:"/homeIcon/Total Transfer Value.svg",
+            img:"/homeIcon/4.svg",
             title: "Total Transfer Value",
             money: "3,618,752",
             addition: "+5,5505",
@@ -95,7 +95,7 @@ const tokens=({
     two:[
             {
                 a: "",
-                img: "https://tronscan.io/static/media/contract_icon.a4d50356.png",
+                img: "/homeIcon/5.svg",
                 title: "Contracts",
                 money: "1,150,202",
                 addition: "+733",
@@ -103,7 +103,7 @@ const tokens=({
             },
         {
             a: "",
-            img: "https://tronscan.io/static/media/token_icon.c1faf8af.png",
+            img: "/homeIcon/6.svg",
             title: "Tokens",
             money: "63",
             addition: "+36",
@@ -112,7 +112,7 @@ const tokens=({
 
             {
                 a: "",
-                img: "https://tronscan.io/static/media/tps_icon.bd4695e2.png",
+                img: "/homeIcon/7.svg",
                 title: "Current/Max TPS",
                 money: "51/748",
                 addition: "255",
@@ -120,7 +120,7 @@ const tokens=({
             },
             {
                 a: "",
-                img: "https://tronscan.io/static/media/node_icon.16c4b6b3.png",
+                img: "/homeIcon/8.svg",
                 title: "Nodes",
                 money: "5292",
                 addition: "",
@@ -356,7 +356,7 @@ const Search = () =>{
                            autoComplete="off"
                     />
 
-                    <div className="flex justify-center z-10 text-white dark:text-gray-300 text-3xl bg-blue-400 rounded-lg m-1  px-4 py-2 -ml-16 ">
+                    <div className="flex justify-center z-10 text-white dark:text-gray-300 text-3xl dark:bg-[#4F4F4F]  bg-blue-400   rounded-lg m-1  px-4 py-2 -ml-16 ">
                         <button onClick={ButtonDataCheck}>
                             <i className="fa fa-search" aria-hidden="true"></i>
                         </button>
@@ -437,7 +437,6 @@ const Token = () =>{
 
                 <div className=" grid xl:grid-cols-2 ">
                     {tokens.one.map(token=>(
-
                         <Link key={token.title} href={token.a}>
                             <a className="flex justify-between border-b dark:border-gray-500 py-6 mr-5" >
                                 <div className="flex">
@@ -513,14 +512,14 @@ const Token = () =>{
                                     </Transition>
                                     <div className="flex justify-center py-1.5">
 
-                                        <Disclosure.Button onClick={move} className={enabled?"pr-4 text-sm font-medium text-left text-gray-500 hover:text-black":"hidden"}>
+                                        <Disclosure.Button onClick={move} className={enabled?"flex justify-center pr-5 text-sm font-medium text-left text-gray-500 hover:text-black dark:hover:text-white hover:scale-125 transition duration-700 ease-in-out":"hidden"}>
                                             <ChevronDownIcon
                                                 className={` w-5  `}
                                                 aria-hidden="true"
                                             />
                                         </Disclosure.Button>
 
-                                        <Disclosure.Button onClick={move} className={enabled?"hidden":"pr-4 text-sm font-medium text-left text-gray-500 hover:text-black"}>
+                                        <Disclosure.Button onClick={move} className={enabled?"hidden":"pr-5 text-sm font-medium text-left text-gray-500 hover:text-black dark:hover:text-white hover:scale-125 transition duration-700 ease-in-out"}>
                                             <ChevronUpIcon
                                                 className={` w-5  `}
                                                 aria-hidden="true"
@@ -669,9 +668,9 @@ const Blocks = () =>{
                     <div className="flex flex-col ">
                         <div className="overflow-x-auto ">
                             <div className="   min-w-full  ">
-                                <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG">
-                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG">
-                                        <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                                <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                        <thead className="bg-white  dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300 ">
                                         <tr>
                                             {BlocksTitle.map(items=>(
                                             <th
@@ -687,7 +686,7 @@ const Blocks = () =>{
                                         </thead>
                                         <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
                                         {blocks.map(block=>(
-                                            <tr key={block.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center" >
+                                            <tr key={block.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center " >
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
                                                     <button id={block.id} onClick={GetBlock}>
                                                         {block.blockHeight}
@@ -726,7 +725,7 @@ const News = () =>{
                 <div className="flex w-full text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                     News
                 </div>
-                <div className="  rounded-lg p-2  shadow-2xl ">
+                <div className="  rounded-lg p-2 dark:bg-neutral-800 shadow-2xl ">
                     <div className="w-full ">
                         <div className=" "  id="container" >
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">

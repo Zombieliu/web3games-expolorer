@@ -14,7 +14,7 @@ function classNames(...classes) {
 }
 const navigation = [
     { id:1 ,name: 'Home', href: '/home' },
-    { id:2 ,name: 'Faucet', href: '/faucet' },
+    // { id:2 ,name: 'Faucet', href: '/faucet' },
 
 ]
 const blockchain=[
@@ -160,8 +160,7 @@ const Header=()=>{
                     <div className=" flex w-full justify-between lg:justify-start items-center">
                         <div className="flex justify-start  ">
                             <Link  href="/">
-                                <a>
-                                    <span className="sr-only">Workflow</span>
+                                <a className="-mt-2">
                                     <img
                                         className=" w-auto h-14  "
                                         src={classNames(enabledNightMode?"/web3gw1.svg":"/web3gb.svg") }
@@ -307,13 +306,13 @@ const Header=()=>{
                                                 </Listbox.Option>
 
                                             ))}
-                                            <div className="m-3 ">
+                                            <div className="m-3 hidden">
                                                 <div className="p-2">
                                                     <div className="font-semibold dark:text-gray-100">
                                                         Custom RPC
                                                     </div>
                                                     <input type="text"
-                                                           className="mt-2 bg-gray-200 dark:bg-neutral-900 dark:placeholder-neutral-500 dark:text-gray-300  text-xs md:text-sm w-full  rounded-lg p-1.5 border dark:border-neutral-600  focus:border-black dark:focus:border-gray-200 focus:bg-white dark:bg-gray-300  outline-none"
+                                                           className="mt-2 bg-gray-200 dark:bg-neutral-900 dark:placeholder-neutral-500 dark:text-gray-900  text-xs md:text-sm w-full  rounded-lg p-1.5 border dark:border-neutral-600  focus:border-black dark:focus:border-gray-200 focus:bg-white dark:bg-gray-300  outline-none"
                                                            placeholder="Enter RPC..."
                                                            id="RPC"
                                                     />
