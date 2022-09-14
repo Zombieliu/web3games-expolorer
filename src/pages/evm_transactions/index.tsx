@@ -334,7 +334,7 @@ const Blocks=()=>{
 
                         <div className="my-5 overflow-x-auto shadow dark:bg-W3GInfoBG rounded-lg ">
                             <div className=" min-w-full  rounded-lg border dark:border-W3GInfoBorderBG">
-                                <div className="border-b dark:border-W3GInfoBorderBG overflow-auto rounded-t-lg  ">
+                                <div className="border-b  dark:border-W3GInfoBorderBG overflow-auto rounded-t-lg  ">
                                     <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
                                         <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
                                         <tr>
