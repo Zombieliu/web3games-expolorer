@@ -190,13 +190,14 @@ const Blcok_Info = `
 
 const GET_USER_QUERY = `
  query QueryPage($ctx: String) {
-  blockInfos(filter:{
+   blockInfos(filter:{
     blockHeight:{
       equalTo:$ctx
     }
   }){
     nodes{
-      id
+    id
+    }
     }
   }
 }
@@ -265,38 +266,41 @@ const Search = () =>{
 
     const ButtonDataCheck = async () =>{
         const value = (document.getElementById("homeinput") as HTMLInputElement).value
+        console.log(value)
 
-        if (selected.name == 'Block'){
+        if (selected.name == 'Block') {
             const block = await fetchUserThenSomething(value)
-            if (block.data.blockInfos.nodes.length == 0){
-                setPop_up_boxData({
-                    state:false,
-                    type:"No this block",
-                    hash:""
-                })
-                setSop_up_boxState(true)
-            }else{
-                const hash = block.data.blockInfos.nodes[0].id
-                await router.push(`/blocksdetails/${hash}`)
-            }
+            console.log(block)
         }
-        else if (selected.name == 'BlockHash'){
-            await router.push(`/blocksdetails/${value}`)
-        }
-        else if (selected.name == 'ExtrinsicHash'){
-            await router.push(`/extrinsics/${value}`)
-        }
-        else if (selected.name == 'Account'){
-            await router.push(`/account/${value}`)
-        }
-        else {
-            setPop_up_boxData({
-                state:false,
-                type:"No Data",
-                hash:"",
-            })
-            setSop_up_boxState(true)
-        }
+        //     if (block.data.blockInfos.nodes.length == 0){
+        //         setPop_up_boxData({
+        //             state:false,
+        //             type:"No this block",
+        //             hash:""
+        //         })
+        //         setSop_up_boxState(true)
+        //     }else{
+        //         const hash = block.data.blockInfos.nodes[0].id
+        //         await router.push(`/blocksdetails/${hash}`)
+        //     }
+        // }
+        // else if (selected.name == 'BlockHash'){
+        //     await router.push(`/blocksdetails/${value}`)
+        // }
+        // else if (selected.name == 'ExtrinsicHash'){
+        //     await router.push(`/extrinsics/${value}`)
+        // }
+        // else if (selected.name == 'Account'){
+        //     await router.push(`/account/${value}`)
+        // }
+        // else {
+        //     setPop_up_boxData({
+        //         state:false,
+        //         type:"No Data",
+        //         hash:"",
+        //     })
+        //     setSop_up_boxState(true)
+        // }
     }
     return (
         <>
