@@ -22,4 +22,11 @@ const extrinsicPageNumberValue = atom(1)
 
 const SelectNumber = atom(20)
 
-export{AccountValue,AccountBalanceValue,DarkModeAtom,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue,SelectNumber}
+const PopUpBoxInfo = atom({
+    type:"",
+    hash:"",
+    state:false
+})
+const PopUpBoxState = atom(false)
+
+export{PopUpBoxInfo,PopUpBoxState,AccountValue,AccountBalanceValue,DarkModeAtom,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue,SelectNumber}

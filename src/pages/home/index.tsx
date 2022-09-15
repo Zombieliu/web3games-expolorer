@@ -9,10 +9,11 @@ import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useManualQuery } from 'graphql-hooks'
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom} from "../../jotai";
+import {BlockPageNumberValue, DarkModeAtom, PopUpBoxInfo, PopUpBoxState} from "../../jotai";
 import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Head from "next/head";
+import { Pop_up_box } from '../../components/pop_up_box';
 
 
 function classNames(...classes) {
@@ -228,6 +229,9 @@ const Search = () =>{
         return block
     }
     const [selected, setSelected] = useState(types[0])
+
+    const [,setPop_up_boxData] =useAtom(PopUpBoxInfo)
+    const [,setSop_up_boxState] = useAtom(PopUpBoxState)
     const DataCheck = async (props) =>{
         const key_code = props.nativeEvent.keyCode
         if (key_code == 13){
@@ -235,7 +239,12 @@ const Search = () =>{
                 const value = props.target.value
                 const block = await fetchUserThenSomething(value)
                 if (block.data.blockInfos.nodes.length == 0){
-                    alert("no this block")
+                    setPop_up_boxData({
+                        state:false,
+                        type:"No this block",
+                        hash:""
+                    })
+                    setSop_up_boxState(true)
                 }else{
                     const hash = block.data.blockInfos.nodes[0].id
                     await router.push(`/blocksdetails/${hash}`)
@@ -285,6 +294,7 @@ const Search = () =>{
     }
     return (
         <>
+            <Pop_up_box/>
             <div className="text-5xl text-black font-medium ">
                 <div className="mt-5  justify-center hidden xl:flex  p-0.5 rounded-lg bg-gradient-to-r from-W3G1 w-full via-W3G2 to-W3G3">
                     <div className="-mr-40 -my-1.5 flex ">
@@ -641,7 +651,7 @@ const Blocks = () =>{
 
     if(loading){
         return(
-            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+            <div className="animate-pulse w-full mx-auto py-16  ">
                 <BlockSkeleton/>
             </div>
         )
@@ -721,8 +731,8 @@ const News = () =>{
     const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
     return(
         <>
-            <div>
-                <div className="flex w-full text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
+            <div className="w-96">
+                <div className="flex w-96 text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                     News
                 </div>
                 <div className="  rounded-lg p-2 dark:bg-neutral-800 shadow-2xl ">
@@ -781,8 +791,8 @@ const Home= ()  =>{
                             </div>
                             <Project/>
                         </div>
-                        <div className="mt-20  xl:flex justify-between ">
-                            <Blocks/>
+                        <div className="mt-20 w-full xl:flex justify-between ">
+                                <Blocks/>
                             <News></News>
                         </div>
                     </div>
