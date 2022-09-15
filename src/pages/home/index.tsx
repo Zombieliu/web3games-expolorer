@@ -13,7 +13,7 @@ import {BlockPageNumberValue, DarkModeAtom, PopUpBoxInfo, PopUpBoxState} from ".
 import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Head from "next/head";
-import { Pop_up_box } from '../../components/pop_up_box';
+import {Pop_up_box} from "../../components/pop_up_box";
 
 
 function classNames(...classes) {
@@ -230,8 +230,8 @@ const Search = () =>{
     }
     const [selected, setSelected] = useState(types[0])
 
+    const [pop_up_boxState,setSop_up_boxState] = useAtom(PopUpBoxState)
     const [,setPop_up_boxData] =useAtom(PopUpBoxInfo)
-    const [,setSop_up_boxState] = useAtom(PopUpBoxState)
     const DataCheck = async (props) =>{
         const key_code = props.nativeEvent.keyCode
         if (key_code == 13){
@@ -239,12 +239,7 @@ const Search = () =>{
                 const value = props.target.value
                 const block = await fetchUserThenSomething(value)
                 if (block.data.blockInfos.nodes.length == 0){
-                    setPop_up_boxData({
-                        state:false,
-                        type:"No this block",
-                        hash:""
-                    })
-                    setSop_up_boxState(true)
+
                 }else{
                     const hash = block.data.blockInfos.nodes[0].id
                     await router.push(`/blocksdetails/${hash}`)
@@ -270,10 +265,16 @@ const Search = () =>{
 
     const ButtonDataCheck = async () =>{
         const value = (document.getElementById("homeinput") as HTMLInputElement).value
+
         if (selected.name == 'Block'){
             const block = await fetchUserThenSomething(value)
             if (block.data.blockInfos.nodes.length == 0){
-                alert("no this block")
+                setPop_up_boxData({
+                    state:false,
+                    type:"No this block",
+                    hash:""
+                })
+                setSop_up_boxState(true)
             }else{
                 const hash = block.data.blockInfos.nodes[0].id
                 await router.push(`/blocksdetails/${hash}`)
@@ -289,7 +290,12 @@ const Search = () =>{
             await router.push(`/account/${value}`)
         }
         else {
-            alert("no data")
+            setPop_up_boxData({
+                state:false,
+                type:"No Data",
+                hash:"",
+            })
+            setSop_up_boxState(true)
         }
     }
     return (
@@ -366,7 +372,7 @@ const Search = () =>{
                            autoComplete="off"
                     />
 
-                    <div className="flex justify-center z-10 text-white dark:text-gray-300 text-3xl dark:bg-[#4F4F4F]  bg-blue-400   rounded-lg m-1  px-4 py-2 -ml-16 ">
+                    <div className="flex justify-center z-10 text-black dark:text-white text-3xl    rounded-lg m-1  px-4 py-2 -ml-16 ">
                         <button onClick={ButtonDataCheck}>
                             <i className="fa fa-search" aria-hidden="true"></i>
                         </button>
@@ -651,7 +657,7 @@ const Blocks = () =>{
 
     if(loading){
         return(
-            <div className="animate-pulse w-full mx-auto py-16  ">
+            <div className="animate-pulse xl:w-104  pb-16  ">
                 <BlockSkeleton/>
             </div>
         )
@@ -784,13 +790,13 @@ const Home= ()  =>{
                         <Search/>
 
                         <HotSearch/>
-                        <div className=" xl:flex justify-between">
-                            <div className="xl:w-7/12">
-                                <Announcement/>
-                                <Token/>
-                            </div>
-                            <Project/>
-                        </div>
+                        {/*<div className=" xl:flex justify-between">*/}
+                        {/*    <div className="xl:w-7/12">*/}
+                        {/*        <Announcement/>*/}
+                        {/*        <Token/>*/}
+                        {/*    </div>*/}
+                        {/*    <Project/>*/}
+                        {/*</div>*/}
                         <div className="mt-20 w-full xl:flex justify-between ">
                                 <Blocks/>
                             <News></News>

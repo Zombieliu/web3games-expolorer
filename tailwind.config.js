@@ -8,6 +8,7 @@ module.exports = {
             spacing:{
                 '18': '4.5rem',
                 '99': "32rem",
+                '104' :"46rem",
             },
             colors: {
                 transparent: 'transparent',

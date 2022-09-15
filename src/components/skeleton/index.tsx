@@ -106,119 +106,290 @@ const HiddenSkeleton = () =>{
 
 const BlockSkeleton = () =>{
     return(
-        <div className="grid grid-cols-3 md:grid-cols-4 gap-12 mb-20 shadow rounded-md">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20 shadow rounded-md">
             <div className="w-full  p-5   mb-10 lg:mb-0">
-                <div className="flex-1 space-y-6 py-1">
+                <div className="flex-1 space-y-10 py-1">
                     <div>
                         <div className="h-2 bg-gray-200 rounded"></div>
                     </div>
-
                     <div className="space-y-3">
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
                         </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
                         </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                        </div><div className="grid grid-cols-4 gap-12 py-5">
-                        <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div><div className="grid grid-cols-4 gap-12 py-4">
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                     </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+
                         <div className="h-2 bg-gray-200 rounded"></div>
                     </div>
 
                 </div>
             </div>
             <div className="w-full  p-5   mb-10 lg:mb-0">
-                <div className="flex-1 space-y-6 py-1">
-                    <div className="h-2 bg-gray-200 rounded"></div>
+                <div className="flex-1 space-y-10 py-1">
+                    <div>
+                        <div className="h-2 bg-gray-200 rounded"></div>
+                    </div>
                     <div className="space-y-3">
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
                         </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
                         </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                        </div><div className="grid grid-cols-4 gap-12 py-5">
-                        <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div><div className="grid grid-cols-4 gap-12 py-4">
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                     </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+
                         <div className="h-2 bg-gray-200 rounded"></div>
                     </div>
 
                 </div>
             </div>
             <div className="w-full  p-5 hidden md:block  mb-10 lg:mb-0">
-                <div className="flex-1 space-y-6 py-1">
-                    <div className="h-2 bg-gray-200 rounded"></div>
+                <div className="flex-1 space-y-10 py-1">
+                    <div>
+                        <div className="h-2 bg-gray-200 rounded"></div>
+                    </div>
                     <div className="space-y-3">
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
                         </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
                         </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
-                        </div><div className="grid grid-cols-4 gap-12 py-5">
-                        <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div><div className="grid grid-cols-4 gap-12 py-4">
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         <div className="w-2 h-2 bg-gray-200 rounded "></div>
                     </div>
-                        <div className="grid grid-cols-4 gap-12 py-5">
-                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                             <div className="w-2 h-2 bg-gray-200 rounded "></div>
                         </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+
+                        <div className="h-2 bg-gray-200 rounded"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div className="w-full hidden md:block p-5   mb-10 lg:mb-0">
+                <div className="flex-1 space-y-10 py-1">
+                    <div>
+                        <div className="h-2 bg-gray-200 rounded"></div>
+                    </div>
+                    <div className="space-y-3">
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div><div className="grid grid-cols-4 gap-12 py-4">
+                        <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                    </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+                        <div className="grid grid-cols-4 gap-12 py-4">
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                            <div className="w-2 h-2 bg-gray-200 rounded "></div>
+                        </div>
+
                         <div className="h-2 bg-gray-200 rounded"></div>
                     </div>
 
