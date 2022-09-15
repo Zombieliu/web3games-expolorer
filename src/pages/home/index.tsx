@@ -192,7 +192,7 @@ const GET_USER_QUERY = `
  query QueryPage($ctx: String) {
    blockInfos(filter:{
     blockHeight:{
-      equalTo:$ctx
+      equalTo:1
     }
   }){
     nodes{
@@ -267,11 +267,11 @@ const Search = () =>{
     const ButtonDataCheck = async () =>{
         const value = (document.getElementById("homeinput") as HTMLInputElement).value
         console.log(value)
-
-        if (selected.name == 'Block') {
-            const block = await fetchUserThenSomething(value)
-            console.log(block)
-        }
+        const block = await fetchUserThenSomething(value)
+        console.log(block.data)
+        // if (selected.name == 'Block') {
+        //     const block = await fetchUserThenSomething(value)
+        //     console.log(block)
         //     if (block.data.blockInfos.nodes.length == 0){
         //         setPop_up_boxData({
         //             state:false,
