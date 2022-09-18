@@ -10,6 +10,7 @@ import {useAtom} from "jotai";
 import { DarkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
 import Error from  '../../components/error'
 import {DetailsSkeleton} from "../../components/skeleton";
+import {showAccount, showSmallAccount} from "../../utils";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -330,8 +331,15 @@ const Extrinsic = (props:any) =>{
     }
     const GetExtrinsics = (props) => {
         const value = props.target.id;
-        router.push(`/extrinsics/${value}`)
+        const id = document.getElementById(props.target.id).innerText
+        console.log(value)
+        router.push(`/extrinsics/${value}/${id}`)
     }
+    useEffect(()=>{
+
+    },[])
+
+
 
     return(
       <>
@@ -367,7 +375,7 @@ const Extrinsic = (props:any) =>{
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
                                         <button id={token.extrinsicHash} onClick={GetExtrinsics}>
-                                            {token.extrinsicHash}
+                                                {classNames(showAccount(token.extrinsicHash,))}
                                         </button>
                                     </td>
                                     <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
@@ -376,9 +384,11 @@ const Extrinsic = (props:any) =>{
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                         {token.state ? "success" : "fail"}
                                     </td>
-                                    <td  className="px-12 py-4 whitespace-nowrap text-base ">
-                                        <button onClick={getAccount} className="text-blue-400" id={token.address}>
-                                            {token.by}
+                                    <td  className="px-12 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                        <button id={token.address} onClick={getAccount} className="text-blue-400" >
+
+                                                {classNames(token.by == 'system'? "system": showSmallAccount(token.by))}
+
                                         </button>
                                     </td>
                                 </tr>

@@ -7,6 +7,7 @@ import {Dialog, Transition} from "@headlessui/react";
 import Tail from "../../../components/tail";
 import Header from "../../../components/header";
 import EVMAddress from "../../../components/evm_address_overview";
+import {showSmallAccount} from "../../../utils";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -295,8 +296,8 @@ const Erc20TokenTxns = () =>{
                                         <tr key={item.TxhHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
                                             <td className="px-4 py-4 whitespace-nowrap   text-blue-400  font-medium">
                                                 <div className="flex">
-                                                    <button id={item.TxhHash} onClick={GetHash} className="truncate w-36">
-                                                        {item.TxhHash}
+                                                    <button id={item.TxhHash} onClick={GetHash} >
+                                                        {classNames(showSmallAccount(item.TxhHash,))}
                                                     </button>
 
                                                     <div className={classNames(item.State?"hidden":"text-red-400")}>
@@ -311,8 +312,8 @@ const Erc20TokenTxns = () =>{
                                                 {item.Age} secs ago
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                <button id={item.From} onClick={GetAddress}  className="truncate w-36">
-                                                    {item.From}
+                                                <button id={item.From} onClick={GetAddress} >
+                                                    {classNames(showSmallAccount(item.From,))}
                                                 </button>
                                                 <button onClick={() => {
                                                     // @ts-ignore
@@ -327,8 +328,8 @@ const Erc20TokenTxns = () =>{
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400  ">
-                                                <button id={item.To} onClick={GetAddress}  className="truncate w-36" >
-                                                    {item.To}
+                                                <button id={item.To} onClick={GetAddress} >
+                                                    {classNames(showSmallAccount(item.To,))}
                                                 </button>
                                                 <button onClick={() => {
                                                     // @ts-ignore
@@ -340,8 +341,8 @@ const Erc20TokenTxns = () =>{
                                                 {item.Value}
                                             </td>
 
-                                            <td className="px-6 py-4 whitespace-nowrap font-medium text-blue-400 ">
-                                                <div className=" flex items-center">
+                                            <td className="px-6 py-4 whitespace-nowrap font-medium text-blue-400">
+                                                <div className=" flex items-center justify-center">
                                                     <img className="w-3 mr-1 rounded-full" src="/USDT.png" alt=""/>
                                                     Tether USD (USDT)
                                                 </div>

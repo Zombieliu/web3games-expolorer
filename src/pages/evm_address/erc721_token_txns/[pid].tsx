@@ -7,6 +7,7 @@ import {Dialog, Transition} from "@headlessui/react";
 import Header from "../../../components/header";
 import EVMAddress from "../../../components/evm_address_overview";
 import Tail from "../../../components/tail";
+import {showSmallAccount} from "../../../utils";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -292,8 +293,8 @@ const Erc721TokenTxns = () =>{
                                         <tr key={item.TxhHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
                                             <td className="px-4 py-4 whitespace-nowrap   text-blue-400  font-medium">
                                                 <div className="flex">
-                                                    <button id={item.TxhHash} onClick={GetHash} className="truncate w-36">
-                                                        {item.TxhHash}
+                                                    <button id={item.TxhHash} onClick={GetHash}>
+                                                        {classNames(showSmallAccount(item.TxhHash,))}
                                                     </button>
 
                                                     <div className={classNames(item.State?"hidden":"text-red-400")}>
@@ -308,8 +309,8 @@ const Erc721TokenTxns = () =>{
                                                 {item.Age} secs ago
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap  text-blue-400   font-medium">
-                                                <button id={item.From} onClick={GetAddress}  className="truncate w-36">
-                                                    {item.From}
+                                                <button id={item.From} onClick={GetAddress} >
+                                                    {classNames(showSmallAccount(item.From,))}
                                                 </button>
                                             </td>
                                             <td className=" py-4 whitespace-nowrap  font-medium text-white   font-medium">

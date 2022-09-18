@@ -58,7 +58,7 @@ const Pop_up_box = () =>{
                                     <p className=" font-medium  ">{pop_up_boxData.type} {classNames(pop_up_boxData.state?"Success":"Failed")}</p>
                                     <p className={pop_up_boxData.state?"hidden":"mt-1 "}>Please try again</p>
                                     <Link href={`https://explorer-devnet.web3games.org/${pop_up_boxData.hash}` }>
-                                        <a className={pop_up_boxData.state?"mt-1 underline font-semibold hover:text-blue-400":"hidden"}>
+                                        <a target='_blank' className={pop_up_boxData.state?"mt-1 underline font-semibold hover:text-blue-400":"hidden"}>
                                         View on Explorer
                                     </a></Link>
                                 </div>

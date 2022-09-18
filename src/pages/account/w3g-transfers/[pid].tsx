@@ -11,6 +11,7 @@ import {AccountValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from
 import {useQuery} from "graphql-hooks";
 import Error from "../../../components/error";
 import {DetailsSkeleton} from "../../../components/skeleton";
+import {showAccount} from "../../../utils";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -291,9 +292,7 @@ const W3G_Transfers=()=>{
                           <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
                             <td className="px-6 py-4 whitespace-nowrap text-sm  text-blue-400  ">
                               <Link  href={`/extrinsics/${item.extrinsicHash}`}>
-                                <div  className="truncate w-44">
-                                  {item.extrinsicHash}
-                                </div>
+                                  {classNames(showAccount(item.extrinsicHash,))}
                               </Link>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 ">
@@ -308,15 +307,15 @@ const W3G_Transfers=()=>{
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               <div className="text-gray-800 flex" id="from">
-                                <a href={item.afrom} className="mr-1 text-blue-400  truncate w-36">
-                                  {item.from}
+                                <a href={item.afrom} className="mr-1 text-blue-400  ">
+                                  {classNames(showAccount(item.afrom,))}
                                 </a>
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-gray-500 dark:text-zinc-300">
                               <div className="text-gray-800 flex" id="from">
-                                <a href={item.afrom} className="mr-1 text-blue-400 truncate w-36">
-                                  {item.to}
+                                <a href={item.afrom} className="mr-1 text-blue-400 ">
+                                  {classNames(showAccount(item.to,))}
                                 </a>
                               </div>
                             </td>

@@ -11,6 +11,7 @@ import {useAtom} from "jotai";
 import {DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
+import {showAccount, showSmallAccount} from "../../utils";
 
 
 function classNames(...classes) {
@@ -63,11 +64,6 @@ query HomePage($select: Int,$first: Int) {
 }
 `
 
-// {
-//     extrinsicHeight
-//     id
-//     signerId
-// }
 
 class extrinsicInfo {
     private id: string;
@@ -75,6 +71,7 @@ class extrinsicInfo {
     private time: string;
     private hash : string;
     private signerId: string;
+    private totalCount: string;
 
 
     constructor(
@@ -83,6 +80,7 @@ class extrinsicInfo {
         time:string,
         hash:string,
         signerId:string,
+        totalCount:string
 
     ) {
         this.id = id
@@ -90,6 +88,7 @@ class extrinsicInfo {
         this.time = time
         this.hash = hash
         this.signerId = signerId
+        this.totalCount = totalCount
 
     }
 }
@@ -99,36 +98,36 @@ function GetBlockData(blockTime) {
     return `${start}`
 }
 
-function data_list(data: any ,Extrinsic_Hash_data:any){
-    let times = data.events.nodes.length;
-    let data_list = [];
-    for (let i = 0;i < times;i++){
-        if (data.events.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
-            let result = new extrinsicInfo(
-                data.events.nodes[i].id,
-                `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
-                GetBlockData(data.events.nodes[i].timestamp),
-                Extrinsic_Hash_data.data.extrinsicInfos.nodes[i].extrinsicHeight,
-                // data.events.nodes[i].signerId,
-                "system",
-
-            )
-            data_list.push(result)
-        }else{
-            let result = new extrinsicInfo(
-
-                data.events.nodes[i].id,
-                `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
-                GetBlockData(data.events.nodes[i].timestamp),
-                data.events.nodes[i].extrinsicHeight,
-                data.events.nodes[i].extrinsicHash.signerId
-
-            )
-            data_list.push(result)
-        }
-    }
-    return data_list
-}
+// function data_list(block_Info_data: any ,extrinsicInfos_data:any){
+//     let times = block_Info_data.events.nodes.length;
+//     let data_list = [];
+//     for (let i = 0;i < times;i++){
+//         if (block_Info_data.events.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
+//             let result = new extrinsicInfo(
+//                 block_Info_data.events.nodes[i].id,
+//                 `${block_Info_data.events.nodes[i].module}.${block_Info_data.events.nodes[i].method}`,
+//                 GetBlockData(block_Info_data.events.nodes[i].timestamp),
+//                 extrinsicInfos_data.extrinsicInfos.nodes[i].extrinsicHeight,
+//                 // data.events.nodes[i].signerId,
+//                 "system",
+//
+//             )
+//             data_list.push(result)
+//         }else{
+//             let result = new extrinsicInfo(
+//
+//                 block_Info_data.events.nodes[i].id,
+//                 `${block_Info_data.events.nodes[i].module}.${block_Info_data.events.nodes[i].method}`,
+//                 GetBlockData(block_Info_data.events.nodes[i].timestamp),
+//                 extrinsicInfos_data.extrinsicInfos.nodes[i].extrinsicHeight,
+//                 extrinsicInfos_data.extrinsicInfos.nodes[i].signerId
+//
+//             )
+//             data_list.push(result)
+//         }
+//     }
+//     return data_list
+// }
 
 const Sort=(props:any)=>{
     const router = useRouter()
@@ -143,9 +142,10 @@ const Sort=(props:any)=>{
                 document.documentElement.classList.remove('dark');
             }
         }
+
     },[router.isReady])
 
-    const extrinsic_number = props.data.events.totalCount
+    const extrinsic_number = 1000
 
     const Select = (e) =>{
         SetextrinsicPageNumber(1)
@@ -238,8 +238,24 @@ const Transactions=()=> {
     const [enabledNightMode,] = useAtom(DarkModeAtom)
     const [extrinsicPageNumber,] = useAtom(extrinsicPageNumberValue)
     const [selectNumber,] = useAtom(SelectNumber)
-    const [extrinsic_Hash_info] = useManualQuery(Extrinsic_Hash)
-    const [extrinsic_Hash_Info,setExtrinsic_Hash_info] = useState({})
+    let [isOpen, setIsOpen] = useState(false)
+    const [block_Info] = useManualQuery(Block_Info)
+    const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
+    const [totalCount,SetTotalCount]= useState(0)
+    const extrinsicType = [
+        {
+           id:"",
+           action:"",
+           time:"",
+           hash:"",
+           signerId:"",
+            totalCount:"",
+        }
+    ]
+    const [extrinsic,setExtrinsic ]= useState(extrinsicType)
+
+    const [number,setnumber] = useState(0)
+
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){
@@ -247,32 +263,71 @@ const Transactions=()=> {
             }else{
                 document.documentElement.classList.remove('dark');
             }
-            fetchUserThenSomething()
+            const query = async ()=>{
+                const data = await (await QueryBlock_Info()).data
+                const data2 = await (await QueryExtrinsicInfos()).data
+                SetTotalCount(data)
+                setnumber(data.events.totalCount)
+                let times = data.events.nodes.length;
+                let data_list = [];
+                for (let i = 0;i < times;i++){
+                    if (data.events.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
+                        let result = new extrinsicInfo(
+
+                            data.events.nodes[i].id,
+                            `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
+                            GetBlockData(data.events.nodes[i].timestamp),
+                            data.events.nodes[i].extrinsicHash,
+                            // data.events.nodes[i].signerId,
+                            "system",
+                            data.events.totalCount,
+
+
+                        )
+                        data_list.push(result)
+                        setExtrinsic(data_list)
+                    }else{
+                        let result = new extrinsicInfo(
+                            data.events.nodes[i].id,
+                            `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
+                            GetBlockData(data.events.nodes[i].timestamp),
+                            data.events.nodes[i].extrinsicHash,
+                            data2.extrinsicInfos.nodes[i].signerId,
+                            data.events.totalCount,
+
+                        )
+                        data_list.push(result)
+                        setExtrinsic(data_list)
+                    }
+                }
+
+
+                // await SetBlock_Info_data(data)
+                // await SetExtrinsicInfos_data(data2)
+            }
+            query()
+            // fetchUserThenSomething()
         }
-    },[router.isReady])
+    },[router.isReady,extrinsic])
 
-
-
-    let [isOpen, setIsOpen] = useState(false)
-
-
-    const {loading, error, data}: any = useQuery(Block_Info, {
-        variables:{
-            select:selectNumber,
-            first:(extrinsicPageNumber - 1) * selectNumber
-        },
-    })
-
-
-    const fetchUserThenSomething = async () => {
-        const block = await extrinsic_Hash_info({
+    const QueryBlock_Info = async () => {
+        const result = await block_Info({
             variables: {
                 select:selectNumber,
                 first:(extrinsicPageNumber - 1) * selectNumber
             }
         })
-        setExtrinsic_Hash_info(block)
+        return result
+    }
 
+    const QueryExtrinsicInfos = async () => {
+        const result = await extrinsic_Hash({
+            variables: {
+                select:selectNumber,
+                first:(extrinsicPageNumber - 1) * selectNumber
+            }
+        })
+        return result
     }
 
     const Copy = (span) => {
@@ -301,12 +356,16 @@ const Transactions=()=> {
 
     const GetEventDetails = (props) => {
         const value = props.target.id;
-        router.push(`/event/${value}`)
+        const  id = document.getElementById(props.target.id).innerText
+        console.log(id)
+        router.push(`/event/${value}/${id}`)
     }
 
     const GetExtrinsics = (props) =>{
         const value = props.target.id;
-        router.push(`/extrinsics/${value}`)
+        const id = document.getElementById(props.target.id).innerText
+
+        router.push(`/extrinsics/${value}/${id}`)
 
     }
 
@@ -314,35 +373,15 @@ const Transactions=()=> {
         await router.push(`/account/${e.target.id}`)
     }
 
-    if (loading) {
-        return (
-            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
-                <DetailsSkeleton/>
-            </div>
-        )
-    }
 
-    if (error) {
-        console.log(error)
-        return (
-            <div>
-                <Error/>
-            </div>
-        )
 
-    }
-
-    if (data) {
-        // console.log(data)
-        // console.log('sss',(extrinsic_Hash_Info as any).data.extrinsicInfos.nodes)
-        const extrinsic = data_list(data,extrinsic_Hash_Info)
-
+    if (extrinsic.length>0) {
         return (
             <div className="mx-auto  bg-white dark:bg-W3GBG  transition duration-700">
-
                 <Header></Header>
                 <div className="max-w-7xl mx-auto py-16  px-2 ">
                     <div className="my-10 mb-14">
+
                         <div className="mx-auto flex justify-between items-center">
 
                             <div className="text-xl my-2 lg:my-0 text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
@@ -382,31 +421,29 @@ const Transactions=()=> {
                                         {extrinsic.map(item => (
                                             <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
                                                 <td className="px-7 py-4 whitespace-nowrap text-sm font-medium  text-blue-400 font-medium ">
-                                                    <button id={item.id}  onClick={GetEventDetails}>
+                                                    <button id={item.hash}  onClick={GetEventDetails}>
                                                         {item.id}
                                                     </button>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 dark:text-zinc-300  font-medium ">
-                                                       <div className="w-52  truncate">
-                                                        {item.action}
-                                                       </div>
+                                                    {item.action}
                                                 </td>
                                                 <td className="px-6 py-4 w-12 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                    <div className="  ">
-                                                        {item.time}
-                                                    </div>
+                                                    {item.time}
                                                 </td>
 
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400">
-                                                    <button  id={item.hash} className="w-48  truncate" onClick={GetExtrinsics}>
-                                                        {item.hash}
+                                                    <button id={item.hash} onClick={GetExtrinsics}>
+                                                        {classNames(showAccount(item.hash))}
+                                                        <div id={item.hash} className="hidden">
+                                                            {item.id}
+                                                        </div>
+                                                        {/*{item.hash}*/}
                                                     </button>
                                                 </td>
 
                                                 <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                    <div className="w-48  truncate">
-                                                        {item.signerId}
-                                                    </div>
+                                                    {classNames(item.signerId == 'system'? "system": showSmallAccount(item.signerId))}
                                                 </td>
                                             </tr>
                                         ))}
@@ -414,7 +451,7 @@ const Transactions=()=> {
                                     </table>
                                 </div>
 
-                                <Sort data={data}></Sort>
+                                <Sort data={number}></Sort>
                             </div>
                         </div>
 
@@ -476,6 +513,14 @@ const Transactions=()=> {
                     </Dialog>
                 </Transition>
 
+            </div>
+        )
+
+    }else {
+
+        return (
+            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+                <DetailsSkeleton/>
             </div>
         )
     }

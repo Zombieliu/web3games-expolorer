@@ -7,6 +7,12 @@ import {Dialog, Transition} from "@headlessui/react";
 import Header from "../../../components/header";
 import EVMAddress from "../../../components/evm_address_overview";
 import Tail from "../../../components/tail";
+import {showSmallAccount} from "../../../utils";
+
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
 
 const Sort=(props:any)=>{
 
@@ -281,8 +287,8 @@ const InternalTxns = () =>{
                                     {extrinsic.map(item => (
                                         <tr key={item.TxhHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
                                             <td className="px-4 py-4 whitespace-nowrap  font-medium text-blue-400  font-medium">
-                                                <button id={item.TxhHash} onClick={GetHash} className="truncate w-36">
-                                                    {item.TxhHash}
+                                                <button id={item.TxhHash} onClick={GetHash}>
+                                                    {classNames(showSmallAccount(item.TxhHash,))}
                                                 </button>
                                             </td>
 
@@ -295,8 +301,8 @@ const InternalTxns = () =>{
                                                 {item.Age} secs ago
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                <button id={item.From} onClick={GetAddress} className="truncate w-36">
-                                                    {item.From}
+                                                <button id={item.From} onClick={GetAddress} >
+                                                    {classNames(showSmallAccount(item.From,))}
                                                 </button>
                                                 <button onClick={() => {
                                                     // @ts-ignore
@@ -311,8 +317,9 @@ const InternalTxns = () =>{
                                             </td>
 
                                             <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                                                <button id={item.To} onClick={GetAddress}  className="truncate w-36" >
-                                                    {item.To}
+                                                <button id={item.To} onClick={GetAddress}>
+
+                                                    {classNames(showSmallAccount(item.To,))}
                                                 </button>
                                                 <button onClick={() => {
                                                     // @ts-ignore

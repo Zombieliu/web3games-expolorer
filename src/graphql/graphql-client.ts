@@ -7,7 +7,7 @@ let graphQLClient
 function createClient(initialState) {
     return new GraphQLClient({
         ssrMode: typeof window === 'undefined',
-        url: 'https://explorer-testnet-graphql-api.web3games.org/', // Server URL (must be absolute)
+        url: 'http://localhost:3000/', // Server URL (must be absolute)
         cache: memCache({initialState}),
     })
 }

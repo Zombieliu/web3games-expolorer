@@ -9,6 +9,7 @@ import {useAtom} from "jotai";
 import {BlockPageNumberValue, DarkModeAtom, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
+import {showAccount} from "../../utils";
 
 
 function classNames(...classes) {
@@ -348,10 +349,8 @@ const Blocks=()=>{
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
-                              <button onClick={GetBlock}>
-                                <div id={item.id} className="w-52 truncate">
-                                  {item.id}
-                                </div>
+                              <button id={item.id} onClick={GetBlock}>
+                                  {classNames(showAccount(item.id,))}
                                 {/*<i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
                             </button>
                             </td>

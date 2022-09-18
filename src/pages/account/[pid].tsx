@@ -11,6 +11,7 @@ import axios from "axios";
 import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
+import {showAccount} from "../../utils";
 
 
 function classNames(...classes) {
@@ -325,7 +326,7 @@ const Account=()=>{
                             <td className="px-6 py-4 whitespace-nowrap text-blue-400 text-sm font-medium  ">
                               <Link href={`/extrinsics/${item.extrinsicHash}`}>
                                 <a>
-                                  {item.extrinsicHash}
+                                  {classNames(showAccount(item.extrinsicHash,))}
                                 </a></Link>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">

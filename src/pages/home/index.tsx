@@ -192,7 +192,7 @@ const GET_USER_QUERY = `
  query QueryPage($ctx: String) {
    blockInfos(filter:{
     blockHeight:{
-      equalTo:1
+      equalTo:$ctx
     }
   }){
     nodes{
@@ -216,8 +216,6 @@ function DataDiff (blocktime) {
         return seconds % 60
     }
 }
-
-
 
 const Search = () =>{
     const router = useRouter()

@@ -4,7 +4,7 @@ import Tail from "../../components/tail";
 import { Dialog,Transition } from '@headlessui/react';
 import { CheckCircleIcon} from '@heroicons/react/solid';
 import {useRouter} from "next/router";
-import {useQuery} from 'graphql-hooks'
+import {useManualQuery, useQuery} from 'graphql-hooks'
 import {useAtom} from "jotai";
 import {DarkModeAtom, } from "../../jotai";
 import Error from "../../components/error";
@@ -16,7 +16,7 @@ function classNames(...classes) {
 
 const Event_Info = `
  query HomePage($Event: String) {
-  events(filter:{
+   events(filter:{
     id:{
       equalTo:$Event
     }
@@ -27,39 +27,72 @@ const Event_Info = `
     method
     rawType
     data
-    extrinsicHash{
-    meta
     }
-      }
-
+  }
+}
+`
+const Extrinsic_Hash =`
+query HomePage_Hash($ExtrinsicHash: String){
+    extrinsicInfos(filter:{
+    id:{
+      equalTo:$ExtrinsicHash
+    }
+  }){
+       nodes{
+       
+        meta
+    }
   }
 }
 `
 
-function data_type(data:any){
-    let Data = [];
-    const times = JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields.length
-    console.log(JSON.parse(data.events.nodes[0].data))
-    for (let i =0;i<times;i++){
-        let content = {
-            id : i ,
-            Name : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].name}`,
-            Type : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].typeName}`,
-            Data : `${JSON.parse(data.events.nodes[0].data)[i]}`,
-        }
-        Data.push(content)
-    }
-    return Data
 
-}
+// extrinsicHash{
+// meta
+// }
+
+// function data_type(data:any){
+//     let Data = [];
+//     const times = JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields.length
+//     console.log(JSON.parse(data.events.nodes[0].data))
+//     for (let i =0;i<times;i++){
+//         let content = {
+//             id : i ,
+//             Name : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].name}`,
+//             Type : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].typeName}`,
+//             Data : `${JSON.parse(data.events.nodes[0].data)[i]}`,
+//         }
+//         Data.push(content)
+//     }
+//     return Data
+//
+// }
 
 
 const Events=()=>{
     const router = useRouter()
     let [isOpen, setIsOpen] = useState(false)
-    const [Event,SetEvent] = useState("")
-
+    const [event_Info] = useManualQuery(Event_Info)
+    const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
     const [enabledNightMode,] = useAtom(DarkModeAtom)
+
+    const OverviewType={
+        event:"",
+        id:"",
+    }
+    const [overview,setOverview] =useState(OverviewType)
+
+    const dataType = [
+        {
+            id:"",
+            Name:"",
+            Type:"",
+            Data:"",
+
+        }
+    ]
+    const [data,SetData ]= useState(dataType)
+
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){
@@ -67,22 +100,53 @@ const Events=()=>{
             }else{
                 document.documentElement.classList.remove('dark');
             }
+
+            const id = router.query.slug[1]
+            const hash = router.query.slug[0];
+            const query = async ()=>{
+                const data = await (await QueryEvent_Info(id)).data
+                const data2 = await (await QueryExtrinsic_Hash(hash)).data
+                let Data = [];
+                const overview2=
+                    {
+                        event:`${data.events.nodes[0].module}.${data.events.nodes[0].method}`,
+                        id:`${data.events.nodes[0].id}`,
+                    }
+                setOverview(overview2)
+                const times = JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields.length
+                for (let i =0;i<times;i++){
+                    let content = {
+                        id : i ,
+                        Name : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields[i].name}`,
+                        Type : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields[i].typeName}`,
+                        Data : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta)[i]}`,
+                    }
+                    Data.push(content)
+                    SetData(Data)
+                }
+            }
+            query()
         }
     },[router.isReady])
 
-    useEffect(()=>{
-        if (router.isReady){
-            const {pid} = router.query;
-            SetEvent(`${pid}`)
-        }
-    },[router.isReady])
 
+    const QueryEvent_Info = async (EventID) => {
+        const result = await event_Info({
+            variables: {
+                Event:EventID
+            }
+        })
+        return result
+    }
+    const QueryExtrinsic_Hash = async (ExtrinsicHash) => {
+        const result = await extrinsic_Hash({
+            variables: {
+                ExtrinsicHash
+            }
+        })
+        return result
+    }
 
-    const{loading,error,data}: any = useQuery(Event_Info,{
-        variables:{
-            Event
-        }
-    })
 
 
     const Copy=(span)=>{
@@ -109,32 +173,26 @@ const Events=()=>{
         setIsOpen(true)
     }
 
-    if (loading){
-        return(
-            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
-                <DetailsSkeleton/>
-            </div>
-        )
-    }
+    // if (loading){
+    //     return(
+    //         <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+    //             <DetailsSkeleton/>
+    //         </div>
+    //     )
+    // }
 
-    if(error){
-        return(
-            <Error/>
-        )
-
-    }
-    if(data.events.nodes.length == 0){
+    // if(error){
+    //     return(
+    //         <Error/>
+    //     )
+    //
+    // }
+    if(data.length == 0){
         return (
             <Error/>
         )
     }else{
-        const Data = data_type(data)
-        const overview=[
-            {
-                event:`${data.events.nodes[0].module}.${data.events.nodes[0].method}`,
-                id:`${data.events.nodes[0].id}`,
-            }
-        ]
+
         return (
 
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
@@ -163,19 +221,23 @@ const Events=()=>{
                                             Overview
                                     </div>
                                     <div className="text-black dark:text-white text-sm ">
-                                        {overview.map(item => (
-                                            <div key={item.event}>
+
+                                            <div key={overview.event}>
                                                 <div className="md:flex justify-between lg:justify-start  my-3 ">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Event Name
                                                     </div>
                                                     <div className="text-gray-800 dark:text-white" id="block">
-                                                        {item.event}
+                                                        {overview.event}
                                                     </div>
                                                 </div>
                                                 <div className="md:flex justify-between lg:justify-start   ">
                                                     <div className="font-semibold lg:font-medium w-60 mr-32">
                                                         Parameters
+                                                    </div>
+
+                                                    <div className="text-gray-800 dark:text-white" id="block">
+                                                        {/*{overview.id}*/}- -
                                                     </div>
 
                                                 </div>
@@ -212,7 +274,7 @@ const Events=()=>{
                                                             </thead>
 
                                                             <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                            {Data.map(item => (
+                                                            {data.map(item => (
                                                                 <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
                                                                     <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
                                                                         {item.id}
@@ -238,7 +300,7 @@ const Events=()=>{
                                                     </div>
 
                                                 </div>
-                                            </div>))}
+                                            </div>
                                     </div>
 
                                 </div>

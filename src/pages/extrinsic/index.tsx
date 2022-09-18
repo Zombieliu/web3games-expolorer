@@ -11,6 +11,7 @@ import {useAtom} from "jotai";
 import {DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
+import {showAccount, showSmallAccount} from "../../utils";
 
 
 function classNames(...classes) {
@@ -100,7 +101,7 @@ function data_list(data: any){
           GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
           data.extrinsicInfos.nodes[i].success,
           "system",
-          data.extrinsicInfos.nodes[i].fee,
+          "0.522222"
       )
       data_list.push(result)
     }else{
@@ -110,7 +111,8 @@ function data_list(data: any){
           GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
           data.extrinsicInfos.nodes[i].success,
           data.extrinsicInfos.nodes[i].signerId,
-          data.extrinsicInfos.nodes[i].fee,
+          "0.522222"
+          // data.extrinsicInfos.nodes[i].fee,
       )
       data_list.push(result)
     }
@@ -280,7 +282,9 @@ const Transactions=()=> {
 
   const GetExtrinsics = (props) => {
     const value = props.target.id;
-    router.push(`/extrinsics/${value}`)
+    const id = document.getElementById(props.target.id).innerText
+
+    router.push(`/extrinsics/${value}/${id}`)
   }
 
   async function getAccount(e){
@@ -355,13 +359,11 @@ const Transactions=()=> {
                             <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
                               <button id={item.extrinsicHeight} className="w-20" onClick={GetExtrinsics}>
                                 {item.id}
-
-
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
-                              <button id={item.extrinsicHeight} className="w-52 md:w-72 truncate" onClick={GetExtrinsics}>
-                                {item.extrinsicHeight}
+                              <button id={item.extrinsicHeight} onClick={GetExtrinsics}>
+                                {classNames(showAccount(item.extrinsicHeight,))}
                               </button>
                             </td>
                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
@@ -372,9 +374,7 @@ const Transactions=()=> {
                               { item.state ? "success" : "fail"}
                             </td>
                               <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                <div className="w-52 md:w-60 truncate">
-                                  {item.signerId}
-                                </div>
+                                {classNames(item.signerId == 'system'? "system": showSmallAccount(item.signerId))}
                               </td>
                               {/*<button onClick={() => {*/}
                               {/*  // @ts-ignore*/}
@@ -389,7 +389,7 @@ const Transactions=()=> {
                                   <div className="flex">
                                     {item.fee}
                                     <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
-                                      W3G
+                                       W3G
                                     </div>
                                   </div>
                               </div>
