@@ -189,18 +189,21 @@ const Blcok_Info = `
 
 
 const GET_USER_QUERY = `
- query QueryPage($ctx: String) {
-   blockInfos(filter:{
-    blockHeight:{
-      equalTo:$ctx
+ query HomePage($ctx: String) {
+  blockInfos(filter:{blockHeight:{
+      equalTo:1234
     }
   }){
     nodes{
-    id
-    }
+      id
+      blockHeight
+      extrinsicNumber
+      eventNumber
+      timestamp
     }
   }
 }
+ 
 `
 
 function DataDiff (blocktime) {
@@ -229,7 +232,7 @@ const Search = () =>{
     }
     const [selected, setSelected] = useState(types[0])
 
-    const [pop_up_boxState,setSop_up_boxState] = useAtom(PopUpBoxState)
+    const [,setSop_up_boxState] = useAtom(PopUpBoxState)
     const [,setPop_up_boxData] =useAtom(PopUpBoxInfo)
     const DataCheck = async (props) =>{
         const key_code = props.nativeEvent.keyCode
@@ -237,28 +240,35 @@ const Search = () =>{
             if (selected.name == 'Block'){
                 const value = props.target.value
                 const block = await fetchUserThenSomething(value)
-                if (block.data.blockInfos.nodes.length == 0){
-
-                }else{
-                    const hash = block.data.blockInfos.nodes[0].id
-                    await router.push(`/blocksdetails/${hash}`)
-                }
+                console.log(block)
+                // if (block.data.blockInfos.nodes.length == 0){
+                //     setPop_up_boxData({
+                //         state:false,
+                //         type:"No this block",
+                //         hash:""
+                //     })
+                //     setSop_up_boxState(true)
+                //
+                // }else{
+                //     const hash = block.data.blockInfos.nodes[0].id
+                //     await router.push(`/blocksdetails/${hash}`)
+                // }
             }
-            else if (selected.name == 'BlockHash'){
-                const value = props.target.value
-                await router.push(`/blocksdetails/${value}`)
-            }
-            else if (selected.name == 'ExtrinsicHash'){
-                const value = props.target.value
-                await router.push(`/extrinsics/${value}`)
-            }
-            else if (selected.name == 'Account'){
-                const value = props.target.value
-                await router.push(`/account/${value}`)
-            }
-            else {
-                alert("fuck you")
-            }
+            // else if (selected.name == 'BlockHash'){
+            //     const value = props.target.value
+            //     await router.push(`/blocksdetails/${value}`)
+            // }
+            // else if (selected.name == 'ExtrinsicHash'){
+            //     const value = props.target.value
+            //     await router.push(`/extrinsics/${value}`)
+            // }
+            // else if (selected.name == 'Account'){
+            //     const value = props.target.value
+            //     await router.push(`/account/${value}`)
+            // }
+            // else {
+            //     alert("fuck you")
+            // }
         }
     }
 
@@ -267,38 +277,38 @@ const Search = () =>{
         console.log(value)
         const block = await fetchUserThenSomething(value)
         console.log(block.data)
-        // if (selected.name == 'Block') {
-        //     const block = await fetchUserThenSomething(value)
-        //     console.log(block)
-        //     if (block.data.blockInfos.nodes.length == 0){
-        //         setPop_up_boxData({
-        //             state:false,
-        //             type:"No this block",
-        //             hash:""
-        //         })
-        //         setSop_up_boxState(true)
-        //     }else{
-        //         const hash = block.data.blockInfos.nodes[0].id
-        //         await router.push(`/blocksdetails/${hash}`)
-        //     }
-        // }
-        // else if (selected.name == 'BlockHash'){
-        //     await router.push(`/blocksdetails/${value}`)
-        // }
-        // else if (selected.name == 'ExtrinsicHash'){
-        //     await router.push(`/extrinsics/${value}`)
-        // }
-        // else if (selected.name == 'Account'){
-        //     await router.push(`/account/${value}`)
-        // }
-        // else {
-        //     setPop_up_boxData({
-        //         state:false,
-        //         type:"No Data",
-        //         hash:"",
-        //     })
-        //     setSop_up_boxState(true)
-        // }
+        if (selected.name == 'Block') {
+            const block = await fetchUserThenSomething(value)
+            console.log(block)
+            if (block.data.blockInfos.nodes.length == 0){
+                setPop_up_boxData({
+                    state:false,
+                    type:"No this block",
+                    hash:""
+                })
+                setSop_up_boxState(true)
+            }else{
+                const hash = block.data.blockInfos.nodes[0].id
+                await router.push(`/blocksdetails/${hash}`)
+            }
+        }
+        else if (selected.name == 'BlockHash'){
+            await router.push(`/blocksdetails/${value}`)
+        }
+        else if (selected.name == 'ExtrinsicHash'){
+            await router.push(`/extrinsics/${value}`)
+        }
+        else if (selected.name == 'Account'){
+            await router.push(`/account/${value}`)
+        }
+        else {
+            setPop_up_boxData({
+                state:false,
+                type:"No Data",
+                hash:"",
+            })
+            setSop_up_boxState(true)
+        }
     }
     return (
         <>

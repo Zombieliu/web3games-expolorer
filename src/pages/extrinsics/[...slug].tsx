@@ -118,7 +118,7 @@ const Extrinsics=()=>{
         signature: "",
         extrinsic_hash: "",
         weight:"",
-        events: "data2.extrinsicInfos.nodes.length"
+        events: ""
     }
     const [overview,setOverview] =useState(OverviewType)
     const dataType = [

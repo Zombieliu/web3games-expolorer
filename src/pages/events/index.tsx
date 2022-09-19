@@ -129,119 +129,16 @@ function GetBlockData(blockTime) {
 //     return data_list
 // }
 
-const Sort=(props:any)=>{
-    const router = useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [extrinsicPageNumber,SetextrinsicPageNumber] = useAtom(extrinsicPageNumberValue)
-    const [select_number,setSelect_number] = useAtom(SelectNumber)
-    useEffect(()=>{
-        if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
-        }
-
-    },[router.isReady])
-
-    const extrinsic_number = 1000
-
-    const Select = (e) =>{
-        SetextrinsicPageNumber(1)
-        setSelect_number(Number(e.target.value))
-    }
-
-
-    let extrinsic_number_pages = Math.ceil(extrinsic_number / select_number)
-
-    if (extrinsic_number_pages > 500){
-        extrinsic_number_pages = 500
-    }
-
-    const addPageCounter = ()=>{
-        if (extrinsicPageNumber != extrinsic_number_pages){
-            SetextrinsicPageNumber(extrinsicPageNumber + 1)
-        }
-    }
-
-    const decPageCounter = ()=>{
-        if (extrinsicPageNumber != 1){
-            SetextrinsicPageNumber(extrinsicPageNumber - 1)
-        }
-    }
-
-    const lastPage = ()=>{
-        SetextrinsicPageNumber(extrinsic_number_pages)
-    }
-
-    const firstPage = ()=>{
-        SetextrinsicPageNumber(1)
-
-    }
-
-    return(
-        <div>
-            <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
-                <div className="flex text-black dark:text-white items-center">
-                    Show
-                    <select
-                        onChange={Select}
-                        id="select"
-                        className=" block  w-13   p-1 outline-none  text-base  border border-[#7ADFD5] mx-1 sm:text-sm rounded-md text-black bg-white  dark:bg-W3GInfoBG dark:text-white"
-                        defaultValue={select_number}
-                    >
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-
-                    Records
-
-                </div>
-                <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
-                    <button
-                        onClick={firstPage}
-                        className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F]  text-sm font-semibold  "
-                    >
-                        <span className="">First</span>
-                    </button>
-                    <button
-                        onClick={decPageCounter}
-                        className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
-                    >
-                        <span className="sr-only">Previous</span>
-                        <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                    <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-                        Page {extrinsicPageNumber} of {extrinsic_number_pages}
-                    </div>
-                    <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-                        <span className="sr-only">Next</span>
-                        <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                    <button
-                        onClick={lastPage}
-                        className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
-                    >
-                        <span className="">Last</span>
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    )
-}
 
 const Transactions=()=> {
     const router = useRouter()
     const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [extrinsicPageNumber,] = useAtom(extrinsicPageNumberValue)
     const [selectNumber,] = useAtom(SelectNumber)
-    let [isOpen, setIsOpen] = useState(false)
     const [block_Info] = useManualQuery(Block_Info)
     const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
     const [totalCount,SetTotalCount]= useState(0)
+    const [extrinsicPageNumber,SetextrinsicPageNumber] = useAtom(extrinsicPageNumberValue)
+    const [select_number,setSelect_number] = useAtom(SelectNumber)
     const extrinsicType = [
         {
            id:"",
@@ -253,8 +150,9 @@ const Transactions=()=> {
         }
     ]
     const [extrinsic,setExtrinsic ]= useState(extrinsicType)
+    const [extrinsic_number,setExtrinsic_number]  = useState(0)
 
-    const [number,setnumber] = useState(0)
+
 
     useEffect(()=>{
         if (router.isReady){
@@ -267,7 +165,7 @@ const Transactions=()=> {
                 const data = await (await QueryBlock_Info()).data
                 const data2 = await (await QueryExtrinsicInfos()).data
                 SetTotalCount(data)
-                setnumber(data.events.totalCount)
+                setExtrinsic_number(data.events.totalCount)
                 let times = data.events.nodes.length;
                 let data_list = [];
                 for (let i = 0;i < times;i++){
@@ -330,29 +228,40 @@ const Transactions=()=> {
         return result
     }
 
-    const Copy = (span) => {
-        const spanText = document.getElementById(span).innerText;
-        const oInput = document.createElement('input');
-        oInput.value = spanText;
-        document.body.appendChild(oInput);
-        oInput.select();
-        document.execCommand('Copy');
-        oInput.className = 'oInput';
-        oInput.style.display = 'none';
-        document.body.removeChild(oInput);
-        if (oInput) {
+    const Select = (e) =>{
+        SetextrinsicPageNumber(1)
+        setSelect_number(Number(e.target.value))
+    }
 
-            setIsOpen(true)
+
+    let extrinsic_number_pages = Math.ceil(extrinsic_number / select_number)
+
+    if (extrinsic_number_pages > 500){
+        extrinsic_number_pages = 500
+    }
+
+    const addPageCounter = ()=>{
+        if (extrinsicPageNumber != extrinsic_number_pages){
+            SetextrinsicPageNumber(extrinsicPageNumber + 1)
         }
     }
 
-    function closeModal() {
-        setIsOpen(false)
+    const decPageCounter = ()=>{
+        if (extrinsicPageNumber != 1){
+            SetextrinsicPageNumber(extrinsicPageNumber - 1)
+        }
     }
 
-    function openModal() {
-        setIsOpen(true)
+    const lastPage = ()=>{
+        SetextrinsicPageNumber(extrinsic_number_pages)
     }
+
+    const firstPage = ()=>{
+        SetextrinsicPageNumber(1)
+
+    }
+
+
 
     const GetEventDetails = (props) => {
         const value = props.target.id;
@@ -451,7 +360,55 @@ const Transactions=()=> {
                                     </table>
                                 </div>
 
-                                <Sort data={number}></Sort>
+                                <div>
+                                    <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
+                                        <div className="flex text-black dark:text-white items-center">
+                                            Show
+                                            <select
+                                                onChange={Select}
+                                                id="select"
+                                                className=" block  w-13   p-1 outline-none  text-base  border border-[#7ADFD5] mx-1 sm:text-sm rounded-md text-black bg-white  dark:bg-W3GInfoBG dark:text-white"
+                                                defaultValue={select_number}
+                                            >
+                                                <option value="20">20</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+
+                                            Records
+
+                                        </div>
+                                        <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
+                                            <button
+                                                onClick={firstPage}
+                                                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F]  text-sm font-semibold  "
+                                            >
+                                                <span className="">First</span>
+                                            </button>
+                                            <button
+                                                onClick={decPageCounter}
+                                                className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+                                            >
+                                                <span className="sr-only">Previous</span>
+                                                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+                                            </button>
+                                            <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+                                                Page {extrinsicPageNumber} of {extrinsic_number_pages}
+                                            </div>
+                                            <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+                                                <span className="sr-only">Next</span>
+                                                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                                            </button>
+                                            <button
+                                                onClick={lastPage}
+                                                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+                                            >
+                                                <span className="">Last</span>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -460,58 +417,6 @@ const Transactions=()=> {
                 </div>
                 <Tail></Tail>
 
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="fixed inset-0 z-40  -mt-72"
-                        onClose={closeModal}
-                    >
-                        <div className="min-h-screen px-4 text-center ">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                                <Dialog.Overlay className="fixed inset-0"/>
-                            </Transition.Child>
-
-                            {/* This element is to trick the browser into centering the modal contents. */}
-                            <span
-                                className="inline-block h-screen align-middle"
-                                aria-hidden="true"
-                            >
-              &#8203;
-            </span>
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <div
-                                    className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                                    <div className="flex justify-center">
-                                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                                    </div>
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        Copy successfully !
-                                    </Dialog.Title>
-                                </div>
-                            </Transition.Child>
-                        </div>
-                    </Dialog>
-                </Transition>
 
             </div>
         )

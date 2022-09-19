@@ -50,6 +50,7 @@ const Block_Info = `
       nonce
       success
       signerId
+      fees
     }
     totalCount
   }
@@ -62,7 +63,7 @@ class extrinsicInfo {
   private time: string;
   private state: string;
   private signerId: string;
-  private fee : string;
+  private fees : string;
 
   constructor(
       id:string,
@@ -70,14 +71,14 @@ class extrinsicInfo {
       time:string,
       state:string,
       signerId:string,
-      fee:string
+      fees:string
   ) {
     this.extrinsicHeight = extrinsicHeight
     this.id = id
     this.time = time
     this.state = state
     this.signerId = signerId
-    this.fee = fee
+    this.fees = fees
   }
 }
 
@@ -88,6 +89,7 @@ function GetBlockData(blockTime) {
   const start = new Date(blockTime).toUTCString();
   return `${start}`
 }
+
 
 
 function data_list(data: any){
@@ -101,7 +103,7 @@ function data_list(data: any){
           GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
           data.extrinsicInfos.nodes[i].success,
           "system",
-          "0.522222"
+         Number(data.extrinsicInfos.nodes[i].fees.slice(data.extrinsicInfos.nodes[i].fees.lastIndexOf(":") + 1,-1)).toPrecision(6),
       )
       data_list.push(result)
     }else{
@@ -111,8 +113,8 @@ function data_list(data: any){
           GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
           data.extrinsicInfos.nodes[i].success,
           data.extrinsicInfos.nodes[i].signerId,
-          "0.522222"
-          // data.extrinsicInfos.nodes[i].fee,
+          // "0.522222",
+          Number(data.extrinsicInfos.nodes[i].fees.slice(data.extrinsicInfos.nodes[i].fees.lastIndexOf(":") + 1,-1)).toPrecision(6),
       )
       data_list.push(result)
     }
@@ -287,6 +289,7 @@ const Transactions=()=> {
     router.push(`/extrinsics/${value}/${id}`)
   }
 
+
   async function getAccount(e){
     await router.push(`/account/${e.target.id}`)
   }
@@ -310,7 +313,7 @@ const Transactions=()=> {
   }
 
   if (data) {
-    console.log(data)
+    console.log(data.extrinsicInfos.nodes[0].fees)
     const extrinsic = data_list(data)
     return (
         <div className="mx-auto bg-white dark:bg-W3GBG  transition duration-700">
@@ -386,8 +389,8 @@ const Transactions=()=> {
                             {/*</button>*/}
                             <td className="px-6 py-4 whitespace-nowrap text-sm  text-gray-500 dark:text-zinc-300">
                               <div className="flex justify-center ">
-                                  <div className="flex">
-                                    {item.fee}
+                                  <div  className="flex">
+                                    {item.fees}
                                     <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                                        W3G
                                     </div>

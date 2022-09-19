@@ -48,6 +48,11 @@ const Blcok_Info = `
       extrinsicNumber
       eventNumber
       timestamp
+      extrinsicInfosByBlockHashId{
+      nodes{
+      fees
+      }
+      }
     }
     totalCount
   }
@@ -74,7 +79,7 @@ class BlockInfo {
   private time: string;
   private extrinsicNumber: string;
   private eventNumber: string;
-  private fee: string;
+  private fees: string;
 
   constructor(
       id:string,
@@ -82,14 +87,14 @@ class BlockInfo {
       time:string,
       extrinsicNumber:string,
       eventNumber:string,
-      fee:string,
+      fees:string,
   ) {
     this.id = id
     this.blockHeight = blockHeight
     this.time = time
     this.extrinsicNumber = extrinsicNumber
     this.eventNumber = eventNumber
-    this.fee = fee
+    this.fees = fees
   }
 }
 
@@ -103,7 +108,8 @@ function data_list(data: any){
         GetBlockData(data.blockInfos.nodes[i].timestamp),
         data.blockInfos.nodes[i].extrinsicNumber,
         data.blockInfos.nodes[i].eventNumber,
-        (0.52222222).toFixed(6)
+        Number(data.blockInfos.nodes[i].extrinsicInfosByBlockHashId.nodes[0].fees.slice(data.blockInfos.nodes[i].extrinsicInfosByBlockHashId.nodes[0].fees.lastIndexOf(":") + 1,-1)).toPrecision(6),
+
     )
     data_list.push(result)
   }
@@ -296,7 +302,7 @@ const Blocks=()=>{
   }
 
   if (data) {
-    // console.log(data)
+    console.log(data)
     const extrinsic = data_list(data)
     return (
         <div className="mx-auto bg-white dark:bg-W3GBG transition duration-700">
@@ -367,7 +373,7 @@ const Blocks=()=>{
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               <div className="flex justify-center w-36">
                                 <div className="flex">
-                                  {item.fee}
+                                  {item.fees}
                                   <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                                     W3G
                                   </div>
