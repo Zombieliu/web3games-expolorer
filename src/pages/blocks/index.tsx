@@ -10,6 +10,7 @@ import {BlockPageNumberValue, DarkModeAtom, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import {showAccount} from "../../utils";
+import Heads from "../../components/head";
 
 
 function classNames(...classes) {
@@ -253,32 +254,6 @@ const Blocks=()=>{
     },
   })
 
-
-  const Copy=(span)=>{
-
-    const spanText = document.getElementById(span).innerText;
-    const oInput = document.createElement('input');
-    oInput.value = spanText;
-    document.body.appendChild(oInput);
-    oInput.select();
-    document.execCommand('Copy');
-    oInput.className = 'oInput';
-    oInput.style.display = 'none';
-    document.body.removeChild(oInput);
-    if(oInput){
-
-      setIsOpen(true)
-    }
-  }
-
-  function closeModal() {
-    setIsOpen(false)
-  }
-
-  function openModal() {
-    setIsOpen(true)
-  }
-
   const GetBlock = (props) => {
     const value = props.target.id;
     router.push(`/blocksdetails/${value}`)
@@ -306,8 +281,8 @@ const Blocks=()=>{
     const extrinsic = data_list(data)
     return (
         <div className="mx-auto bg-white dark:bg-W3GBG transition duration-700">
-
-          <Header></Header>
+          <Heads/>
+          <Header/>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-10 mb-14">
               <div className="mx-auto flex justify-between items-center">
@@ -396,58 +371,6 @@ const Blocks=()=>{
           </div>
           <Tail></Tail>
 
-          <Transition appear show={isOpen} as={Fragment}>
-            <Dialog
-                as="div"
-                className="fixed inset-0 z-40  -mt-72"
-                onClose={closeModal}
-            >
-              <div className="min-h-screen px-4 text-center ">
-                <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-                  <Dialog.Overlay className="fixed inset-0"/>
-                </Transition.Child>
-
-                {/* This element is to trick the browser into centering the modal contents. */}
-                <span
-                    className="inline-block h-screen align-middle"
-                    aria-hidden="true"
-                >
-              &#8203;
-            </span>
-                <Transition.Child
-                    as={Fragment}
-                    enter="ease-out duration-300"
-                    enterFrom="opacity-0 scale-95"
-                    enterTo="opacity-100 scale-100"
-                    leave="ease-in duration-200"
-                    leaveFrom="opacity-100 scale-100"
-                    leaveTo="opacity-0 scale-95"
-                >
-                  <div
-                      className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                    <div className="flex justify-center">
-                      <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                    </div>
-                    <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Copy successfully !
-                    </Dialog.Title>
-                  </div>
-                </Transition.Child>
-              </div>
-            </Dialog>
-          </Transition>
 
         </div>
     )

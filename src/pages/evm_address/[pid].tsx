@@ -14,6 +14,7 @@ import EVMAddress from "../../components/evm_address_overview";
 import Header from "../../components/header";
 import Tail from "../../components/tail";
 import {showSmallAccount} from "../../utils";
+import Heads from "../../components/head";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -274,7 +275,8 @@ const Transactions = () =>{
     return(
         <>
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
-                <Header></Header>
+                <Heads/>
+                <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <EVMAddress/>
                     <div className=" overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">

@@ -5,6 +5,7 @@ import Link from "next/link";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {DarkModeAtom, } from "../../jotai";
+import Heads from "../../components/head";
 
 
 const allnfts=[
@@ -150,10 +151,11 @@ const NFTs=()=>{
     },[router.isReady])
     return(
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
-            <Header></Header>
+            <Heads/>
+            <Header/>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className="my-10 mb-14">
-                    <NFTHeader></NFTHeader>
+                    <NFTHeader/>
                     <div className="bg-white border dark:border-neutral-700 dark:bg-neutral-800 p-5 rounded-lg mt-2">
                         <div className="flex items-center">
                             <div className="mt-0.5 text-base dark:text-gray-200">

@@ -9,6 +9,7 @@ import {useAtom} from "jotai";
 import {BlockPageNumberValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
+import Heads from "../../components/head";
 
 
 function classNames(...classes) {
@@ -290,8 +291,8 @@ const Blocks=()=>{
         // console.log(data)
         return (
             <div className="mx-auto bg-white dark:bg-W3GBG  transition duration-700">
-
-                <Header></Header>
+                <Heads/>
+                <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-10 mb-14">
                         <div className="mx-auto flex justify-between items-center">

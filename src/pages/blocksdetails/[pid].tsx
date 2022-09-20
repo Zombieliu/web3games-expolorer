@@ -11,6 +11,7 @@ import { DarkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
 import Error from  '../../components/error'
 import {DetailsSkeleton} from "../../components/skeleton";
 import {showAccount, showSmallAccount} from "../../utils";
+import Heads from "../../components/head";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -176,7 +177,7 @@ const Overview = (props:any) =>{
     let utc = GetBlockData(props.data.extrinsicInfos.nodes[0].blockHash.timestamp)
     const overview=[
         {
-            block:`#${props.data.extrinsicInfos.nodes[0].blockHash.blockHeight}`,
+            block:`${props.data.extrinsicInfos.nodes[0].blockHash.blockHeight}`,
             timestamp:time,
             UTCtime:utc,
             blockHash:props.data.extrinsicInfos.nodes[0].blockHash.id,
@@ -455,7 +456,8 @@ const BlocksDetails=()=>{
     }else{
         return (
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
-                <Header></Header>
+                <Heads/>
+                <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-10 mb-14">
                         <div className="mx-auto lg:flex justify-between ">

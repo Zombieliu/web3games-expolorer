@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {DarkModeAtom, } from "../../../jotai";
+import Heads from "../../../components/head";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -212,7 +213,8 @@ const Collections=()=>{
     },[router.isReady])
     return(
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
-            <Header></Header>
+            <Heads/>
+            <Header/>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className="my-10 mb-14">
                     <NFTHeader></NFTHeader>

@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 import {useManualQuery} from "graphql-hooks";
 
 const GET_USER_QUERY = `
- query  GetUseQuery($select: Number){
+ query  GetUseQuery($select: Int){
   blockInfos(filter:{
   blockHeight:{
       equalTo:$select
@@ -20,7 +20,7 @@ const Extrinsic_Hash =`
 query HomePage_Hash($ExtrinsicHash: String){
     extrinsicInfos(filter:{
     id:{
-      equalTo:"0xa8861f4454eaffae7f3c64ed7c632efb6dcbf599cc2dd4652cd60cf294e20dee"
+      equalTo:$ExtrinsicHash
     }
   }){
        nodes{ 
@@ -67,7 +67,7 @@ const Test = (props)=>{
         console.log(block)
     }
     const test =async () =>{
-        const block = await QueryExtrinsic_Hash("")
+        const block = await QueryExtrinsic_Hash("0xa8861f4454eaffae7f3c64ed7c632efb6dcbf599cc2dd4652cd60cf294e20dee")
         // console.log(block.data.blockInfos.nodes[0].id)
         console.log(block)
     }

@@ -14,6 +14,7 @@ import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Head from "next/head";
 import {Pop_up_box} from "../../components/pop_up_box";
+import Heads from "../../components/head";
 
 
 function classNames(...classes) {
@@ -189,23 +190,33 @@ const Blcok_Info = `
 
 
 const GET_USER_QUERY = `
- query HomePage($ctx: String) {
-  blockInfos(filter:{blockHeight:{
-      equalTo:1234
+ query  GetUseQuery($select: Int){
+  blockInfos(filter:{
+  blockHeight:{
+      equalTo:$select
     }
   }){
     nodes{
       id
       blockHeight
-      extrinsicNumber
-      eventNumber
-      timestamp
     }
   }
 }
- 
 `
 
+const Extrinsic_Hash =`
+query HomePage_Hash($ExtrinsicHash: String){
+    extrinsicInfos(filter:{
+    id:{
+      equalTo:$ExtrinsicHash
+    }
+  }){
+       nodes{ 
+      extrinsicHeight
+    }
+  }
+}
+`
 function DataDiff (blocktime) {
     const start = new Date(blocktime).getTime();
     const end = new Date().getTime();
@@ -223,12 +234,23 @@ function DataDiff (blocktime) {
 const Search = () =>{
     const router = useRouter()
     const [fetchUser] = useManualQuery(GET_USER_QUERY)
+    const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
 
-    const fetchUserThenSomething = async (query_data:string) => {
+    const fetchUserThenSomething = async (query_data:number) => {
         const block = await fetchUser({
-            variables: { ctx: query_data }
+            variables: {
+                select: query_data
+            }
         })
         return block
+    }
+    const QueryExtrinsic_Hash = async (ExtrinsicHash) => {
+        const result = await extrinsic_Hash({
+            variables: {
+                ExtrinsicHash
+            }
+        })
+        return result
     }
     const [selected, setSelected] = useState(types[0])
 
@@ -238,67 +260,118 @@ const Search = () =>{
         const key_code = props.nativeEvent.keyCode
         if (key_code == 13){
             if (selected.name == 'Block'){
-                const value = props.target.value
+                const value = Number(props.target.value)
                 const block = await fetchUserThenSomething(value)
-                console.log(block)
-                // if (block.data.blockInfos.nodes.length == 0){
-                //     setPop_up_boxData({
-                //         state:false,
-                //         type:"No this block",
-                //         hash:""
-                //     })
-                //     setSop_up_boxState(true)
-                //
-                // }else{
-                //     const hash = block.data.blockInfos.nodes[0].id
-                //     await router.push(`/blocksdetails/${hash}`)
-                // }
+                if(block.data){
+                    if (block.data.blockInfos.nodes.length == 0){
+                        setPop_up_boxData({
+                            state:false,
+                            type:"No this block",
+                            hash:""
+                        })
+                        setSop_up_boxState(true)
+
+                    }else{
+                        const hash = block.data.blockInfos.nodes[0].id
+                        await router.push(`/blocksdetails/${hash}`)
+                    }
+                }else {
+                    setPop_up_boxData({
+                        state:false,
+                        type:"No this block",
+                        hash:""
+                    })
+                    setSop_up_boxState(true)
+                }
+
+
             }
-            // else if (selected.name == 'BlockHash'){
-            //     const value = props.target.value
-            //     await router.push(`/blocksdetails/${value}`)
-            // }
-            // else if (selected.name == 'ExtrinsicHash'){
-            //     const value = props.target.value
-            //     await router.push(`/extrinsics/${value}`)
-            // }
-            // else if (selected.name == 'Account'){
-            //     const value = props.target.value
-            //     await router.push(`/account/${value}`)
-            // }
-            // else {
-            //     alert("fuck you")
-            // }
+            else if (selected.name == 'BlockHash'){
+                const value = props.target.value
+                await router.push(`/blocksdetails/${value}`)
+            }
+            else if (selected.name == 'ExtrinsicHash'){
+                const value = props.target.value
+                const eventID = await  QueryExtrinsic_Hash(value)
+                console.log(eventID)
+                if(eventID.data.extrinsicInfos.nodes.length == 0){
+                    setPop_up_boxData({
+                        state:false,
+                        type:"No this hash",
+                        hash:""
+                    })
+                    setSop_up_boxState(true)
+
+                }else {
+                    const id = eventID.data.extrinsicInfos.nodes[0].extrinsicHeight
+                    await router.push(`/extrinsics/${value}/${id}`)
+                }
+            }
+            else if (selected.name == 'Account'){
+                const value = props.target.value
+                await router.push(`/account/${value}`)
+            }
+            else {
+                setPop_up_boxData({
+                    state:false,
+                    type:"No this hash",
+                    hash:""
+                })
+                setSop_up_boxState(true)
+            }
         }
     }
 
     const ButtonDataCheck = async () =>{
-        const value = (document.getElementById("homeinput") as HTMLInputElement).value
-        console.log(value)
-        const block = await fetchUserThenSomething(value)
-        console.log(block.data)
         if (selected.name == 'Block') {
+            const value = Number((document.getElementById("homeinput") as HTMLInputElement).value)
             const block = await fetchUserThenSomething(value)
-            console.log(block)
-            if (block.data.blockInfos.nodes.length == 0){
+            if(block.data){
+                if (block.data.blockInfos.nodes.length == 0){
+                    setPop_up_boxData({
+                        state:false,
+                        type:"No this block",
+                        hash:""
+                    })
+                    setSop_up_boxState(true)
+
+                }else{
+                    const hash = block.data.blockInfos.nodes[0].id
+                    await router.push(`/blocksdetails/${hash}`)
+                }
+            }else {
                 setPop_up_boxData({
                     state:false,
                     type:"No this block",
                     hash:""
                 })
                 setSop_up_boxState(true)
-            }else{
-                const hash = block.data.blockInfos.nodes[0].id
-                await router.push(`/blocksdetails/${hash}`)
             }
+
         }
         else if (selected.name == 'BlockHash'){
+            const value = (document.getElementById("homeinput") as HTMLInputElement).value
             await router.push(`/blocksdetails/${value}`)
         }
         else if (selected.name == 'ExtrinsicHash'){
-            await router.push(`/extrinsics/${value}`)
+            const value = (document.getElementById("homeinput") as HTMLInputElement).value
+            const eventID = await  QueryExtrinsic_Hash(value)
+            console.log(eventID)
+            if(eventID.data.extrinsicInfos.nodes.length == 0){
+                setPop_up_boxData({
+                    state:false,
+                    type:"No this hash",
+                    hash:""
+                })
+                setSop_up_boxState(true)
+
+            }else {
+                const id = eventID.data.extrinsicInfos.nodes[0].extrinsicHeight
+                await router.push(`/extrinsics/${value}/${id}`)
+            }
         }
         else if (selected.name == 'Account'){
+            const value = (document.getElementById("homeinput") as HTMLInputElement).value
             await router.push(`/account/${value}`)
         }
         else {
@@ -786,10 +859,7 @@ const Home= ()  =>{
 
     return(
         <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
-            <Head>
-                <title>Web3Games Explorer  | Dashboard</title>
-                <link rel="icon" href="/favicon.ico"/>
-            </Head>
+            <Heads/>
             <Header/>
             <div className="max-w-7xl mx-auto py-16  px-4 ">
                 <div className=" mb-14">

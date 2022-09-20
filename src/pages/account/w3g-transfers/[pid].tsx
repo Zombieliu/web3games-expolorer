@@ -12,6 +12,7 @@ import {useQuery} from "graphql-hooks";
 import Error from "../../../components/error";
 import {DetailsSkeleton} from "../../../components/skeleton";
 import {showAccount} from "../../../utils";
+import Heads from "../../../components/head";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -266,7 +267,8 @@ const W3G_Transfers=()=>{
     const trades = second_data(first)
     return (
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
-          <Header></Header>
+          <Heads/>
+          <Header/>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-10 mb-14">
               <AccountOverview></AccountOverview>

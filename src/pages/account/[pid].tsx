@@ -12,6 +12,7 @@ import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {showAccount} from "../../utils";
+import Heads from "../../components/head";
 
 
 function classNames(...classes) {
@@ -292,12 +293,14 @@ const Account=()=>{
 
   }
 
-  if (data) {
-    const collections = data_list(data)
 
+  if (data.accounts.nodes.length !== 0) {
+    console.log(data)
+    const collections = data_list(data)
     return (
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
-          <Header></Header>
+          <Heads/>
+          <Header/>
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-10 mb-14">
               <div>
@@ -356,17 +359,16 @@ const Account=()=>{
                     </table>
                     <Sort data={data}></Sort>
                   </div>
-
-
                 </div>
               </div>
             </div>
-
           </div>
           <Tail></Tail>
-
-
         </div>
+    )
+  }else{
+    return(
+        <Error/>
     )
   }
 }

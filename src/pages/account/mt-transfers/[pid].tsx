@@ -7,6 +7,7 @@ import AccountOverview from "../../../components/Account-overview";
 import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {Dialog, Transition} from "@headlessui/react";
 import Tail from "../../../components/tail";
+import Heads from "../../../components/head";
 
 
 function classNames(...classes) {
@@ -197,7 +198,8 @@ const MT_Transfers = () =>{
 
   return(
       <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
-        <Header></Header>
+        <Heads/>
+        <Header/>
         <div className="max-w-7xl mx-auto py-16  px-4 ">
           <div className="my-10 mb-14">
             <AccountOverview></AccountOverview>

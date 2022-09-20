@@ -16,6 +16,7 @@ import {BlockPageNumberValue, DarkModeAtom, extrinsicPageNumberValue} from "../.
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Link from "next/link";
+import Heads from "../../components/head";
 
 
 function classNames(...classes) {
@@ -154,8 +155,8 @@ const EvmTransactionsDetail=()=>{
         // console.log(data)
         return (
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
-
-                <Header></Header>
+                <Heads/>
+                <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-10 mb-14">
                         <div className="mx-auto lg:flex justify-between items-center">

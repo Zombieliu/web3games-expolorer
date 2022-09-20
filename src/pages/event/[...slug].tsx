@@ -9,6 +9,7 @@ import {useAtom} from "jotai";
 import {DarkModeAtom, } from "../../jotai";
 import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
+import Heads from "../../components/head";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -75,6 +76,7 @@ const Events=()=>{
     const [event_Info] = useManualQuery(Event_Info)
     const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
     const [enabledNightMode,] = useAtom(DarkModeAtom)
+    const [dataState,setDataState] = useState(true)
 
     const OverviewType={
         event:"",
@@ -106,6 +108,9 @@ const Events=()=>{
             const query = async ()=>{
                 const data = await (await QueryEvent_Info(id)).data
                 const data2 = await (await QueryExtrinsic_Hash(hash)).data
+                console.log(data,data2)
+                if(data.events.nodes.length !== 0 && data2.extrinsicInfos.nodes.length !== 0){
+
                 let Data = [];
                 const overview2=
                     {
@@ -124,7 +129,11 @@ const Events=()=>{
                     Data.push(content)
                     SetData(Data)
                 }
+            }else {
+                    setDataState(false)
+                }
             }
+
             query()
         }
     },[router.isReady])
@@ -187,17 +196,12 @@ const Events=()=>{
     //     )
     //
     // }
-    if(data.length == 0){
-        return (
-            <Error/>
-        )
-    }else{
-
+    if(dataState){
         return (
 
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
-
-                <Header></Header>
+                <Heads/>
+                <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-10 mb-40">
                         <div className="mx-auto lg:flex justify-between ">
@@ -218,89 +222,89 @@ const Events=()=>{
                             <div className="py-5  bg-white dark:bg-neutral-800 rounded-lg  ">
                                 <div className=" min-w-full  p-5 dark:text-gray-300">
                                     <div className="flex  text-xl font-semibold text-gray-700 dark:text-neutral-200 ">
-                                            Overview
+                                        Overview
                                     </div>
                                     <div className="text-black dark:text-white text-sm ">
 
-                                            <div key={overview.event}>
-                                                <div className="md:flex justify-between lg:justify-start  my-3 ">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Event Name
-                                                    </div>
-                                                    <div className="text-gray-800 dark:text-white" id="block">
-                                                        {overview.event}
-                                                    </div>
+                                        <div key={overview.event}>
+                                            <div className="md:flex justify-between lg:justify-start  my-3 ">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32">
+                                                    Event Name
                                                 </div>
-                                                <div className="md:flex justify-between lg:justify-start   ">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Parameters
-                                                    </div>
-
-                                                    <div className="text-gray-800 dark:text-white" id="block">
-                                                        {/*{overview.id}*/}- -
-                                                    </div>
-
-                                                </div>
-                                                <div className=" rounded-lg mt-2 md:mt-4 w-full  ">
-                                                    <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
-                                                        <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                            <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
-                                                            <tr>
-                                                                <th
-                                                                    scope="col"
-                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                >
-                                                                    #
-                                                                </th>
-                                                                <th
-                                                                    scope="col"
-                                                                    className="px-6 py-1  text-left text-sm font-semibold   "
-                                                                >
-                                                                    Name
-                                                                </th>
-                                                                <th
-                                                                    scope="col"
-                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                >
-                                                                    Type
-                                                                </th>
-                                                                <th
-                                                                    scope="col"
-                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                >
-                                                                    Data
-                                                                </th>
-                                                            </tr>
-                                                            </thead>
-
-                                                            <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                            {data.map(item => (
-                                                                <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
-                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                        {item.id}
-                                                                    </td>
-                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                        {item.Name}
-                                                                    </td>
-                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                        {item.Type}
-                                                                    </td>
-                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                        <div className="">
-                                                                            {item.Data}
-                                                                        </div>
-
-                                                                    </td>
-
-                                                                </tr>
-                                                            ))}
-                                                            </tbody>
-                                                        </table>
-
-                                                    </div>
-
+                                                <div className="text-gray-800 dark:text-white" id="block">
+                                                    {overview.event}
                                                 </div>
                                             </div>
+                                            <div className="md:flex justify-between lg:justify-start   ">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32">
+                                                    Parameters
+                                                </div>
+
+                                                <div className="text-gray-800 dark:text-white" id="block">
+                                                    {/*{overview.id}*/}- -
+                                                </div>
+
+                                            </div>
+                                            <div className=" rounded-lg mt-2 md:mt-4 w-full  ">
+                                                <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                        <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                                                        <tr>
+                                                            <th
+                                                                scope="col"
+                                                                className="px-6 py-1 text-left text-sm font-semibold   "
+                                                            >
+                                                                #
+                                                            </th>
+                                                            <th
+                                                                scope="col"
+                                                                className="px-6 py-1  text-left text-sm font-semibold   "
+                                                            >
+                                                                Name
+                                                            </th>
+                                                            <th
+                                                                scope="col"
+                                                                className="px-6 py-1 text-left text-sm font-semibold   "
+                                                            >
+                                                                Type
+                                                            </th>
+                                                            <th
+                                                                scope="col"
+                                                                className="px-6 py-1 text-left text-sm font-semibold   "
+                                                            >
+                                                                Data
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+
+                                                        <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                        {data.map(item => (
+                                                            <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                                                                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                                    {item.id}
+                                                                </td>
+                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                    {item.Name}
+                                                                </td>
+                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                    {item.Type}
+                                                                </td>
+                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                    <div className="">
+                                                                        {item.Data}
+                                                                    </div>
+
+                                                                </td>
+
+                                                            </tr>
+                                                        ))}
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -376,6 +380,11 @@ const Events=()=>{
 
 
             </div>
+        )
+
+    }else{
+        return (
+            <Error/>
         )
     }
 }

@@ -12,6 +12,7 @@ import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Link from "next/link";
 import {log} from "util";
+import Heads from "../../components/head";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -108,6 +109,7 @@ function weight_check(data: any ,data2: any){
 const Extrinsics=()=>{
     const router = useRouter()
     const [enabledNightMode,] = useAtom(DarkModeAtom)
+    const [dataState,setDataState] = useState(true)
 
 
     const [event_Info] = useManualQuery(Event_Info)
@@ -178,7 +180,10 @@ const Extrinsics=()=>{
             const query = async ()=> {
                 const data = await (await QueryEvent_Info(id)).data
                 const data2 = await (await QueryExtrinsic_Hash(hash)).data
+
                 console.log(data,data2)
+                if(data.events.nodes.length !== 0 && data2.extrinsicInfos.nodes.length !== 0){
+                    setDataState(true)
                 const weight = weight_check(data,data2)
                 const overview =
                     {
@@ -218,13 +223,17 @@ const Extrinsics=()=>{
                     data_list.push(result)
                     SetData(data_list)
                 }
-            }
+            }else {
+                    setDataState(false)
+                }
             if (enabledNightMode == true){
                 document.documentElement.classList.add('dark');
             }else{
                 document.documentElement.classList.remove('dark');
             }
+            }
             query()
+
         }
     },[router.isReady])
 
@@ -252,13 +261,10 @@ const Extrinsics=()=>{
         router.push(`/event/${id}/${value}`)
     }
 
-    if(data.length == 0){
-        return (
-            <Error/>
-        )
-    }else{
+    if(dataState){
         return(
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
+                <Heads/>
                 <Header/>
                 <div className="max-w-7xl mx-auto py-16  px-4 ">
                     <div className="my-10 mb-14">
@@ -278,128 +284,128 @@ const Extrinsics=()=>{
                                     </div>
                                     <div className="text-black text-sm dark:text-white">
 
-                                            <div>
-                                                <div className="md:flex  justify-between lg:justify-start my-3 ">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Extrinsic Name
-                                                    </div>
-                                                    <div className="text-gray-800 dark:text-white" id="block">
-                                                        {overview.extrinsic}
-                                                    </div>
+                                        <div>
+                                            <div className="md:flex  justify-between lg:justify-start my-3 ">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32">
+                                                    Extrinsic Name
                                                 </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Signer
-                                                    </div>
-                                                    <div id={overview.signature}
-                                                         className="text-gray-800 dark:text-white text-xs lg:text-sm  break-words">
-                                                        {overview.signature}
-                                                        <button onClick={() => {
-                                                            // @ts-ignore
-                                                            Copy(`${overview.signature}`);
-                                                        }}>
-                                                            <i className="fa fa-clone ml-1.5 mt-1" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
+                                                <div className="text-gray-800 dark:text-white" id="block">
+                                                    {overview.extrinsic}
                                                 </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60  mr-32">
-                                                        Extrinsic hash
-                                                    </div>
-                                                    <div id={overview.extrinsic_hash}
-                                                         className="text-gray-800  dark:text-white text-xs lg:text-sm  break-words">
-                                                        {overview.extrinsic_hash}
-                                                        <button onClick={() => {
-                                                            // @ts-ignore
-                                                            Copy(`${overview.extrinsic_hash}`);
-                                                        }}>
-                                                            <i className="fa fa-clone ml-1.5 mt-1" aria-hidden="true"></i>
-                                                        </button>
-                                                    </div>
+                                            </div>
+                                            <div className="md:flex justify-between lg:justify-start my-3">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32">
+                                                    Signer
                                                 </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Weight
-                                                    </div>
-                                                    <div className="text-gray-800 dark:text-white">
-                                                        {overview.weight}
-                                                    </div>
+                                                <div id={overview.signature}
+                                                     className="text-gray-800 dark:text-white text-xs lg:text-sm  break-words">
+                                                    {overview.signature}
+                                                    <button onClick={() => {
+                                                        // @ts-ignore
+                                                        Copy(`${overview.signature}`);
+                                                    }}>
+                                                        <i className="fa fa-clone ml-1.5 mt-1" aria-hidden="true"></i>
+                                                    </button>
                                                 </div>
-                                                <div className="md:flex justify-between lg:justify-start my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32 ">
-                                                        Events
-                                                    </div>
-                                                    <div className="md:flex text-gray-800 dark:text-white">
+                                            </div>
+                                            <div className="md:flex justify-between lg:justify-start my-3">
+                                                <div className="font-semibold lg:font-medium w-60  mr-32">
+                                                    Extrinsic hash
+                                                </div>
+                                                <div id={overview.extrinsic_hash}
+                                                     className="text-gray-800  dark:text-white text-xs lg:text-sm  break-words">
+                                                    {overview.extrinsic_hash}
+                                                    <button onClick={() => {
+                                                        // @ts-ignore
+                                                        Copy(`${overview.extrinsic_hash}`);
+                                                    }}>
+                                                        <i className="fa fa-clone ml-1.5 mt-1" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="md:flex justify-between lg:justify-start my-3">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32">
+                                                    Weight
+                                                </div>
+                                                <div className="text-gray-800 dark:text-white">
+                                                    {overview.weight}
+                                                </div>
+                                            </div>
+                                            <div className="md:flex justify-between lg:justify-start my-3">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32 ">
+                                                    Events
+                                                </div>
+                                                <div className="md:flex text-gray-800 dark:text-white">
 
-                                                        <div className="flex ">
-                                                            <div>Total</div>
-                                                            <div className=" mx-1   font-semibold">{overview.events}</div>
-                                                            <div>Events</div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                                <div className="md:flex justify-between lg:justify-start  my-3">
-                                                    <div className="font-semibold lg:font-medium w-60 mr-32">
-                                                        Parameters
+                                                    <div className="flex ">
+                                                        <div>Total</div>
+                                                        <div className=" mx-1   font-semibold">{overview.events}</div>
+                                                        <div>Events</div>
                                                     </div>
 
-                                                    <div className="  mt-2 md:mt-0 w-full xl:w-6/12">
-                                                        <div className="overflow-y-auto  w-full shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
-                                                            <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                                <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
-                                                                <tr>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                    >
-                                                                        #
-                                                                    </th>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1  text-left text-sm font-semibold   "
-                                                                    >
-                                                                        Name
-                                                                    </th>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                    >
-                                                                        Type
-                                                                    </th>
-                                                                    <th
-                                                                        scope="col"
-                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
-                                                                    >
-                                                                        Data
-                                                                    </th>
+                                                </div>
+                                            </div>
+                                            <div className="md:flex justify-between lg:justify-start  my-3">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32">
+                                                    Parameters
+                                                </div>
+
+                                                <div className="  mt-2 md:mt-0 w-full xl:w-6/12">
+                                                    <div className="overflow-y-auto  w-full shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                                                        <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                            <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                                                            <tr>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                >
+                                                                    #
+                                                                </th>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1  text-left text-sm font-semibold   "
+                                                                >
+                                                                    Name
+                                                                </th>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                >
+                                                                    Type
+                                                                </th>
+                                                                <th
+                                                                    scope="col"
+                                                                    className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                >
+                                                                    Data
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
+                                                            {overviewDate.map(item => (
+                                                                <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-left">
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
+                                                                        {item.id}
+                                                                    </td>
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                        {item.Name}
+                                                                    </td>
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                        {item.Type}
+                                                                    </td>
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
+                                                                        {item.Data}
+                                                                    </td>
                                                                 </tr>
-                                                                </thead>
-                                                                <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
-                                                                {overviewDate.map(item => (
-                                                                    <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-left">
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                            {item.id}
-                                                                        </td>
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                            {item.Name}
-                                                                        </td>
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                            {item.Type}
-                                                                        </td>
-                                                                        <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
-                                                                            {item.Data}
-                                                                        </td>
-                                                                    </tr>
 
-                                                                ))}
-                                                                </tbody>
-                                                            </table>
+                                                            ))}
+                                                            </tbody>
+                                                        </table>
 
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -513,6 +519,11 @@ const Extrinsics=()=>{
                 </div>
                 <Tail></Tail>
             </div>
+        )
+
+    }else{
+        return (
+            <Error/>
         )
     }
 

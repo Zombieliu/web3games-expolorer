@@ -8,6 +8,7 @@ import Header from "../../../components/header";
 import AccountOverview from "../../../components/Account-overview";
 import Tail from "../../../components/tail";
 import {showAccount, showSmallAccount} from "../../../utils";
+import Heads from "../../../components/head";
 
 
 function classNames(...classes) {
@@ -188,10 +189,11 @@ const FT_Transfers = () =>{
 
   return(
       <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
-        <Header></Header>
+        <Heads/>
+        <Header/>
         <div className="max-w-7xl mx-auto py-16  px-4 ">
           <div className="my-10 mb-14">
-            <AccountOverview></AccountOverview>
+            <AccountOverview/>
             <div className="rounded-lg mt-2">
               <div className="mt-5">
         <div className="my-5 overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
