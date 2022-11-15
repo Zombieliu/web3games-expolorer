@@ -346,7 +346,7 @@ const Overview = (props:any) =>{
                                             {item.block}  <button onClick={() => {
                                             // @ts-ignore
                                             Copy("block");
-                                        }}>    <img className="w-4 ml-1 -mb-1" src="/copy.svg" alt=""/></button>
+                                        }}>    <img className="w-4 ml-1 " src="/copy.svg" alt=""/></button>
                                         </div>
                                     </div>
                                     <div className="md:flex  justify-between lg:justify-start my-3">
