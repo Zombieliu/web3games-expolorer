@@ -119,8 +119,6 @@ function insertStr(source, start, newStr){
   return source.slice(0, start) + newStr + source.slice(start);
 }
 const Sort=(props:any)=>{
-
-
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
@@ -137,7 +135,7 @@ const Sort=(props:any)=>{
 
 
 
-  const block_number:number = props.data.accounts.totalCount
+  const block_number:number = 2
 
 
   const Select = (e) =>{
@@ -270,33 +268,22 @@ const Account=()=>{
   },[router.isReady])
 
 
-  const{loading,error,data} = useQuery(Account_Info,{
-    variables:{
-      Account:account
-    }
-  })
 
 
 
-  if (loading) {
-    return (
-        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
-          <DetailsSkeleton/>
-        </div>
-    )
-  }
 
-  if (error) {
-    return (
-        <Error/>
-    )
+  // if (loading) {
+  //   return (
+  //       <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+  //         <DetailsSkeleton/>
+  //       </div>
+  //   )
+  // }
 
-  }
+ const collections = []
 
 
-  if (data.accounts.nodes.length !== 0) {
-    console.log(data)
-    const collections = data_list(data)
+
     return (
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
           <Heads/>
@@ -357,7 +344,7 @@ const Account=()=>{
                       ))}
                       </tbody>
                     </table>
-                    <Sort data={data}></Sort>
+                    <Sort></Sort>
                   </div>
                 </div>
               </div>
@@ -366,10 +353,6 @@ const Account=()=>{
           <Tail></Tail>
         </div>
     )
-  }else{
-    return(
-        <Error/>
-    )
-  }
+
 }
 export default Account

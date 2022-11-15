@@ -15,6 +15,7 @@ import Error from "../../components/error";
 import Head from "next/head";
 import {Pop_up_box} from "../../components/pop_up_box";
 import Heads from "../../components/head";
+import client from "../../post/post";
 
 
 function classNames(...classes) {
@@ -174,83 +175,43 @@ const StateStyles={
     abnormal:"fa fa-times text-red-500",
 }
 
-const Blcok_Info = `
- query HomePage($first: Int) {
-  blockInfos(first:$first,orderBy:TIMESTAMP_DESC){
-    nodes{
-      id
-      blockHeight
-      extrinsicNumber
-      eventNumber
-      timestamp
-    }
-  }
-}
-`
 
-
-const GET_USER_QUERY = `
- query  GetUseQuery($select: Int){
-  blockInfos(filter:{
-  blockHeight:{
-      equalTo:$select
-    }
-  }){
-    nodes{
-      id
-      blockHeight
-    }
-  }
-}
-`
-
-const Extrinsic_Hash =`
-query HomePage_Hash($ExtrinsicHash: String){
-    extrinsicInfos(filter:{
-    id:{
-      equalTo:$ExtrinsicHash
-    }
-  }){
-       nodes{ 
-      extrinsicHeight
-    }
-  }
-}
-`
 function DataDiff (blocktime) {
+
     const start = new Date(blocktime).getTime();
     const end = new Date().getTime();
     const milliseconds = Math.abs(end - start).toString()
-    // @ts-ignore
-    const seconds = parseInt(String(milliseconds / 1000));
-    const minutes = parseInt(String(seconds / 60));
-    if (minutes % 60 >=1){
-        return seconds % 60 + 60 - 18
-    }else {
-        return seconds % 60
-    }
+
+    const seconds = parseInt(String(Number(milliseconds) / 1000));
+
+
+    return seconds
+    // const minutes = parseInt(String(seconds / 60));
+    // console.log(seconds)
+    // if (minutes % 60 >= 1){
+    //     return seconds % 60 + 60 - 18
+    //
+    // }else {
+    //     return seconds % 60
+    // }
 }
 
 const Search = () =>{
     const router = useRouter()
-    const [fetchUser] = useManualQuery(GET_USER_QUERY)
-    const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
 
-    const fetchUserThenSomething = async (query_data:number) => {
-        const block = await fetchUser({
-            variables: {
-                select: query_data
-            }
-        })
+    const fetchUserThenSomething = async (query_data) => {
+        const block = await client.callApi('block/GetBy', {
+            numOrHash: query_data
+        });
         return block
     }
     const QueryExtrinsic_Hash = async (ExtrinsicHash) => {
-        const result = await extrinsic_Hash({
-            variables: {
-                ExtrinsicHash
-            }
+        let ret = await client.callApi('extrinsic/GetByExtHash', {
+            extrinsicHash:ExtrinsicHash,
+            // blockNum:Number(blockNum),
+            // extrinsicIndex:Number(extrinsicIndex)
         })
-        return result
+        return ret
     }
     const [selected, setSelected] = useState(types[0])
 
@@ -258,23 +219,39 @@ const Search = () =>{
     const [,setPop_up_boxData] =useAtom(PopUpBoxInfo)
     const DataCheck = async (props) =>{
         const key_code = props.nativeEvent.keyCode
+        const value = (document.getElementById("homeinput") as HTMLInputElement).value
         if (key_code == 13){
             if (selected.name == 'Block'){
-                const value = Number(props.target.value)
-                const block = await fetchUserThenSomething(value)
-                if(block.data){
-                    if (block.data.blockInfos.nodes.length == 0){
-                        setPop_up_boxData({
-                            state:false,
-                            type:"No this block",
-                            hash:""
-                        })
-                        setSop_up_boxState(true)
+                    const value = Number(props.target.value)
+                    const block = await fetchUserThenSomething(value)
 
-                    }else{
-                        const hash = block.data.blockInfos.nodes[0].id
-                        await router.push(`/blocksdetails/${hash}`)
+                        if(block.isSucc){
+                            if(block.res.content != ""){
+                                const hash = JSON.parse(block.res.content).block_hash
+                                await router.push(`/blocksdetails/${hash}`)
+                            }else {
+                                setPop_up_boxData({
+                                    state:false,
+                                    type:"No this block",
+                                    hash:""
+                                })
+                                setSop_up_boxState(true)
+                            }
+                        }else {
+                            setPop_up_boxData({
+                                state:false,
+                                type:"No this block",
+                                hash:""
+                            })
+                            setSop_up_boxState(true)
                     }
+
+            }
+            else if (selected.name == 'BlockHash'){
+                const value = props.target.value
+                const block = await fetchUserThenSomething(value)
+                if(block.res.content !== ""){
+                    await router.push(`/blocksdetails/${value}`)
                 }else {
                     setPop_up_boxData({
                         state:false,
@@ -283,28 +260,20 @@ const Search = () =>{
                     })
                     setSop_up_boxState(true)
                 }
-
-
-            }
-            else if (selected.name == 'BlockHash'){
-                const value = props.target.value
-                await router.push(`/blocksdetails/${value}`)
             }
             else if (selected.name == 'ExtrinsicHash'){
                 const value = props.target.value
                 const eventID = await  QueryExtrinsic_Hash(value)
-                console.log(eventID)
-                if(eventID.data.extrinsicInfos.nodes.length == 0){
+                if(eventID.res.content !== ""){
+                    const id = JSON.parse(eventID.res.content).extrinsic_hash
+                    await router.push(`/extrinsics/${value}`)
+                }else {
                     setPop_up_boxData({
                         state:false,
                         type:"No this hash",
                         hash:""
                     })
                     setSop_up_boxState(true)
-
-                }else {
-                    const id = eventID.data.extrinsicInfos.nodes[0].extrinsicHeight
-                    await router.push(`/extrinsics/${value}/${id}`)
                 }
             }
             else if (selected.name == 'Account'){
@@ -323,22 +292,37 @@ const Search = () =>{
     }
 
     const ButtonDataCheck = async () =>{
-        if (selected.name == 'Block') {
+        if (selected.name == 'Block'){
             const value = Number((document.getElementById("homeinput") as HTMLInputElement).value)
             const block = await fetchUserThenSomething(value)
-            if(block.data){
-                if (block.data.blockInfos.nodes.length == 0){
+            if((document.getElementById("homeinput") as HTMLInputElement).value !=" "){
+                if(block.isSucc){
+                    if(block.res.content !== ""){
+                        const hash = JSON.parse(block.res.content).block_hash
+                        await router.push(`/blocksdetails/${hash}`)
+                    }else {
+                        setPop_up_boxData({
+                            state:false,
+                            type:"No this block",
+                            hash:""
+                        })
+                        setSop_up_boxState(true)
+                    }
+                }
+                else {
                     setPop_up_boxData({
                         state:false,
                         type:"No this block",
                         hash:""
                     })
                     setSop_up_boxState(true)
-
-                }else{
-                    const hash = block.data.blockInfos.nodes[0].id
-                    await router.push(`/blocksdetails/${hash}`)
                 }
+            }
+        }  else if (selected.name == 'BlockHash'){
+            const value = (document.getElementById("homeinput") as HTMLInputElement).value
+            const block = await fetchUserThenSomething(value)
+            if(block.res.content != ""){
+                await router.push(`/blocksdetails/${value}`)
             }else {
                 setPop_up_boxData({
                     state:false,
@@ -347,17 +331,11 @@ const Search = () =>{
                 })
                 setSop_up_boxState(true)
             }
-
-        }
-        else if (selected.name == 'BlockHash'){
-            const value = (document.getElementById("homeinput") as HTMLInputElement).value
-            await router.push(`/blocksdetails/${value}`)
         }
         else if (selected.name == 'ExtrinsicHash'){
             const value = (document.getElementById("homeinput") as HTMLInputElement).value
             const eventID = await  QueryExtrinsic_Hash(value)
-            console.log(eventID)
-            if(eventID.data.extrinsicInfos.nodes.length == 0){
+            if(eventID.res.content ==""){
                 setPop_up_boxData({
                     state:false,
                     type:"No this hash",
@@ -366,7 +344,7 @@ const Search = () =>{
                 setSop_up_boxState(true)
 
             }else {
-                const id = eventID.data.extrinsicInfos.nodes[0].extrinsicHeight
+                const id = JSON.parse(eventID.res.content).extrinsic_hash
                 await router.push(`/extrinsics/${value}/${id}`)
             }
         }
@@ -730,33 +708,32 @@ const Blocks = () =>{
             title:"Event",
         }
     ]
-    const{loading,error,data} = useQuery(Blcok_Info,{
-        variables:{
-            first:10
-        }
-    })
+
     const GetBlock = (props) => {
         const value = props.target.id;
         router.push(`/blocksdetails/${value}`)
     }
+    const [blocksInfo,setBlocksInfo] = useState([])
+    useEffect(()=>{
+        const call = async () =>{
+            let ret = await client.callApi('block/GetAll', {
+                pageIndex: 0,
+                limit: 10
+            });
+            console.log(ret)
+            if (ret.res != undefined) {
+                console.log(JSON.parse(ret.res.content).items)
+                setBlocksInfo(JSON.parse(ret.res.content).items)
+            }
+            // Error
+            if (!ret.isSucc) {
+                return;
+            }
+        }
+        call()
+    },[])
 
-    if(loading){
-        return(
-            <div className="animate-pulse xl:w-104  pb-16  ">
-                <BlockSkeleton/>
-            </div>
-        )
-    }
-    if(error){
-        return(
-            <Error/>
-        )
-    }
-
-
-    if (data){
-        const blocks = data.blockInfos.nodes
-        console.log(data)
+    if(blocksInfo.length !==0){
         return(
             <>
                 <div className="bg-white dark:bg-neutral-800 mb-5 p-5 pb-7 rounded-lg xl:w-7/12 shadow-xl">
@@ -774,35 +751,34 @@ const Blocks = () =>{
                                         <thead className="bg-white  dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300 ">
                                         <tr>
                                             {BlocksTitle.map(items=>(
-                                            <th
-                                                key={items.title}
-                                                scope="col"
-                                                className=" px-6 py-3 text-left text-sm font-semibold  text-center "
-                                            >
-                                                {items.title}
-                                            </th>
+                                                <th
+                                                    key={items.title}
+                                                    scope="col"
+                                                    className=" px-6 py-3 text-left text-sm font-semibold  text-center "
+                                                >
+                                                    {items.title}
+                                                </th>
 
-                                                ))}
+                                            ))}
                                         </tr>
                                         </thead>
                                         <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
-                                        {blocks.map(block=>(
-                                            <tr key={block.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center " >
+                                        {blocksInfo.map(block=>(
+                                            <tr key={block.block_hash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center " >
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium">
-                                                    <button id={block.id} onClick={GetBlock}>
-                                                        {block.blockHeight}
+                                                    <button id={block.block_hash} onClick={GetBlock}>
+                                                        {block.block_num}
                                                     </button>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                     {DataDiff(block.timestamp)} Second ago
                                                 </td>
                                                 <td className=" px-14  py-4  whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                    {block.extrinsicNumber}
+                                                    {block.extrinsicNum}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                    {block.eventNumber}
+                                                    {block.eventNum}
                                                 </td>
-
                                             </tr>
                                         ))}
                                         </tbody>
@@ -815,7 +791,15 @@ const Blocks = () =>{
                 </div>
             </>
         )
+    }else {
+        return(
+            <div className="animate-pulse xl:w-104  pb-16  ">
+                <BlockSkeleton/>
+            </div>
+            )
     }
+
+
 }
 
 const News = () =>{
@@ -830,9 +814,11 @@ const News = () =>{
                     <div className="w-full ">
                         <div className=" "  id="container" >
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                <a className="twitter-timeline"  data-width="400"  data-height="620" data-theme={classNames(enabledNightMode?"":"")}>
+                                <a className="twitter-timeline"  data-width="400"  data-height="620" >
+                                    {/*data-theme="dark"*/}
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
+
                         </div>
                     </div>
 

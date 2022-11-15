@@ -162,31 +162,14 @@ const Address=()=>{
   },[router.isReady])
 
 
-  const{loading,error,data} = useQuery(Account_Info,{
-    variables:{
-      Account:account
-    }
-  })
 
-
-
-  if (loading) {
-    return (
-        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
-          <DetailsSkeleton/>
-        </div>
-    )
-  }
-
-  if (error) {
-    return (
-        <Error/>
-    )
-
-  }
-
-  if (data) {
-    const collections = data_list(data)
+  // if (loading) {
+  //   return (
+  //       <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+  //         <DetailsSkeleton/>
+  //       </div>
+  //   )
+  // }
 
     return (
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
@@ -216,38 +199,38 @@ const Address=()=>{
                       </tr>
                       </thead>
                       <tbody className="bg-white dark:bg-neutral-700 text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-neutral-500">
-                      {collections.map(item => (
-                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
-                            <td className="px-6 py-4 whitespace-nowrap text-blue-400 text-sm font-medium  ">
-                              <Link href={`/extrinsics/${item.extrinsicHash}`}>
-                                <a>
-                                  {item.extrinsicHash}
-                                </a></Link>
+                      {/*{collections.map(item => (*/}
+                      {/*    <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">*/}
+                      {/*      <td className="px-6 py-4 whitespace-nowrap text-blue-400 text-sm font-medium  ">*/}
+                      {/*        <Link href={`/extrinsics/${item.extrinsicHash}`}>*/}
+                      {/*          <a>*/}
+                      {/*            {item.extrinsicHash}*/}
+                      {/*          </a></Link>*/}
 
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
-                              <Link href={`/extrinsics/${item.extrinsicHash}`}>
-                                <a className="">
-                                  {item.blockHeight}
-                                </a>
-                              </Link>
-                            </td>
-                            <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                              {item.time}
-                            </td>
-                            {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">*/}
-                            {/*  {item.active}*/}
-                            {/*</td>*/}
-                            {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">*/}
-                            {/*  {item.by}*/}
-                            {/*</td>*/}
+                      {/*      </td>*/}
+                      {/*      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">*/}
+                      {/*        <Link href={`/extrinsics/${item.extrinsicHash}`}>*/}
+                      {/*          <a className="">*/}
+                      {/*            {item.blockHeight}*/}
+                      {/*          </a>*/}
+                      {/*        </Link>*/}
+                      {/*      </td>*/}
+                      {/*      <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">*/}
+                      {/*        {item.time}*/}
+                      {/*      </td>*/}
+                      {/*      /!*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">*!/*/}
+                      {/*      /!*  {item.active}*!/*/}
+                      {/*      /!*</td>*!/*/}
+                      {/*      /!*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">*!/*/}
+                      {/*      /!*  {item.by}*!/*/}
+                      {/*      /!*</td>*!/*/}
 
-                            {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">*/}
-                            {/*  {item.fee}*/}
-                            {/*</td>*/}
+                      {/*      /!*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">*!/*/}
+                      {/*      /!*  {item.fee}*!/*/}
+                      {/*      /!*</td>*!/*/}
 
-                          </tr>
-                      ))}
+                      {/*    </tr>*/}
+                      {/*))}*/}
                       </tbody>
                     </table>
                   </div>
@@ -265,6 +248,6 @@ const Address=()=>{
 
         </div>
     )
-  }
+
 }
 export default Address

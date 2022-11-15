@@ -3,16 +3,13 @@ import Header from "../../components/header";
 import Tail from "../../components/tail";
 import { Dialog,Transition } from '@headlessui/react';
 import { CheckCircleIcon} from '@heroicons/react/solid';
-import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {DarkModeAtom,  EventValue} from "../../jotai";
-import {useManualQuery } from 'graphql-hooks'
-import {DetailsSkeleton} from "../../components/skeleton";
-import Error from "../../components/error";
-import Link from "next/link";
-import {log} from "util";
+import {BlockSkeleton, DetailsSkeleton} from "../../components/skeleton";
 import Heads from "../../components/head";
+import client from "../../post/post";
+import {cropData} from "../math";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -27,135 +24,50 @@ const tokenstitle=[
     },
 ]
 
-
-
-
-const Event_Info = `
- query HomePage($Event: String) {
-   events(filter:{
-    id:{
-      equalTo:$Event
-    }
-  }){
-  nodes{
-    id
-    idx
-    module
-    method
-    data
-    extrinsicHash
-}
-  }
-}
-`
-const Extrinsic_Hash =`
-query HomePage_Hash($ExtrinsicHash: String){
-    extrinsicInfos(filter:{
-    id:{
-      equalTo:$ExtrinsicHash
-    }
-  }){
-       nodes{ 
-        id
-    signerId
-    meta
-    }
-  }
-}
-`
-
-
-
-
-function weight_check(data: any ,data2: any){
-    console.log(data)
-    // let len = data2.extrinsicInfos.nodes.length - 1;
-    let result = JSON.parse(data.events.nodes[0].data)[0].weight
-    return `${result}`
-
-}
-
-
-
-
-// function data_type(data:any){
-//     let Data = [];
-//     const times = JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields.length
-//     // console.log(JSON.parse(data.events.nodes[0].extrinsicHash.meta))
-//     for (let i =0;i<times;i++){
-//         let content = {
-//             id : i ,
-//             Name : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].name}`,
-//             Type : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].typeName}`,
-//             Data : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].type}`,
-//
-//         }
-//         Data.push(content)
-//     }
-//     // let content = {
-//     //             id : 0 ,
-//     //             Name : `1`,
-//     //             Type : `2`,
-//     //             Data : `3`,
-//     //
-//     //         }
-//     //         Data.push(content)
-//
-//     return Data
-//
-// }
-
-
 const Extrinsics=()=>{
     const router = useRouter()
     const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [dataState,setDataState] = useState(true)
-
-
-    const [event_Info] = useManualQuery(Event_Info)
-    const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
 
     const OverviewType={
-        extrinsic: "",
-        signature: "",
+        method: "",
+        section: "",
+        signer: "",
+        is_signed:"",
         extrinsic_hash: "",
-        weight:"",
-        events: ""
+        weight_info:"",
+        events: "",
+        success:""
     }
     const [overview,setOverview] =useState(OverviewType)
-    const dataType = [
-        {
-            hash:"",
-            id:"",
-            Name:"",
-            Type:"",
-            Data:"",
-            action:"",
+    const [data,SetData]= useState([])
+    class OverviewDate {
+        private id: string;
+        private name: string;
+        private type: string;
+        private data : string;
 
+        constructor(
+            id:string,
+            name:string,
+            type:string,
+            data:string,
+
+        ) {
+            this.id = id
+            this.name = name
+            this.type = type
+            this.data = data
         }
-    ]
-    const [data,SetData ]= useState(dataType)
-    const OverviewDate =[
-        {
-            id : "" ,
-            Name : "",
-            Type : "",
-            Data : "",
-        }
-    ]
-    const [overviewDate,setOverviewDate] =useState(OverviewDate)
+    }
+
+    const [overviewDate,setOverviewDate] =useState([])
     let [isOpen, setIsOpen] = useState(false)
 
     function closeModal() {
         setIsOpen(false)
     }
 
-    function openModal() {
-        setIsOpen(true)
-    }
-
     const Copy = (span) => {
-
         const spanText = document.getElementById(span).innerText;
         const oInput = document.createElement('input');
         oInput.value = spanText;
@@ -166,102 +78,73 @@ const Extrinsics=()=>{
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
         if (oInput) {
-
             setIsOpen(true)
         }
     }
 
-
-
+    const [getData,setGetData]= useState(false)
     useEffect(()=>{
         if (router.isReady){
-            const id = router.query.slug[1]
-            const hash = router.query.slug[0];
-            const query = async ()=> {
-                const data = await (await QueryEvent_Info(id)).data
-                const data2 = await (await QueryExtrinsic_Hash(hash)).data
-
-                console.log(data,data2)
-                if(data.events.nodes.length !== 0 && data2.extrinsicInfos.nodes.length !== 0){
-                    setDataState(true)
-                const weight = weight_check(data,data2)
-                const overview =
-                    {
-                        extrinsic: `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).name}`,
-                        signature: data2.extrinsicInfos.nodes[0].signerId,
-                        extrinsic_hash: data2.extrinsicInfos.nodes[0].id,
-                        weight,
-                        events: data2.extrinsicInfos.nodes.length,
-                    }
-
-                    setOverview(overview)
-
-                let overviewData = [];
-                const overviewTimes = JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields.length
-
-                for (let i =0;i<overviewTimes;i++){
-                    let overviewContent = {
-                        id : i ,
-                        Name : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields[i].name}`,
-                        Type : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields[i].typeName}`,
-                        Data : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields[i].type}`,
-
-                    }
-                    overviewData.push(overviewContent)
-                }
-                setOverviewDate(overviewData)
-
-                let times = data.events.nodes.length;
-                let data_list = [];
-                for (let i = 0;i < times;i++) {
-
-                    let result = {
-                        id:data.events.nodes[i].id,
-                        hash:data.events.nodes[i].extrinsicHash,
-                        action: `${data.events.nodes[i].module}.${data.events.nodes[i].method}`,
-                }
-                    data_list.push(result)
-                    SetData(data_list)
-                }
-            }else {
-                    setDataState(false)
-                }
+            const extrinsic_hash = router.query.slug[0];
             if (enabledNightMode == true){
                 document.documentElement.classList.add('dark');
             }else{
                 document.documentElement.classList.remove('dark');
             }
+            const query = async ()=> {
+                let ret = await client.callApi('extrinsic/GetByExtHash', {
+                    extrinsicHash:extrinsic_hash,
+                });
+
+                    if (ret.res.content != "") {
+                        setOverview(JSON.parse(ret.res.content))
+                        console.log(JSON.parse(JSON.parse(ret.res.content).args).now)
+                        let length = JSON.parse(JSON.parse(ret.res.content).meta).args.length
+                        let data_list = []
+                        for (let i = 0 ; i<length;i++){
+                            let result = new OverviewDate(
+                                String(i),
+                                JSON.parse(JSON.parse(ret.res.content).meta).args[i].name,
+                                JSON.parse(JSON.parse(ret.res.content).meta).args[i].type,
+                                JSON.parse(JSON.parse(ret.res.content).args).now,
+                            )
+                            data_list.push(result)
+
+                        }
+                        setOverviewDate(data_list)
+                        setGetData(true)
+                        const eventData =  await client.callApi('event/GetByExt', {
+                            blockNum:Number(JSON.parse(ret.res.content).block_num),
+                            extrinsicIndex:Number(JSON.parse(ret.res.content).extrinsic_num),
+
+                        });
+                        if(eventData.res != undefined) {
+                            console.log(JSON.parse(eventData.res.content))
+                            SetData(JSON.parse(eventData.res.content))
+                            // console.log("-------------1",JSON.parse(eventData.res.content))
+                        }
+                    }
+                // Error
+                if (!ret.isSucc) {
+                    return;
+                }
             }
             query()
 
         }
     },[router.isReady])
 
-
-    const QueryEvent_Info = async (EventID) => {
-        const result = await event_Info({
-            variables: {
-                Event:EventID
-            }
-        })
-        return result
-    }
-    const QueryExtrinsic_Hash = async (ExtrinsicHash) => {
-        const result = await extrinsic_Hash({
-            variables: {
-                ExtrinsicHash
-            }
-        })
-        return result
-    }
-    const GetEvent = (e) => {
-        const value = e.target.innerText
-        const id = document.getElementById(`${overview.extrinsic_hash}`).innerText
-        // console.log(id)
-        router.push(`/event/${id}/${value}`)
+    const GetEvent = (  block_num, eventIndex) => {
+        router.push(`/event/${block_num}/${eventIndex}`)
     }
 
-    if(dataState){
+    if(!getData){
+        return(
+            <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+                <DetailsSkeleton/>
+            </div>
+        )
+    }else
         return(
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
                 <Heads/>
@@ -290,19 +173,19 @@ const Extrinsics=()=>{
                                                     Extrinsic Name
                                                 </div>
                                                 <div className="text-gray-800 dark:text-white" id="block">
-                                                    {overview.extrinsic}
+                                                    {overview.section}({overview.method})
                                                 </div>
                                             </div>
                                             <div className="md:flex justify-between lg:justify-start my-3">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32">
                                                     Signer
                                                 </div>
-                                                <div id={overview.signature}
+                                                <div id="address"
                                                      className="text-gray-800 dark:text-white text-xs lg:text-sm  break-words">
-                                                    {overview.signature}
+                                                    {overview.is_signed ? overview.signer :"system"}
                                                     <button onClick={() => {
                                                         // @ts-ignore
-                                                        Copy(`${overview.signature}`);
+                                                        Copy(`address`);
                                                     }}>
                                                         <i className="fa fa-clone ml-1.5 mt-1" aria-hidden="true"></i>
                                                     </button>
@@ -328,7 +211,23 @@ const Extrinsics=()=>{
                                                     Weight
                                                 </div>
                                                 <div className="text-gray-800 dark:text-white">
-                                                    {overview.weight}
+                                                    {JSON.parse(overview.weight_info).weight}
+                                                </div>
+                                            </div>
+                                            <div className="md:flex justify-between lg:justify-start my-3">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32 ">
+                                                    PartialFee
+                                                </div>
+                                                <div className="md:flex text-gray-800 dark:text-white">
+                                                    <div className={overview.success?"text-green-400":""}>{overview.success?"Success":"Fail"}</div>
+                                                </div>
+                                            </div>
+                                            <div className="md:flex justify-between lg:justify-start my-3">
+                                                <div className="font-semibold lg:font-medium w-60 mr-32 ">
+                                                    PartialFee
+                                                </div>
+                                                <div className="md:flex text-gray-800 dark:text-white">
+                                                    <div className="">  {(parseFloat(String(cropData((JSON.parse(overview.weight_info).partialFee / Math.pow(10, 18)), 5))))} W3G</div>
                                                 </div>
                                             </div>
                                             <div className="md:flex justify-between lg:justify-start my-3">
@@ -339,7 +238,7 @@ const Extrinsics=()=>{
 
                                                     <div className="flex ">
                                                         <div>Total</div>
-                                                        <div className=" mx-1   font-semibold">{overview.events}</div>
+                                                        <div className=" mx-1   font-semibold">{data.length}</div>
                                                         <div>Events</div>
                                                     </div>
 
@@ -382,19 +281,19 @@ const Extrinsics=()=>{
                                                             </tr>
                                                             </thead>
                                                             <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
-                                                            {overviewDate.map(item => (
+                                                            {overviewDate.map((item,index) => (
                                                                 <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-left">
-                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                        {item.id}
+                                                                    <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                        {index}
                                                                     </td>
                                                                     <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                        {item.Name}
+                                                                        {item.name}
                                                                     </td>
                                                                     <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                        {item.Type}
+                                                                        {item.type}
                                                                     </td>
                                                                     <td className="px-6 py-1 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
-                                                                        {item.Data}
+                                                                        {item.data}
                                                                     </td>
                                                                 </tr>
 
@@ -495,14 +394,14 @@ const Extrinsics=()=>{
                                             </thead>
                                             <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
                                             {data.map(Events=>(
-                                                <tr key={Events.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                                                <tr key={Events.event_index} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 font-medium font-medium">
-                                                        <button id={Events.hash}  onClick={GetEvent}>
-                                                            {Events.id}
+                                                        <button id={Events.event_index}  onClick={()=>GetEvent(Events.block_num,Events.event_index)}>
+                                                            {Events.block_num}-{Events.event_index}
                                                         </button>
                                                     </td>
                                                     <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                        {Events.action}
+                                                        {Events.section}({Events.method})
                                                     </td>
                                                 </tr>
                                             ))}
@@ -520,12 +419,6 @@ const Extrinsics=()=>{
                 <Tail></Tail>
             </div>
         )
-
-    }else{
-        return (
-            <Error/>
-        )
-    }
 
 
 }

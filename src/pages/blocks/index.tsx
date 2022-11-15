@@ -11,6 +11,8 @@ import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import {showAccount} from "../../utils";
 import Heads from "../../components/head";
+import client from "../../post/post";
+import {log} from "util";
 
 
 function classNames(...classes) {
@@ -40,82 +42,6 @@ const tokenstitle=[
 ]
 
 
-const Blcok_Info = `
- query HomePage($select: Int,$first: Int) {
-  blockInfos(first:$select,offset:$first,orderBy:TIMESTAMP_DESC){
-    nodes{
-      id
-      blockHeight
-      extrinsicNumber
-      eventNumber
-      timestamp
-      extrinsicInfosByBlockHashId{
-      nodes{
-      fees
-      }
-      }
-    }
-    totalCount
-  }
-}
-`
-
-// const After_Block_Info = `
-//  query HomePage($offsetNumber: Int) {
-//   blockInfos(first:20,offset:$offsetNumber,orderBy:TIMESTAMP_DESC){
-//     nodes{
-//       id
-//       blockHeight
-//       extrinsicNumber
-//       eventNumber
-//       timestamp
-//     }
-//   }
-// }
-// `
-
-class BlockInfo {
-  private id: string;
-  private blockHeight: string;
-  private time: string;
-  private extrinsicNumber: string;
-  private eventNumber: string;
-  private fees: string;
-
-  constructor(
-      id:string,
-      blockHeight:string,
-      time:string,
-      extrinsicNumber:string,
-      eventNumber:string,
-      fees:string,
-  ) {
-    this.id = id
-    this.blockHeight = blockHeight
-    this.time = time
-    this.extrinsicNumber = extrinsicNumber
-    this.eventNumber = eventNumber
-    this.fees = fees
-  }
-}
-
-function data_list(data: any){
-  let times = data.blockInfos.nodes.length;
-  let data_list = [];
-  for (let i = 0;i < times;i++){
-    let result = new BlockInfo(
-        data.blockInfos.nodes[i].id,
-        data.blockInfos.nodes[i].blockHeight,
-        GetBlockData(data.blockInfos.nodes[i].timestamp),
-        data.blockInfos.nodes[i].extrinsicNumber,
-        data.blockInfos.nodes[i].eventNumber,
-        Number(data.blockInfos.nodes[i].extrinsicInfosByBlockHashId.nodes[0].fees.slice(data.blockInfos.nodes[i].extrinsicInfosByBlockHashId.nodes[0].fees.lastIndexOf(":") + 1,-1)).toPrecision(6),
-
-    )
-    data_list.push(result)
-  }
-  return data_list
-}
 
 function GetBlockData(blockTime) {
   const start = new Date(blockTime).toUTCString();
@@ -141,7 +67,7 @@ const Sort=(props:any)=>{
 
 
 
-  const block_number:number = props.data.blockInfos.totalCount
+  const block_number:number = props.data.total
 
 
   const Select = (e) =>{
@@ -237,6 +163,19 @@ const Blocks=()=>{
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [BlockPageNumber,] = useAtom(BlockPageNumberValue)
   const [selectNumber,] = useAtom(SelectNumber)
+  const extrinsic = {
+    total:"",
+    items: [{
+      block_num:"",
+      block_hash:"",
+      timestamp:"",
+      extrinsicNum:"",
+      eventNum:"",
+      event:"",
+      fee:"",
+    }
+    ]}
+  const [blocksInfo,setBlocksInfo] = useState(extrinsic)
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){
@@ -244,41 +183,39 @@ const Blocks=()=>{
       }else{
         document.documentElement.classList.remove('dark');
       }
-    }
-  },[router.isReady])
 
-  const{loading,error,data} = useQuery(Blcok_Info,{
-    variables:{
-      select:selectNumber,
-      first:(BlockPageNumber - 1) * selectNumber
-    },
-  })
+      const call = async () =>{
+        let ret = await client.callApi('block/GetAll', {
+          pageIndex: (BlockPageNumber - 1) * selectNumber,
+          limit: selectNumber
+        });
+        if (ret.res != undefined) {
+          setBlocksInfo(JSON.parse(ret.res.content))
+          console.log(JSON.parse(ret.res.content))
+
+        }
+        // Error
+        if (!ret.isSucc) {
+          return;
+        }
+      }
+      call()
+    }
+  },[router.isReady,selectNumber,BlockPageNumber])
+
 
   const GetBlock = (props) => {
     const value = props.target.id;
     router.push(`/blocksdetails/${value}`)
   }
 
-  if (loading) {
+  if (blocksInfo.total=="") {
     return (
         <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
           <DetailsSkeleton/>
         </div>
     )
-  }
-
-  if (error) {
-    return (
-        <div>
-         <Error/>
-        </div>
-    )
-
-  }
-
-  if (data) {
-    console.log(data)
-    const extrinsic = data_list(data)
+  }else{
     return (
         <div className="mx-auto bg-white dark:bg-W3GBG transition duration-700">
           <Heads/>
@@ -290,18 +227,6 @@ const Blocks=()=>{
                 <div className="text-xl my-2 lg:my-0 text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                   BLOCKS
                 </div>
-                {/*<div className="flex ">*/}
-                {/*    <input type="text"*/}
-                {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700 outline-none"*/}
-                {/*           placeholder="Search transactions, blocks, programs and token"*/}
-                {/*           autoComplete="off"*/}
-                {/*    />*/}
-                {/*    <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -ml-11">*/}
-                {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
-
-
-                {/*</div>*/}
-
               </div>
 
               <div className="my-5 overflow-x-auto shadow dark:bg-W3GInfoBG rounded-lg ">
@@ -322,39 +247,37 @@ const Blocks=()=>{
                       </tr>
                       </thead>
                       <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
-                      {extrinsic.map(item => (
-                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                      {blocksInfo.items.map(item => (
+                          <tr key={item.block_hash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
-                              <button id={item.id} onClick={GetBlock}>
-                                {item.blockHeight}
+                              <button id={item.block_hash} onClick={GetBlock}>
+                                {item.block_num}
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  ">
-                              <button id={item.id} onClick={GetBlock}>
-                                  {classNames(showAccount(item.id,))}
+                              <button id={item.block_hash} onClick={GetBlock}>
+                                {classNames(showAccount(item.block_hash,))}
                                 {/*<i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
-                            </button>
+                              </button>
                             </td>
-
                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                              {item.time}
+                              {GetBlockData(item.timestamp)}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
-                              {item.eventNumber}
+                              {item.extrinsicNum}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-base text-gray-500 dark:text-zinc-300">
-                              {item.extrinsicNumber}
+                              {item.eventNum}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               <div className="flex justify-center w-36">
                                 <div className="flex">
-                                  {item.fees}
+                                  {item.fee}0
                                   <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                                     W3G
                                   </div>
                                 </div>
                               </div>
-
                             </td>
                           </tr>
                       ))}
@@ -362,7 +285,7 @@ const Blocks=()=>{
                     </table>
                   </div>
 
-                  <Sort data={data}></Sort>
+                  <Sort data={blocksInfo}></Sort>
                 </div>
               </div>
 
@@ -375,5 +298,6 @@ const Blocks=()=>{
         </div>
     )
   }
+
 }
 export default Blocks

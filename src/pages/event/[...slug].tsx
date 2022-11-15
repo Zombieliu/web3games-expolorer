@@ -10,77 +10,20 @@ import {DarkModeAtom, } from "../../jotai";
 import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Heads from "../../components/head";
+import client from "../../post/post";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-const Event_Info = `
- query HomePage($Event: String) {
-   events(filter:{
-    id:{
-      equalTo:$Event
-    }
-  }){
-    nodes{
-    id
-    module
-    method
-    rawType
-    data
-    }
-  }
-}
-`
-const Extrinsic_Hash =`
-query HomePage_Hash($ExtrinsicHash: String){
-    extrinsicInfos(filter:{
-    id:{
-      equalTo:$ExtrinsicHash
-    }
-  }){
-       nodes{
-       
-        meta
-    }
-  }
-}
-`
-
-
-// extrinsicHash{
-// meta
-// }
-
-// function data_type(data:any){
-//     let Data = [];
-//     const times = JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields.length
-//     console.log(JSON.parse(data.events.nodes[0].data))
-//     for (let i =0;i<times;i++){
-//         let content = {
-//             id : i ,
-//             Name : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].name}`,
-//             Type : `${JSON.parse(data.events.nodes[0].extrinsicHash.meta).fields[i].typeName}`,
-//             Data : `${JSON.parse(data.events.nodes[0].data)[i]}`,
-//         }
-//         Data.push(content)
-//     }
-//     return Data
-//
-// }
-
-
 const Events=()=>{
     const router = useRouter()
     let [isOpen, setIsOpen] = useState(false)
-    const [event_Info] = useManualQuery(Event_Info)
-    const [extrinsic_Hash] = useManualQuery(Extrinsic_Hash)
     const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [dataState,setDataState] = useState(true)
 
     const OverviewType={
-        event:"",
-        id:"",
+        section:"",
+        method:"",
     }
     const [overview,setOverview] =useState(OverviewType)
 
@@ -93,7 +36,8 @@ const Events=()=>{
 
         }
     ]
-    const [data,SetData ]= useState(dataType)
+    const [data,SetData]= useState(dataType)
+    const [obtainData,setObtainData] = useState(false)
 
     useEffect(()=>{
         if (router.isReady){
@@ -102,35 +46,57 @@ const Events=()=>{
             }else{
                 document.documentElement.classList.remove('dark');
             }
-
-            const id = router.query.slug[1]
-            const hash = router.query.slug[0];
+            const eventIndex = Number(router.query.slug[1])
+            const blockNum = Number(router.query.slug[0])
             const query = async ()=>{
-                const data = await (await QueryEvent_Info(id)).data
-                const data2 = await (await QueryExtrinsic_Hash(hash)).data
-                console.log(data,data2)
-                if(data.events.nodes.length !== 0 && data2.extrinsicInfos.nodes.length !== 0){
+                let ret = await client.callApi('event/GetByBlockNumAndIndex', {
+                    eventIndex: eventIndex,
+                    blockNum:blockNum,
+                });
+                // console.log(JSON.parse(JSON.parse(ret.res.content)[0].meta).fields)
 
-                let Data = [];
-                const overview2=
-                    {
-                        event:`${data.events.nodes[0].module}.${data.events.nodes[0].method}`,
-                        id:`${data.events.nodes[0].id}`,
+                if(ret.res !==undefined){
+
+                    if ( ret.res.content.length > 2) {
+                        setObtainData(true)
+
+                           setOverview(JSON.parse(ret.res.content)[0])
+                           const info = []
+                           const meta =  JSON.parse(JSON.parse(ret.res.content)[0].meta).fields
+                           const data =  JSON.parse(JSON.parse(ret.res.content)[0].data)
+
+                        if(typeof(data[0])=='string' ){
+                               for (let i = 0 ;i<meta.length ;i++){
+                                let result= {
+                                    id:i,
+                                    Type:meta[i].typeName,
+                                    Data:data[i],
+                                }
+                                info.push(result)
+                                SetData(info)
+                            }
+                        }else {
+                            let a =JSON.parse(ret.res.content)[0].data.slice(1,JSON.parse(ret.res.content)[0].data.length-1)
+                            for (let i = 0 ;i<meta.length ;i++){
+                                let result= {
+                                    id:i,
+                                    Type:meta[i].typeName,
+                                    Data:a,
+                                }
+                                info.push(result)
+                                SetData(info)
+                            }
+
+                            console.log(data[0])
+                        }
+
+
                     }
-                setOverview(overview2)
-                const times = JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields.length
-                for (let i =0;i<times;i++){
-                    let content = {
-                        id : i ,
-                        Name : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields[i].name}`,
-                        Type : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta).fields[i].typeName}`,
-                        Data : `${JSON.parse(data2.extrinsicInfos.nodes[0].meta)[i]}`,
-                    }
-                    Data.push(content)
-                    SetData(Data)
                 }
-            }else {
-                    setDataState(false)
+
+                // Error
+                if (!ret.isSucc) {
+                    return;
                 }
             }
 
@@ -138,67 +104,12 @@ const Events=()=>{
         }
     },[router.isReady])
 
-
-    const QueryEvent_Info = async (EventID) => {
-        const result = await event_Info({
-            variables: {
-                Event:EventID
-            }
-        })
-        return result
-    }
-    const QueryExtrinsic_Hash = async (ExtrinsicHash) => {
-        const result = await extrinsic_Hash({
-            variables: {
-                ExtrinsicHash
-            }
-        })
-        return result
-    }
-
-
-
-    const Copy=(span)=>{
-
-        const spanText = document.getElementById(span).innerText;
-        const oInput = document.createElement('input');
-        oInput.value = spanText;
-        document.body.appendChild(oInput);
-        oInput.select();
-        document.execCommand('Copy');
-        oInput.className = 'oInput';
-        oInput.style.display = 'none';
-        document.body.removeChild(oInput);
-        if(oInput){
-
-            setIsOpen(true)
-        }
-    }
     function closeModal() {
         setIsOpen(false)
     }
 
-    function openModal() {
-        setIsOpen(true)
-    }
-
-    // if (loading){
-    //     return(
-    //         <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
-    //             <DetailsSkeleton/>
-    //         </div>
-    //     )
-    // }
-
-    // if(error){
-    //     return(
-    //         <Error/>
-    //     )
-    //
-    // }
-    if(dataState){
+    if (obtainData){
         return (
-
             <div className="mx-auto bg-gray-50 dark:bg-W3GBG transition duration-700">
                 <Heads/>
                 <Header/>
@@ -209,14 +120,6 @@ const Events=()=>{
                             <div className="text-xl my-2  lg:text-3xl font-bold  dark:text-gray-300">
                                 Event Details
                             </div>
-                            {/*<div className="flex ">*/}
-                            {/*    <input type="text"*/}
-                            {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white dark:border-gray-500 dark:bg-gray-700 outline-none"*/}
-                            {/*           placeholder="Search transactions, blocks, programs and token"*/}
-                            {/*    />*/}
-                            {/*    <div className="flex justify-center z-10 text-gray-800 text-3xl py-3 -ml-11">*/}
-                            {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
-                            {/*</div>*/}
                         </div>
                         <div className="my-5">
                             <div className="py-5  bg-white dark:bg-neutral-800 rounded-lg  ">
@@ -225,85 +128,73 @@ const Events=()=>{
                                         Overview
                                     </div>
                                     <div className="text-black dark:text-white text-sm ">
-
-                                        <div key={overview.event}>
+                                        <div>
                                             <div className="md:flex justify-between lg:justify-start  my-3 ">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32">
                                                     Event Name
                                                 </div>
                                                 <div className="text-gray-800 dark:text-white" id="block">
-                                                    {overview.event}
+                                                    {overview.section}-({overview.method})
                                                 </div>
                                             </div>
                                             <div className="md:flex justify-between lg:justify-start   ">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32">
                                                     Parameters
                                                 </div>
+                                                <div className="">
+                                                    <div className=" rounded-lg mt-2 md:mt-4 w-full  ">
+                                                        <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
+                                                            <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                                <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
+                                                                <tr>
+                                                                    <th
+                                                                        scope="col"
+                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                    >
+                                                                        #
+                                                                    </th>
+                                                                    <th
+                                                                        scope="col"
+                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                    >
+                                                                        Type
+                                                                    </th>
+                                                                    <th
+                                                                        scope="col"
+                                                                        className="px-6 py-1 text-left text-sm font-semibold   "
+                                                                    >
+                                                                        Data
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
 
-                                                <div className="text-gray-800 dark:text-white" id="block">
-                                                    {/*{overview.id}*/}- -
+                                                                <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                                                                {data.map((item,index )=> (
+                                                                    <tr key={index} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                            {item.id}
+                                                                        </td>
+                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                            {item.Type}
+                                                                        </td>
+                                                                        <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                                                                            <div className="">
+                                                                                {item.Data}
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                ))}
+                                                                </tbody>
+                                                            </table>
+
+                                                        </div>
+
+                                                    </div>
                                                 </div>
 
                                             </div>
-                                            <div className=" rounded-lg mt-2 md:mt-4 w-full  ">
-                                                <div className="shadow overflow-auto rounded-lg border dark:border-W3GInfoBorderBG ">
-                                                    <table className="min-w-full divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                        <thead className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300">
-                                                        <tr>
-                                                            <th
-                                                                scope="col"
-                                                                className="px-6 py-1 text-left text-sm font-semibold   "
-                                                            >
-                                                                #
-                                                            </th>
-                                                            <th
-                                                                scope="col"
-                                                                className="px-6 py-1  text-left text-sm font-semibold   "
-                                                            >
-                                                                Name
-                                                            </th>
-                                                            <th
-                                                                scope="col"
-                                                                className="px-6 py-1 text-left text-sm font-semibold   "
-                                                            >
-                                                                Type
-                                                            </th>
-                                                            <th
-                                                                scope="col"
-                                                                className="px-6 py-1 text-left text-sm font-semibold   "
-                                                            >
-                                                                Data
-                                                            </th>
-                                                        </tr>
-                                                        </thead>
 
-                                                        <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                                                        {data.map(item => (
-                                                            <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
-                                                                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                                    {item.id}
-                                                                </td>
-                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                    {item.Name}
-                                                                </td>
-                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                    {item.Type}
-                                                                </td>
-                                                                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                                                    <div className="">
-                                                                        {item.Data}
-                                                                    </div>
-
-                                                                </td>
-
-                                                            </tr>
-                                                        ))}
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-
-                                            </div>
                                         </div>
                                     </div>
 
@@ -377,15 +268,14 @@ const Events=()=>{
                         </div>
                     </Dialog>
                 </Transition>
-
-
             </div>
         )
+    }else
+    return (
+        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+            <DetailsSkeleton/>
+        </div>
+    )
 
-    }else{
-        return (
-            <Error/>
-        )
-    }
 }
 export default Events

@@ -13,6 +13,8 @@ import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import {showAccount, showSmallAccount} from "../../utils";
 import Heads from "../../components/head";
+import client from "../../post/post";
+import { cropData } from "../math";
 
 
 function classNames(...classes) {
@@ -40,88 +42,11 @@ const tokenstitle=[
   },
 ]
 
-
-const Block_Info = `
- query HomePage($select: Int,$first: Int) { 
-  extrinsicInfos(first:$select,offset:$first,orderBy:TIMESTAMP_DESC){
-    nodes{
-      id
-      extrinsicHeight
-      timestamp
-      nonce
-      success
-      signerId
-      fees
-    }
-    totalCount
-  }
-}
-`
-
-class extrinsicInfo {
-  private extrinsicHeight: string;
-  private id: string;
-  private time: string;
-  private state: string;
-  private signerId: string;
-  private fees : string;
-
-  constructor(
-      id:string,
-      extrinsicHeight:string,
-      time:string,
-      state:string,
-      signerId:string,
-      fees:string
-  ) {
-    this.extrinsicHeight = extrinsicHeight
-    this.id = id
-    this.time = time
-    this.state = state
-    this.signerId = signerId
-    this.fees = fees
-  }
-}
-
-
-
-
 function GetBlockData(blockTime) {
   const start = new Date(blockTime).toUTCString();
   return `${start}`
 }
 
-
-
-function data_list(data: any){
-  let times = data.extrinsicInfos.nodes.length;
-  let data_list = [];
-  for (let i = 0;i < times;i++){
-    if (data.extrinsicInfos.nodes[i].signerId == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"){
-      let result = new extrinsicInfo(
-          data.extrinsicInfos.nodes[i].extrinsicHeight,
-          data.extrinsicInfos.nodes[i].id,
-          GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
-          data.extrinsicInfos.nodes[i].success,
-          "system",
-         Number(data.extrinsicInfos.nodes[i].fees.slice(data.extrinsicInfos.nodes[i].fees.lastIndexOf(":") + 1,-1)).toPrecision(6),
-      )
-      data_list.push(result)
-    }else{
-      let result = new extrinsicInfo(
-          data.extrinsicInfos.nodes[i].extrinsicHeight,
-          data.extrinsicInfos.nodes[i].id,
-          GetBlockData(data.extrinsicInfos.nodes[i].timestamp),
-          data.extrinsicInfos.nodes[i].success,
-          data.extrinsicInfos.nodes[i].signerId,
-          // "0.522222",
-          Number(data.extrinsicInfos.nodes[i].fees.slice(data.extrinsicInfos.nodes[i].fees.lastIndexOf(":") + 1,-1)).toPrecision(6),
-      )
-      data_list.push(result)
-    }
-  }
-  return data_list
-}
 
 const Sort=(props:any)=>{
 
@@ -140,7 +65,7 @@ const Sort=(props:any)=>{
     }
   },[router.isReady])
 
-  const extrinsic_number = props.data.extrinsicInfos.totalCount
+  const extrinsic_number = props.data.total
 
   const Select = (e) =>{
     SetextrinsicPageNumber(1)
@@ -231,63 +156,61 @@ const Sort=(props:any)=>{
   )
 }
 
-const Transactions=()=> {
+const Extrinsic=()=> {
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
   const [extrinsicPageNumber,] = useAtom(extrinsicPageNumberValue)
   const [selectNumber,] = useAtom(SelectNumber)
+  const extrinsic = {
+    total:"",
+    items: [{
+      block_num:"",
+      extrinsic_num:"",
+      extrinsic_hash:"",
+      timestamp:"",
+      success:"",
+      is_signed:"",
+      signer:"",
+      weight_info:"",
+    }
+    ]}
+  const [extrinsicInfo,setExtrinsicInfo] = useState(extrinsic)
   useEffect(()=>{
       if (router.isReady){
+        const call = async () =>{
+          let ret = await client.callApi('extrinsic/GetAll', {
+            pageIndex: (extrinsicPageNumber - 1) * selectNumber,
+            limit: selectNumber
+          });
+          console.log(JSON.parse(ret.res.content))
+          if (ret.res != undefined) {
+            setExtrinsicInfo(JSON.parse(ret.res.content))
+          }
+          if (!ret.isSucc) {
+            return;
+          }
+        }
+        call()
         if (enabledNightMode == true){
           document.documentElement.classList.add('dark');
         }else{
           document.documentElement.classList.remove('dark');
         }
       }
-  },[router.isReady])
-
-
+  },[router.isReady,selectNumber,extrinsicPageNumber])
 
   let [isOpen, setIsOpen] = useState(false)
-
-
-  const {loading, error, data}: any = useQuery(Block_Info, {
-    variables:{
-      select:selectNumber,
-      first:(extrinsicPageNumber - 1) * selectNumber
-    },
-  })
-
-  const Copy = (span) => {
-
-    const spanText = document.getElementById(span).innerText;
-    const oInput = document.createElement('input');
-    oInput.value = spanText;
-    document.body.appendChild(oInput);
-    oInput.select();
-    document.execCommand('Copy');
-    oInput.className = 'oInput';
-    oInput.style.display = 'none';
-    document.body.removeChild(oInput);
-    if (oInput) {
-
-      setIsOpen(true)
-    }
-  }
 
   function closeModal() {
     setIsOpen(false)
   }
 
-  function openModal() {
-    setIsOpen(true)
-  }
+
 
   const GetExtrinsics = (props) => {
     const value = props.target.id;
-    const id = document.getElementById(props.target.id).innerText
-
-    router.push(`/extrinsics/${value}/${id}`)
+    console.log(value)
+    router.push(`/extrinsics/${value}`)
   }
 
 
@@ -295,27 +218,8 @@ const Transactions=()=> {
     await router.push(`/account/${e.target.id}`)
   }
 
-  if (loading) {
-    return (
-        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
-          <DetailsSkeleton/>
-        </div>
-    )
-  }
 
-  if (error) {
-    console.log(error)
-    return (
-        <div>
-          <Error/>
-        </div>
-    )
-
-  }
-
-  if (data) {
-    console.log(data.extrinsicInfos.nodes[0].fees)
-    const extrinsic = data_list(data)
+  if(extrinsicInfo.total!==""){
     return (
         <div className="mx-auto bg-white dark:bg-W3GBG  transition duration-700">
           <Heads/>
@@ -327,17 +231,6 @@ const Transactions=()=> {
                 <div className="text-xl my-2 lg:my-0 text-3xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                   Extrinsic
                 </div>
-                {/*<div className="flex ">*/}
-                {/*    <input type="text"*/}
-                {/*           className=" text-xs rounded-lg  pl-3 pr-20 w-96 border bg-white  dark:bg-neutral-900  dark:text-white dark:focus:border-neutral-400 focus:border-neutral-700    dark:border-neutral-700 outline-none"*/}
-                {/*           placeholder="Search transactions, blocks, programs and token"*/}
-                {/*           autoComplete="off"*/}
-                {/*    />*/}
-                {/*    <div className="flex justify-center z-10 text-gray-800 dark:text-gray-300 text-3xl py-3 -ml-11">*/}
-                {/*        <i className="fa fa-search" aria-hidden="true"></i></div>*/}
-
-
-                {/*</div>*/}
 
               </div>
               <div className="my-5 overflow-x-auto shadow dark:bg-W3GInfoBG rounded-lg ">
@@ -358,44 +251,44 @@ const Transactions=()=> {
                       </tr>
                       </thead>
                       <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
-                      {extrinsic.map(item => (
-                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
+                      {extrinsicInfo.items.map(item => (
+                          <tr key={item.block_num} className="hover:bg-gray-200 dark:hover:bg-neutral-600 ">
                             <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
-                              <button id={item.extrinsicHeight} className="w-20" onClick={GetExtrinsics}>
-                                {item.id}
+                              <button id={item.extrinsic_hash} className="w-20" onClick={GetExtrinsics}>
+                                {item.block_num}-{item.extrinsic_num}
                               </button>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400  font-medium ">
-                              <button id={item.extrinsicHeight} onClick={GetExtrinsics}>
-                                {classNames(showAccount(item.extrinsicHeight,))}
+                              <button id={item.extrinsic_hash} onClick={GetExtrinsics}>
+                                {classNames(showAccount(item.extrinsic_hash))}
                               </button>
                             </td>
                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                              {item.time}
+                              {GetBlockData(item.timestamp)}
                             </td>
 
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                              { item.state ? "success" : "fail"}
+                              {item.success ? "success" : "fail"}
                             </td>
-                              <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                                {classNames(item.signerId == 'system'? "system": showSmallAccount(item.signerId))}
-                              </td>
-                              {/*<button onClick={() => {*/}
-                              {/*  // @ts-ignore*/}
-                              {/*  Copy(item.address);*/}
-                              {/*}}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
-                              {/*</button>*/}
-                              {/*<button onClick={getAccount} className="text-blue-400 dark:text-indigo-400" id={item.address}>*/}
-                              {/*  {item.by}*/}
+                            <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                              {classNames(item.is_signed ? showSmallAccount(item.signer) : "system")}
+                            </td>
+                            {/*<button onClick={() => {*/}
+                            {/*  // @ts-ignore*/}
+                            {/*  Copy(item.address);*/}
+                            {/*}}><i className="fa fa-clone mr-1  " aria-hidden="true"></i>*/}
+                            {/*</button>*/}
+                            {/*<button onClick={getAccount} className="text-blue-400 dark:text-indigo-400" id={item.address}>*/}
+                            {/*  {item.by}*/}
                             {/*</button>*/}
                             <td className="px-6 py-4 whitespace-nowrap text-sm  text-gray-500 dark:text-zinc-300">
                               <div className="flex justify-center ">
-                                  <div  className="flex">
-                                    {item.fees}
-                                    <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
-                                       W3G
-                                    </div>
+                                <div  className="flex">
+                                  {(parseFloat(String(cropData((JSON.parse(item.weight_info).partialFee / Math.pow(10, 18)), 5))))}
+                                  <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
+                                    W3G
                                   </div>
+                                </div>
                               </div>
                             </td>
                           </tr>
@@ -404,7 +297,7 @@ const Transactions=()=> {
                     </table>
                   </div>
 
-                  <Sort data={data}></Sort>
+                  <Sort data={extrinsicInfo}></Sort>
                 </div>
               </div>
 
@@ -468,6 +361,14 @@ const Transactions=()=> {
 
         </div>
     )
+  }else{
+    return (
+        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+          <DetailsSkeleton/>
+        </div>
+    )
   }
+
+
 }
-export default Transactions
+export default Extrinsic
