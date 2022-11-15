@@ -9,7 +9,7 @@ import {DarkModeAtom,  EventValue} from "../../jotai";
 import {BlockSkeleton, DetailsSkeleton} from "../../components/skeleton";
 import Heads from "../../components/head";
 import client from "../../post/post";
-import {cropData} from "../math";
+import {cropData} from "../../utils/math";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')

@@ -14,7 +14,7 @@ import Error from "../../components/error";
 import {showAccount, showSmallAccount} from "../../utils";
 import Heads from "../../components/head";
 import client from "../../post/post";
-import { cropData } from "../math";
+import { cropData } from "../../utils/math";
 
 
 function classNames(...classes) {
