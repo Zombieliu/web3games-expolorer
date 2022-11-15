@@ -3,7 +3,7 @@ import { atomWithStorage } from 'jotai/utils'
 
 
 // Set the string key and the initial value
-const DarkModeAtom = atomWithStorage('darkMode', false)
+const DarkModeAtom = atomWithStorage('darkMode', true)
 
 
 

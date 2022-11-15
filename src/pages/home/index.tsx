@@ -810,12 +810,12 @@ const News = () =>{
                 <div className="flex w-96 text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                     News
                 </div>
-                <div className="  rounded-lg p-2 dark:bg-neutral-800 shadow-2xl ">
+                <div className="  rounded-lg p-4  shadow-2xl ">
                     <div className="w-full ">
                         <div className=" "  id="container" >
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                <a className="twitter-timeline"  data-width="400"  data-height="620" >
-                                    {/*data-theme="dark"*/}
+                                <a className="twitter-timeline"  data-width="400"  data-height="620"  data-theme="dark">
+
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
 
