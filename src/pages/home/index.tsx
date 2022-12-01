@@ -184,16 +184,14 @@ function DataDiff (blocktime) {
 
     const seconds = parseInt(String(Number(milliseconds) / 1000));
 
+    const minutes = parseInt(String(seconds / 60));
+    console.log(seconds)
+    if (minutes % 60 >= 1){
+        return seconds % 60 + 60 - 18
 
-    return seconds
-    // const minutes = parseInt(String(seconds / 60));
-    // console.log(seconds)
-    // if (minutes % 60 >= 1){
-    //     return seconds % 60 + 60 - 18
-    //
-    // }else {
-    //     return seconds % 60
-    // }
+    }else {
+        return seconds % 60
+    }
 }
 
 const Search = () =>{

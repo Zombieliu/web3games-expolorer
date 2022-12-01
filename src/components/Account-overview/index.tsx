@@ -48,9 +48,9 @@ const overview = [
   // },
 ]
 
-const AccountOverview=()=>{
+const AccountOverview=(props:any)=>{
   const [account,] = useAtom(AccountValue);
-  const [balance,setBalance] = useAtom(AccountBalanceValue);
+
   let [isOpen, setIsOpen] = useState(false);
   const [pathname,setPathname] = useState("")
   const router = useRouter()
@@ -62,10 +62,11 @@ const AccountOverview=()=>{
       }else{
         document.documentElement.classList.remove('dark');
       }
+
       const content = router.asPath
       const fetchUserBounty = async () => {
         setPathname(content)
-        console.log(`${content}`)
+
       }
       fetchUserBounty()
     }
@@ -162,9 +163,9 @@ const AccountOverview=()=>{
 
           <div className="">
             <div className="flex mb-3">
-            <div className="font-semibold mr-1 dark:text-white"> {balance}
-              <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">W3G</div>
-            </div> <div className="text-gray-600 dark:text-gray-200">($55.2)</div>
+            <div className="font-semibold mr-1 dark:text-white">{props.data.amount}  </div>
+            <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">W3G</div>
+            <div className="text-gray-600 dark:text-gray-200">($55.2)</div>
             </div>
             {/*<div>*/}
             {/*  <div className="flex mb-3">*/}
@@ -193,7 +194,7 @@ const AccountOverview=()=>{
                         </div>
                       </div>
                       <div className="mt-1">
-                        {balance}
+                        {props.data.amount}
                       </div>
                       <div className="mt-1">
                         $55.2
@@ -293,7 +294,7 @@ const AccountOverview=()=>{
 
             <div className="">
               <div className="flex mb-3">
-                <div className="font-semibold mr-1 "> {balance} </div>
+                <div className="font-semibold mr-1 ">  {props.data.amount} </div>
                 <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                   W3G
                 </div>

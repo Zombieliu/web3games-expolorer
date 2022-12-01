@@ -13,6 +13,8 @@ import {DetailsSkeleton} from "../../components/skeleton";
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {showAccount} from "../../utils";
 import Heads from "../../components/head";
+import {chain_api} from "../../chain/web3games";
+import {cropData} from "../../utils/math";
 
 
 function classNames(...classes) {
@@ -226,32 +228,18 @@ const Sort=(props:any)=>{
 const Account=()=>{
   const [account,setAccount] = useAtom(AccountValue)
   const [,setBalance] = useAtom(AccountBalanceValue)
+  const accountInfo = {
+    amount:0,
+  }
+  const [AccountInfo,setAccountInfo] = useState(accountInfo)
   const router = useRouter();
-  useEffect(()=>{
+  useEffect( () =>{
     if (router.isReady){
-      const {pid} = router.query;
-      setAccount(`${pid}`)
-      axios.get(`https://explorer-devnet-restful-api.web3games.org/api/get_balance?account=${pid}`, {
-      })
-          .then(function (response) {
-            if (response.data.data.length > 19){
-              const data = response.data.data
-              const new_data = data.substring(0,16)
-              console.log(new_data)
-              const result = insertStr(new_data,8,'.')
-              setBalance(result)
-            }else if(response.data.data.length > 8 && response.data.data.length < 20){
-              const data = response.data.data
-              const result = insertStr(data,-8,'.')
-              setBalance(result)
-            }
-            else{
-              setBalance(response.data.data)
-            }
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+      const pid = (router.query);
+      setAccount(`${pid.pid}`)
+
+      console.log("xxxxxx",pid.pid)
+
 
     }
   },[router.isReady])
@@ -291,7 +279,7 @@ const Account=()=>{
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-10 mb-14">
               <div>
-                <AccountOverview></AccountOverview>
+                <AccountOverview data={AccountInfo}></AccountOverview>
               </div>
               <div className="  rounded-lg mt-2">
                 <div className="mt-5">
