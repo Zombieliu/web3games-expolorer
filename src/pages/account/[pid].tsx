@@ -5,7 +5,14 @@ import Tail from '../../components/tail';
 import AccountOverview from '../../components/Account-overview';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue, BlockPageNumberValue, DarkModeAtom, SelectNumber} from "../../jotai";
+import {
+  AccountBalanceValue,
+  AccountInfo,
+  AccountValue,
+  BlockPageNumberValue,
+  DarkModeAtom,
+  SelectNumber
+} from "../../jotai";
 import {useQuery} from "graphql-hooks";
 import axios from "axios";
 import Error from "../../components/error";
@@ -15,6 +22,7 @@ import {showAccount} from "../../utils";
 import Heads from "../../components/head";
 import {chain_api} from "../../chain/web3games";
 import {cropData} from "../../utils/math";
+
 
 
 function classNames(...classes) {
@@ -227,18 +235,24 @@ const Sort=(props:any)=>{
 }
 const Account=()=>{
   const [account,setAccount] = useAtom(AccountValue)
-  const [,setBalance] = useAtom(AccountBalanceValue)
-  const accountInfo = {
-    amount:0,
-  }
-  const [AccountInfo,setAccountInfo] = useState(accountInfo)
+
+  const [,setAccountInfo] = useAtom(AccountInfo)
   const router = useRouter();
-  useEffect( () =>{
+  useEffect(() =>{
     if (router.isReady){
       const pid = (router.query);
       setAccount(`${pid.pid}`)
 
-      console.log("xxxxxx",pid.pid)
+      const query_balance = async ()=>{
+        const api = await chain_api()
+        const balance = await api.query.system.account(pid.pid);
+        const accountInfo = {
+          amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+        }
+        setAccountInfo(accountInfo)
+        console.log(`${balance.data.free}`)
+      }
+      query_balance()
 
 
     }
@@ -279,7 +293,7 @@ const Account=()=>{
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-10 mb-14">
               <div>
-                <AccountOverview data={AccountInfo}></AccountOverview>
+                <AccountOverview ></AccountOverview>
               </div>
               <div className="  rounded-lg mt-2">
                 <div className="mt-5">

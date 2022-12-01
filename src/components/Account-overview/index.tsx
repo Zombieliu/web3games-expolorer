@@ -3,8 +3,10 @@ import React, {Fragment, useEffect, useState} from 'react';
 import { Dialog, Popover, Transition } from '@headlessui/react';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountValue, DarkModeAtom} from "../../jotai";
+import {AccountBalanceValue, AccountInfo, AccountValue, DarkModeAtom} from "../../jotai";
 import {useRouter} from "next/router";
+import {chain_api} from "../../chain/web3games";
+import {cropData} from "../../utils/math";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -55,6 +57,9 @@ const AccountOverview=(props:any)=>{
   const [pathname,setPathname] = useState("")
   const router = useRouter()
   const [enabledNightMode,] = useAtom(DarkModeAtom)
+
+  const [accountInfo,setAccountInfo] = useAtom(AccountInfo)
+
   useEffect(()=>{
     if (router.isReady){
       if (enabledNightMode == true){
@@ -66,7 +71,13 @@ const AccountOverview=(props:any)=>{
       const content = router.asPath
       const fetchUserBounty = async () => {
         setPathname(content)
-
+        const api = await chain_api()
+        const balance = await api.query.system.account(account);
+        const accountInfo = {
+          amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+        }
+        setAccountInfo(accountInfo)
+        console.log(`${balance.data.free}`)
       }
       fetchUserBounty()
     }
@@ -163,7 +174,7 @@ const AccountOverview=(props:any)=>{
 
           <div className="">
             <div className="flex mb-3">
-            <div className="font-semibold mr-1 dark:text-white">{props.data.amount}  </div>
+            <div className="font-semibold mr-1 dark:text-white"> {accountInfo.amount} </div>
             <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">W3G</div>
             <div className="text-gray-600 dark:text-gray-200">($55.2)</div>
             </div>
@@ -194,7 +205,7 @@ const AccountOverview=(props:any)=>{
                         </div>
                       </div>
                       <div className="mt-1">
-                        {props.data.amount}
+                        {accountInfo.amount}
                       </div>
                       <div className="mt-1">
                         $55.2
@@ -253,7 +264,7 @@ const AccountOverview=(props:any)=>{
                               </td>
                               <td className="px-6 py-2 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                 <div className="mt-1 ">
-                                  {item.amount}
+                                  {accountInfo.amount}
                                 </div>
                               </td>
 
@@ -294,7 +305,7 @@ const AccountOverview=(props:any)=>{
 
             <div className="">
               <div className="flex mb-3">
-                <div className="font-semibold mr-1 ">  {props.data.amount} </div>
+                <div className="font-semibold mr-1 ">    {accountInfo.amount}  </div>
                 <div className="ml-0.5 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                   W3G
                 </div>

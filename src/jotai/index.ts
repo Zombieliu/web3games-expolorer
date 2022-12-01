@@ -1,5 +1,6 @@
 import {atom} from "jotai";
 import { atomWithStorage } from 'jotai/utils'
+import {useState} from "react";
 
 
 // Set the string key and the initial value
@@ -29,4 +30,10 @@ const PopUpBoxInfo = atom({
 })
 const PopUpBoxState = atom(false)
 
-export{PopUpBoxInfo,PopUpBoxState,AccountValue,AccountBalanceValue,DarkModeAtom,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue,SelectNumber}
+
+const accountInfo = {
+    amount:0,
+}
+const AccountInfo = atom(accountInfo)
+
+export{PopUpBoxInfo,AccountInfo,PopUpBoxState,AccountValue,AccountBalanceValue,DarkModeAtom,EventValue,BlocksDetailsValue,CopyValue,BlockPageNumberValue,extrinsicPageNumberValue,SelectNumber}
