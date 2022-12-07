@@ -3,10 +3,11 @@ import React, {Fragment, useEffect, useState} from 'react';
 import { Dialog, Popover, Transition } from '@headlessui/react';
 import { CheckCircleIcon, ChevronDownIcon } from '@heroicons/react/solid';
 import {useAtom} from "jotai";
-import {AccountBalanceValue, AccountInfo, AccountValue, DarkModeAtom} from "../../jotai";
+import {AccountBalanceValue, AccountInfo, AccountValue, CopyPopUpBoxState, DarkModeAtom} from "../../jotai";
 import {useRouter} from "next/router";
 import {chain_api} from "../../chain/web3games";
 import {cropData} from "../../utils/math";
+import {Copy_Pop_up_box} from "../pop_up_box";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -53,47 +54,22 @@ const overview = [
 const AccountOverview=(props:any)=>{
   const [account,] = useAtom(AccountValue);
 
-  let [isOpen, setIsOpen] = useState(false);
+  const [copy_pop_up_boxState,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
   const [pathname,setPathname] = useState("")
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
 
-  const [accountInfo,setAccountInfo] = useAtom(AccountInfo)
+  const [accountInfo,] = useAtom(AccountInfo)
 
   useEffect(()=>{
     if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
-      }
-
       const content = router.asPath
       const fetchUserBounty = async () => {
         setPathname(content)
-        const api = await chain_api()
-        const balance = await api.query.system.account(account);
-        const accountInfo = {
-          amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
-        }
-        setAccountInfo(accountInfo)
-        console.log(`${balance.data.free}`)
+
       }
       fetchUserBounty()
     }
   },[router.isReady])
-
-  // function insertStr(source, start, newStr){
-  //   return source.slice(0, start) + newStr + source.slice(start);
-  // }
-  //
-  //
-  // useEffect(()=>{
-  //     if (Number(balance) >= 100000000){
-  //       const result = insertStr(balance,9,'.')
-  //       setBalance(result)
-  //     }
-  // },[])
 
   const navigation = [
     { id:1 ,name: 'Extrinsics ', href:`/account/${account}` },
@@ -102,7 +78,6 @@ const AccountOverview=(props:any)=>{
     { id:4 ,name: 'NFT Transfers', href:`/account/nft-transfers/${account}` },
     { id:5 ,name: 'MT Transfers', href:`/account/mt-transfers/${account}` },
   ]
-
 
   const Copy=(span)=>{
 
@@ -116,17 +91,11 @@ const AccountOverview=(props:any)=>{
     oInput.style.display = 'none';
     document.body.removeChild(oInput);
     if(oInput){
-      setIsOpen(true)
+      setCopy_Sop_up_boxState(true)
+
     }
   }
 
-  function closeModal() {
-    setIsOpen(false)
-  }
-
-  function openModal() {
-    setIsOpen(true)
-  }
   return(
     <div>
       <div className="lg:flex justify-between ">
@@ -142,7 +111,7 @@ const AccountOverview=(props:any)=>{
         {/*    <i className="fa fa-search" aria-hidden="true"></i></div>*/}
         {/*</div>*/}
       </div>
-      <div className="flex dark:text-white items-center">
+      <div className="flex flex-wrap dark:text-white items-center">
         <div id="account" className="text-xs mt-2 lg:text-base mr-2 ">
           {account}
         </div>
@@ -153,7 +122,6 @@ const AccountOverview=(props:any)=>{
           }}> <img className="w-4 ml-1 mt-3" src="/copy.svg" alt=""/></button>
         </div>
       </div>
-
       <div className="lg:flex justify-between py-6 w-full  ">
         <div className="bg-white dark:bg-neutral-800 p-5 rounded-lg w-full mb-2 lg:w-1/2 mr-10 shadow-lg">
           <div className="text-2xl font-semibold mb-3  dark:text-gray-100">
@@ -319,11 +287,9 @@ const AccountOverview=(props:any)=>{
           </div>
         </div>
       </div>
-
-
-      <div className="flex justify-between mt-5  w-full font-semibold text-sm lg:text-lg bg-white shadow-lg dark:bg-[#262626]  p-2 rounded-md">
+      <div className="flex flex-wrap justify-between mt-5  w-full font-semibold text-sm lg:text-lg bg-white shadow-lg dark:bg-[#262626]  p-2 rounded-md">
         {navigation.map(item=>(
-          <div key={item.id} className="pr-8 text-gray-500 ">
+          <div key={item.id} className="pr-8 text-gray-500 my-2 md:my-0">
             <Link href={item.href}>
               <a className={classNames(`${item.href}` == `${pathname}` ?"bg-clip-text text-transparent  bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3 ":"",'p-2 ')}>
                 {item.name}
@@ -332,58 +298,6 @@ const AccountOverview=(props:any)=>{
           </div>
         ))}
       </div>
-
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-40  -mt-96"
-          onClose={closeModal}
-        >
-          <div className="min-h-screen px-4 text-center ">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0" />
-            </Transition.Child>
-
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <div className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                <div className="flex justify-center">
-                  <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
-                </div>
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
-                  Copy successfully !
-                </Dialog.Title>
-              </div>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition>
     </div>
   )
 }

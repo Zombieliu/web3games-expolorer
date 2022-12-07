@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom, SelectNumber} from "../../jotai";
+import {PageNumberValue, DarkModeAtom, SelectNumber} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import {showAccount} from "../../utils";
@@ -52,16 +52,12 @@ const Sort=(props:any)=>{
 
 
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
-  const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
+
+  const [PageNumber,SetPageNumber] = useAtom(PageNumberValue)
   const [select_number,setSelect_number] = useAtom(SelectNumber)
   useEffect(()=>{
     if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
-      }
+
     }
   },[router.isReady])
 
@@ -72,7 +68,7 @@ const Sort=(props:any)=>{
 
   const Select = (e) =>{
     setSelect_number(Number(e.target.value))
-    SetBlockPageNumber(1)
+    SetPageNumber(1)
   }
 
   let block_number_pages:number = Math.ceil(block_number / select_number)
@@ -82,24 +78,24 @@ const Sort=(props:any)=>{
   }
 
   const addPageCounter = async ()=>{
-    if (BlockPageNumber != block_number_pages){
-      SetBlockPageNumber(BlockPageNumber + 1)
+    if (PageNumber != block_number_pages){
+      SetPageNumber(PageNumber + 1)
     }
 
   }
 
   const decPageCounter = ()=>{
-    if (BlockPageNumber != 1){
-      SetBlockPageNumber(BlockPageNumber - 1)
+    if (PageNumber != 1){
+      SetPageNumber(PageNumber - 1)
     }
   }
 
   const lastPage = ()=>{
-    SetBlockPageNumber(block_number_pages)
+    SetPageNumber(block_number_pages)
   }
 
   const firstPage = ()=>{
-    SetBlockPageNumber(1)
+    SetPageNumber(1)
   }
 
   return(
@@ -137,7 +133,7 @@ const Sort=(props:any)=>{
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-              Page {BlockPageNumber} of {block_number_pages}
+              Page {PageNumber} of {block_number_pages}
             </div>
             <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
               <span className="sr-only">Next</span>
@@ -158,10 +154,7 @@ const Sort=(props:any)=>{
 
 const Blocks=()=>{
   const router = useRouter()
-  let [isOpen, setIsOpen] = useState(false)
-
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
-  const [BlockPageNumber,] = useAtom(BlockPageNumberValue)
+  const [PageNumber,] = useAtom(PageNumberValue)
   const [selectNumber,] = useAtom(SelectNumber)
   const extrinsic = {
     total:"",
@@ -178,15 +171,9 @@ const Blocks=()=>{
   const [blocksInfo,setBlocksInfo] = useState(extrinsic)
   useEffect(()=>{
     if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
-      }
-
       const call = async () =>{
         let ret = await client.callApi('block/GetAll', {
-          pageIndex: (BlockPageNumber - 1) * selectNumber,
+          pageIndex: (PageNumber - 1) * selectNumber,
           limit: selectNumber
         });
         if (ret.res != undefined) {
@@ -201,7 +188,7 @@ const Blocks=()=>{
       }
       call()
     }
-  },[router.isReady,selectNumber,BlockPageNumber])
+  },[router.isReady,selectNumber,PageNumber])
 
 
   const GetBlock = (props) => {

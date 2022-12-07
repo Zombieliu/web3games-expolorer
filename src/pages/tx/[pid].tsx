@@ -7,7 +7,7 @@ import {useQuery} from "graphql-hooks";
 import {useManualQuery } from 'graphql-hooks'
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {DarkModeAtom,  EventValue} from "../../jotai";
+import {CopyPopUpBoxState, DarkModeAtom,  EventValue} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 
@@ -155,15 +155,8 @@ function data_type(data:any){
 
 const Overview = (props:any) => {
     console.log(props)
-    let [isOpen, setIsOpen] = useState(false)
+    const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
 
-    function closeModal() {
-        setIsOpen(false)
-    }
-
-    function openModal() {
-        setIsOpen(true)
-    }
 
     const Copy = (span) => {
 
@@ -177,8 +170,7 @@ const Overview = (props:any) => {
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
         if (oInput) {
-
-            setIsOpen(true)
+            setCopy_Sop_up_boxState(true)
         }
     }
 
@@ -341,68 +333,6 @@ const Overview = (props:any) => {
                     </div>
                 </div>
             </div>
-            <Transition appear show={isOpen} as={Fragment}>
-                <Dialog
-                    as="div"
-                    className="fixed inset-0 z-40  "
-                    onClose={closeModal}
-                >
-                    <div className="min-h-screen px-4 text-center">
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0"
-                            enterTo="opacity-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                        >
-                            <Dialog.Overlay className="fixed inset-0"/>
-                        </Transition.Child>
-
-                        {/* This element is to trick the browser into centering the modal contents. */}
-                        <span
-                            className="inline-block h-screen align-middle"
-                            aria-hidden="true"
-                        >
-                          &#8203;
-                        </span>
-                        <Transition.Child
-                            as={Fragment}
-                            enter="ease-out duration-300"
-                            enterFrom="opacity-0 scale-95"
-                            enterTo="opacity-100 scale-100"
-                            leave="ease-in duration-200"
-                            leaveFrom="opacity-100 scale-100"
-                            leaveTo="opacity-0 scale-95"
-                        >
-                            <div
-                                className="inline-block  text-center max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-
-                                <div className="flex justify-center">
-                                    <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                                </div>
-                                <Dialog.Title
-                                    as="h3"
-                                    className="text-lg font-medium leading-6 text-gray-900"
-                                >
-                                    Copy successfully !
-                                </Dialog.Title>
-
-                                {/*<div className="mt-4">*/}
-                                {/*    <button*/}
-                                {/*        type="button"*/}
-                                {/*        className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"*/}
-                                {/*        onClick={closeModal}*/}
-                                {/*    >*/}
-                                {/*        Got it, thanks!*/}
-                                {/*    </button>*/}
-                                {/*</div>*/}
-                            </div>
-                        </Transition.Child>
-                    </div>
-                </Dialog>
-            </Transition>
         </>
     )
 
@@ -468,7 +398,6 @@ const Events = (props) =>{
 
 const Extrinsics=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
     const [Extrinsics, SetExtrinsicInfo] = useState("")
     const [fetchExtrinsic] = useManualQuery(Tx_Info)
 
@@ -485,11 +414,7 @@ const Extrinsics=()=>{
                 }
             }
             fetchExtrinsicInfo(`${pid}`)
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
+
         }
     },[router.isReady])
 

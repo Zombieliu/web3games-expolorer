@@ -9,7 +9,7 @@ import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useManualQuery } from 'graphql-hooks'
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom, PopUpBoxInfo, PopUpBoxState} from "../../jotai";
+import {PageNumberValue, DarkModeAtom, PopUpBoxInfo, PopUpBoxState} from "../../jotai";
 import {BlockSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Head from "next/head";
@@ -186,11 +186,11 @@ function DataDiff (blocktime) {
 
     const minutes = parseInt(String(seconds / 60));
     console.log(seconds)
-    if (minutes % 60 >= 1){
-        return seconds % 60 + 60 - 18
+    if (blocktime % 60 >= 1){
+        return seconds - 6
 
     }else {
-        return seconds % 60
+        return seconds - 6
     }
 }
 
@@ -720,7 +720,7 @@ const Blocks = () =>{
             });
             console.log(ret)
             if (ret.res != undefined) {
-                console.log(JSON.parse(ret.res.content).items)
+                console.log(JSON.parse(ret.res.content).items.timestamp)
                 setBlocksInfo(JSON.parse(ret.res.content).items)
             }
             // Error
@@ -801,18 +801,31 @@ const Blocks = () =>{
 }
 
 const News = () =>{
+    const router = useRouter()
+    const [NightMode,setNightMode] = useState(false)
     const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
+    useEffect(()=>{
+        if (router.isReady){
+            if (enabledNightMode == true){
+                setNightMode(true)
+                document.documentElement.classList.add('dark');
+            }else{
+                setNightMode(false)
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    },[router.isReady,enabledNightMode])
     return(
         <>
             <div className="w-96">
                 <div className="flex w-96 text-gray-500 dark:text-gray-200 text-2xl mb-2.5 font-semibold">
                     News
                 </div>
-                <div className="  rounded-lg p-4  shadow-2xl ">
+                <div className="  rounded-lg p-2  shadow-2xl ">
                     <div className="w-full ">
                         <div className=" "  id="container" >
                             <Link href="https://twitter.com/web3games/lists/1495961454490849280?ref_src=twsrc%5Etfw">
-                                <a className="twitter-timeline"  data-width="400"  data-height="620"  data-theme="dark">
+                                <a className="twitter-timeline"  data-width="400"  data-height="620" data-theme={NightMode?"dark":""} >
 
                                     A Twitter List by web3games</a></Link>
                             <Script src="https://platform.twitter.com/widgets.js" charSet="utf-8" ></Script>
@@ -829,25 +842,22 @@ const News = () =>{
 
 const Home= ()  =>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
 
     useEffect(()=>{
-        if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
-        }
+
     },[router.isReady])
 
     return(
         <div className="mx-auto bg-gray-50 dark:bg-W3GBG  transition duration-700">
             <Heads/>
             <Header/>
+
             <div className="max-w-7xl mx-auto py-16  px-4 ">
+
                 <div className=" mb-14">
+
                     <div className="my-10">
+
                         <div className="flex">
                         <div className="text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">
                             Web3Games Chain

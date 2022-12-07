@@ -150,16 +150,6 @@ const Address=()=>{
     }
   },[router.isReady])
 
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
-  useEffect(()=>{
-    if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
-      }
-    }
-  },[router.isReady])
 
 
 

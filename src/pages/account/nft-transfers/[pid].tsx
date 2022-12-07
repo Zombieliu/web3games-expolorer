@@ -1,48 +1,163 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../../jotai";
+import {
+  AccountInfo,
+  AccountValue,
+  CopyPopUpBoxState,
+  PageNumberValue,
+  SelectNumber
+} from "../../../jotai";
 import Header from "../../../components/header";
 import AccountOverview from "../../../components/Account-overview";
 import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {Dialog, Transition} from "@headlessui/react";
 import Tail from "../../../components/tail";
-import {showAccount} from "../../../utils";
+import {showAccount, showSmallAccount} from "../../../utils";
 import Heads from "../../../components/head";
+import client from "../../../post/post";
+import {chain_api} from "../../../chain/web3games";
+import {cropData} from "../../../utils/math";
+import Link from "next/link";
+import {Copy_Pop_up_box} from "../../../components/pop_up_box";
 
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const NFT_Transfers = () =>{
-  const tokenstitle=[
-    {
-      title:"Txn Hash"
-    },
-    {
-      title:"Age"
-    },
-    {
-      title:"From"
-    },
-    {
-      title:""
-    },
-    {
-      title:"To"
-    },
-    {
-      title:"Token ID"
-    },
+const Sort=(props:any)=>{
+  const router = useRouter()
+  const [PageNumber,SetPageNumber] = useAtom(PageNumberValue)
+  const [select_number,setSelect_number] = useAtom(SelectNumber)
+  useEffect(()=>{
+    if (router.isReady){
 
-    {
-      title:"Token"
-    },
-    {
-      title:"Details"
     }
-  ]
+  },[router.isReady])
+
+  const block_number:number =1
+  // props.data
+
+  const Select = (e) =>{
+    setSelect_number(Number(e.target.value))
+    SetPageNumber(1)
+  }
+
+  let block_number_pages:number = Math.ceil(block_number / select_number)
+
+  if (block_number_pages > 500){
+    block_number_pages = 500
+  }
+
+  const addPageCounter = async ()=>{
+    if (PageNumber != block_number_pages){
+      SetPageNumber(PageNumber + 1)
+    }
+
+  }
+
+  const decPageCounter = ()=>{
+    if (PageNumber != 1){
+      SetPageNumber(PageNumber - 1)
+    }
+  }
+
+  const lastPage = ()=>{
+    SetPageNumber(block_number_pages)
+  }
+
+  const firstPage = ()=>{
+    SetPageNumber(1)
+  }
+
+  return(
+      <div>
+        <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
+          <div className="flex text-black dark:text-white items-center">
+            Show
+
+            <select
+                onChange={Select}
+                id="select"
+                className=" block  w-13   p-1 outline-none  text-base  border border-[#7ADFD5] mx-1 sm:text-sm rounded-md text-black bg-white  dark:bg-W3GInfoBG dark:text-white"
+                defaultValue={select_number}
+            >
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+
+            Records
+
+          </div>
+          <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
+            <button
+                onClick={firstPage}
+                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F]  text-sm font-semibold  "
+            >
+              <span className="">First</span>
+            </button>
+            <button
+                onClick={decPageCounter}
+                className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+              Page {PageNumber} of {block_number_pages}
+            </div>
+            <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+                onClick={lastPage}
+                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+            >
+              <span className="">Last</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+  )
+}
+const tokenstitle=[
+  {
+    title:"Txn Hash"
+  },
+  {
+    title:"Age"
+  },
+  {
+    title:"From"
+  },
+  {
+    title:""
+  },
+  {
+    title:"To"
+  },
+  {
+    title:"Token ID"
+  },
+  // {
+  //   title:"Details"
+  // }
+]
+const Transfers =
+    [
+      {
+        extrinsicHash:"",
+        timestamp:"",
+        fromAccount:"",
+        toAccount:"",
+        nonFungibleTokenId:"",
+      }
+    ]
+const NFT_Transfers = () =>{
 
   const extrinsic = [
     {
@@ -113,39 +228,68 @@ const NFT_Transfers = () =>{
 
 
   ]
-  // const extrinsic_number = props.data.extrinsicInfos.totalCount
-  //
-  let extrinsic_number_pages = (20 / 20)
-  //
-  //
-  // if (extrinsic_number_pages > 500){
-  //     extrinsic_number_pages = 500
-  // }
-  const [isOpen, setIsOpen] = useState(false)
-  const router = useRouter()
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
-  const [extrinsicPageNumber,SetextrinsicPageNumber] = useAtom(extrinsicPageNumberValue)
-  const [select_number,setSelect_number] = useAtom(SelectNumber)
+  const router = useRouter();
+  const [transfers,setTransfers] = useState(Transfers)
   const [account,setAccount] = useAtom(AccountValue)
+  const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
+  const [,setAccountInfo] = useAtom(AccountInfo)
+  const [total,setTotal] = useState(0)
+  const [PageNumber,] = useAtom(PageNumberValue)
+  const [selectNumber,] = useAtom(SelectNumber)
+  const [requestState,setRequestState] = useState(false)
   useEffect(()=>{
     const {pid} = router.query;
     setAccount(`${pid}`)
+    const Account = `${pid}`
     if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
+      if (router.isReady){
+        const query_balance = async ()=>{
+          let  ret = await client.callApi('tokenNonFungible/ListNftTransfer', {
+            fromAccount: Account,
+            toAccount:Account,
+            pageIndex: (PageNumber - 1) * selectNumber,
+            limit: selectNumber
+          });
+          console.log(JSON.parse(ret.res.content))
+          if(ret.res != undefined){
+            const data = JSON.parse(ret.res.content)
+            setTotal(data.total)
+            console.log('xxxxx......',data)
+            const info = []
+            for (let i = 0 ;i<data.total ;i++){
+              let result= {
+                fromAccount:data.items[i].fromAccount,
+                toAccount:data.items[i].toAccount,
+                extrinsicHash:data.items[i].extrinsicHash,
+                timestamp:data.items[i].timestamp,
+                nonFungibleTokenId:data.items[i].nonFungibleTokenId,
+              }
+              info.push(result)
+              setTransfers(info)
+            }
+            setRequestState(true)
+          }
+
+          const api = await chain_api()
+          const balance = await api.query.system.account(Account);
+          if(balance !==undefined){
+            const accountInfo = {
+              amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+            }
+            setAccountInfo(accountInfo)
+          }
+
+          // console.log(`${balance.data.free}`)
+        }
+        query_balance()
       }
     }
   },[router.isReady])
 
-  const Select = (e) =>{
-    setSelect_number(Number(e.target.value))
-    SetextrinsicPageNumber(1)
-  }
+
   const Copy=(span)=>{
-    console.log(span)
-    const spanText = document.getElementById(span).innerText;
+
+    const spanText = span;
     const oInput = document.createElement('input');
     oInput.value = spanText;
     document.body.appendChild(oInput);
@@ -155,43 +299,19 @@ const NFT_Transfers = () =>{
     oInput.style.display = 'none';
     document.body.removeChild(oInput);
     if(oInput){
-      setIsOpen(true)
+      setCopy_Sop_up_boxState(true)
     }
   }
-  const addPageCounter = ()=>{
-    // if (extrinsicPageNumber != extrinsic_number_pages){
-    //     SetextrinsicPageNumber(extrinsicPageNumber + 1)
-    // }
-  }
 
-  const decPageCounter = ()=>{
-    // if (extrinsicPageNumber != 1){
-    //     SetextrinsicPageNumber(extrinsicPageNumber - 1)
-    // }
-  }
-
-  const lastPage = ()=>{
-    // SetextrinsicPageNumber(extrinsic_number_pages)
-  }
-
-  const firstPage = ()=>{
-    SetextrinsicPageNumber(1)
-  }
-
-  function closeModal() {
-    setIsOpen(false)
-  }
 
   const GetHash = (props) => {
     const value = props.target.id;
-    router.push(`/evm_transactionsDetail/${value}`)
+    router.push(`/extrinsics/${value}`)
   }
 
   const GetAddress = (props) =>{
     const value = props.target.id;
-    router.push(`/evm_address/${value}`).then(r => {
-      location.reload()
-    })
+    router.push(`/account/${value}`)
   }
 
 
@@ -202,7 +322,10 @@ const NFT_Transfers = () =>{
         <div className="max-w-7xl mx-auto py-16  px-4 ">
           <div className="my-10 mb-14">
             <AccountOverview></AccountOverview>
-            <div className="rounded-lg mt-2">
+            <div className={total==0?"flex justify-center mt-10":"hidden"}>
+              No Data
+            </div>
+            <div className={total==0?"hidden":"rounded-lg mt-2"}>
               <div className="mt-5">
                 <div className="my-5 overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
                   <div className=" min-w-full  ">
@@ -222,179 +345,97 @@ const NFT_Transfers = () =>{
                         </tr>
                         </thead>
                         <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
-                        {extrinsic.map(item => (
-                            <tr key={item.TxhHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
-                              <td className="px-4 py-4 whitespace-nowrap   text-blue-400  font-medium">
-                                <div className="flex">
-                                  <button id={item.TxhHash} onClick={GetHash} >
-                                    {classNames(showAccount(item.TxhHash,))}
+                        {transfers.map(item => (
+                            <tr key={item.extrinsicHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
+                              <td className="px-6 py-4 whitespace-nowrap text-center  text-blue-400  font-medium">
+                                <div className="flex justify-center">
+                                  <button id={item.extrinsicHash} onClick={GetHash} >
+                                    {classNames(showAccount(item.extrinsicHash))}
                                   </button>
-
-                                  <div className={classNames(item.State?"hidden":"text-red-400")}>
-                                    <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                  </div>
                                 </div>
 
-
                               </td>
-
                               <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                                {item.Age} secs ago
+                                {item.timestamp}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap  text-blue-400   font-medium">
-                                <button id={item.From} onClick={GetAddress}  >
-                                  {classNames(showAccount(item.From,))}
-                                </button>
-                              </td>
-                              <td className=" py-4 whitespace-nowrap  font-medium text-white   font-medium">
-                                <div className={classNames(item.State?"bg-green-300 ":"bg-red-400","rounded-md p-0.5 px-2")}>
-                                  {classNames(item.State?"IN":"OUT")}
+                              <td className="px-6 py-4 whitespace-nowrap   text-gray-500 dark:text-zinc-300  font-medium">
+                                <div className={item.fromAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"hidden":""}>
+                                <div className={account ==item.fromAccount?"hidden":""}>
+                                  <button onClick={() => {
+                                    // @ts-ignore
+                                    Copy(`${item.fromAccount}`);}} className="text-neutral-600 ">
+                                    <img className="w-4 mr-1 -mb-1" src="/copy.svg" alt=""/>
+                                  </button>
+                                  <Link href={`/account/${item.fromAccount}`} className="text-gray-800 flex">
+                                    <a  className="mr-1 text-blue-400 ">
+                                      {showSmallAccount(item.fromAccount)}
+                                    </a>
+                                  </Link>
                                 </div>
-                              </td>
-
-                              <td className="px-6 py-4 whitespace-nowrap  font-medium text-gray-500 dark:text-zinc-300  ">
-
-                                <button onClick={() => {
-                                  // @ts-ignore
-                                  Copy(`${item.To}`);}} className="text-neutral-600">
-                                   <img className="w-4 ml-1" src="/copy.svg" alt=""/>
-                                </button>
-                                <button id={item.To}   className="truncate w-36" >
-                                  Tether: USDT Stablecoin
-                                </button>
-                              </td>
-
-                              <td className="px-6 py-4 whitespace-nowrap text-blue-400 ">
-                                {item.TokenID}
-                              </td>
-
-                              <td className="px-6 py-4 whitespace-nowrap  text-blue-400 ">
-                                <div className=" flex items-center">
-                                  <img className="w-3 mr-1 rounded-full" src="/USDT.png" alt=""/>
-                                  ERC-721: Hip...ids
-                                </div>
-                              </td>
-
-                              <td className="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-zinc-300">
-
-                                <div className="text-white bg-neutral-600 p-1.5 rounded-md flex justify-center">
-                                  View NFT
-                                  <div className="ml-1">
-                                    <i className="fa fa-chevron-right" aria-hidden="true"></i>
+                                <div className={account ==item.fromAccount?"":"hidden"} >
+                                  <div  className="mr-1">
+                                    {showSmallAccount(item.fromAccount)}
                                   </div>
                                 </div>
+                                </div>
+                                <div className={item.fromAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"":"hidden"}>
+                                  Zero System Account
+                                </div>
                               </td>
+                              <td className="px-6 py-4 whitespace-nowrap  font-medium text-white   font-medium">
+                                <div className={classNames(true?"bg-green-300 ":"bg-red-400","rounded-md p-0.5 px-2")}>
+                                  {classNames(item.toAccount ==account?"IN":"OUT")}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap  font-medium text-gray-500 dark:text-zinc-300  ">
+                                <div className={item.toAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"hidden":""}>
+                                <div className={account ==item.toAccount?"hidden":""}>
+                                  <button onClick={() => {
+                                    // @ts-ignore
+                                    Copy(`${item.toAccount}`);}} className="text-neutral-600 ">
+                                    <img className="w-4 mr-1 -mb-1" src="/copy.svg" alt=""/>
+                                  </button>
+                                  <Link href={`/account/${item.toAccount}`} className="text-gray-800 flex">
+                                    <a  className="mr-1 text-blue-400 ">
+                                      {showSmallAccount(item.toAccount)}
+                                    </a>
+                                  </Link>
+                                </div>
+                                <div className={account ==item.toAccount?"":"hidden"} >
+
+                                  <button id={item.toAccount} onClick={GetAddress}  >
+                                    {showSmallAccount(item.toAccount)}
+                                  </button>
+                                </div>
+                                </div>
+                                <div className={item.toAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"":"hidden"}>
+                                  Zero System Account
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300 ">
+                                {item.nonFungibleTokenId}
+                              </td>
+                              {/*<td className="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-zinc-300">*/}
+
+                              {/*  <div className="text-white bg-neutral-600 p-1.5 rounded-md flex justify-center">*/}
+                              {/*    View NFT*/}
+                              {/*    <div className="ml-1">*/}
+                              {/*      <i className="fa fa-chevron-right" aria-hidden="true"></i>*/}
+                              {/*    </div>*/}
+                              {/*  </div>*/}
+                              {/*</td>*/}
                             </tr>
                         ))}
                         </tbody>
                       </table>
-                      <div>
-                        <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
-                          <div className="flex text-black dark:text-white items-center">
-                            Show
-
-                            <select
-                                onChange={Select}
-                                id="select"
-                                className=" block  w-13   p-1 outline-none  text-base  border border-[#7ADFD5] mx-1 sm:text-sm rounded-md text-black bg-white  dark:bg-W3GInfoBG dark:text-white"
-                                defaultValue={select_number}
-                            >
-                              <option value="20">20</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
-                            </select>
-
-                            Records
-
-                          </div>
-                          <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
-                            <button
-                                onClick={firstPage}
-                                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F]  text-sm font-semibold  "
-                            >
-                              <span className="">First</span>
-                            </button>
-                            <button
-                                onClick={decPageCounter}
-                                className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
-                            >
-                              <span className="sr-only">Previous</span>
-                              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                            </button>
-                            <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-                              Page {extrinsicPageNumber} of {extrinsic_number_pages}
-                            </div>
-                            <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-                              <span className="sr-only">Next</span>
-                              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                            </button>
-                            <button
-                                onClick={lastPage}
-                                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
-                            >
-                              <span className="">Last</span>
-                            </button>
-                          </div>
-
-                        </div>
-                      </div>
+                      <Sort ></Sort>
                     </div>
                   </div>
                 </div>
-                <Transition appear show={isOpen} as={Fragment}>
-                  <Dialog
-                      as="div"
-                      className="fixed inset-0 z-40  -mt-72"
-                      onClose={closeModal}
-                  >
-                    <div className="min-h-screen px-4 text-center ">
-                      <Transition.Child
-                          as={Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0"
-                          enterTo="opacity-100"
-                          leave="ease-in duration-200"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                      >
-                        <Dialog.Overlay className="fixed inset-0"/>
-                      </Transition.Child>
-
-                      {/* This element is to trick the browser into centering the modal contents. */}
-                      <span
-                          className="inline-block h-screen align-middle"
-                          aria-hidden="true"
-                      >
-              &#8203;
-            </span>
-                      <Transition.Child
-                          as={Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0 scale-95"
-                          enterTo="opacity-100 scale-100"
-                          leave="ease-in duration-200"
-                          leaveFrom="opacity-100 scale-100"
-                          leaveTo="opacity-0 scale-95"
-                      >
-                        <div
-                            className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                          <div className="flex justify-center">
-                            <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                          </div>
-                          <Dialog.Title
-                              as="h3"
-                              className="text-lg font-medium leading-6 text-gray-900"
-                          >
-                            Copy successfully !
-                          </Dialog.Title>
-                        </div>
-                      </Transition.Child>
-                    </div>
-                  </Dialog>
-                </Transition>
+                {/*<Copy_Pop_up_box/>*/}
               </div>
             </div>
+
           </div>
         </div>
         <Tail></Tail>

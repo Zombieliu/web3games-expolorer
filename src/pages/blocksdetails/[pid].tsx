@@ -7,7 +7,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useRouter} from "next/router";
 import {useQuery} from "graphql-hooks";
 import {useAtom} from "jotai";
-import { DarkModeAtom, BlocksDetailsValue, CopyValue } from '../../jotai';
+import {DarkModeAtom, BlocksDetailsValue, CopyPopUpBoxState} from '../../jotai';
 import Error from  '../../components/error'
 import {BlockSkeleton, DetailsSkeleton} from "../../components/skeleton";
 import {showAccount, showSmallAccount} from "../../utils";
@@ -76,7 +76,6 @@ const GetBlockData = (blockTime) => {
 }
 const BlocksDetails=()=>{
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
 
     const [hash,setHash] = useState("")
     const [data,setData] = useState({})
@@ -113,11 +112,7 @@ const BlocksDetails=()=>{
                 }
             }
             call()
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
+
         }
     },[router.isReady])
 
@@ -184,8 +179,9 @@ const BlocksDetails=()=>{
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                             { token.success ? "success" : "fail"}
                                                         </td>
-                                                        <td  className="px-12 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                            <button id={token.signer} onClick={getAccount} className="text-blue-400" >
+                                                        <td  className="px-12 py-4 whitespace-nowrap text-sm font-medium text-gray-500 dark:text-zinc-300 font-medium">
+                                                            <button id={token.signer}  className="" >
+                                                                {/*onClick={getAccount}*/}
                                                                 {classNames(token.is_signed ? showSmallAccount(token.signer):"system")}
                                                             </button>
                                                         </td>
@@ -265,8 +261,8 @@ const BlocksDetails=()=>{
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                                                         { token.success ? "success" : "fail"}
                                                     </td>
-                                                    <td  className="px-12 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium">
-                                                        <button id={token.signer} onClick={getAccount} className="text-blue-400" >
+                                                    <td  className="px-12 py-4 whitespace-nowrap text-sm font-medium text-gray-500 dark:text-zinc-300 font-medium">
+                                                        <button id={token.signer}  className="" >
                                                             {classNames(token.is_signed ? showSmallAccount(token.signer):"system")}
                                                         </button>
                                                     </td>
@@ -291,7 +287,7 @@ const BlocksDetails=()=>{
 }
 
 const Overview = (props:any) =>{
-    const [,setIsOpen] = useAtom(CopyValue)
+    const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
     const Copy=(span)=>{
         console.log(span)
         const spanText = document.getElementById(span).innerText;
@@ -304,7 +300,7 @@ const Overview = (props:any) =>{
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
         if(oInput){
-            setIsOpen(true)
+            setCopy_Sop_up_boxState(true)
         }
     }
 

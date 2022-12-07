@@ -9,7 +9,7 @@ import {
   AccountBalanceValue,
   AccountInfo,
   AccountValue,
-  BlockPageNumberValue,
+  PageNumberValue,
   DarkModeAtom,
   SelectNumber
 } from "../../jotai";
@@ -22,6 +22,7 @@ import {showAccount} from "../../utils";
 import Heads from "../../components/head";
 import {chain_api} from "../../chain/web3games";
 import {cropData} from "../../utils/math";
+import client from "../../post/post";
 
 
 
@@ -31,10 +32,13 @@ function classNames(...classes) {
 
 const title=[
   {
-    title:"Extrinsic Hash"
+    title:"Extrinsic ID"
   },
   {
-    title:"Extrinsic Block Height"
+    title:"Block"
+  },
+  {
+    title:"Extrinsic Hash"
   },
   {
     title:"Time",
@@ -52,105 +56,30 @@ const title=[
 ]
 
 
-const Account_Info = `
- query HomePage($Account: String) {
-   accounts(filter:{
-    id:{
-      equalTo:$Account
-    }
-  }){
-    nodes{
-      id
-      extrinsicInfosBySignerId(first:5,orderBy:TIMESTAMP_ASC){
-        nodes{
-          id
-          extrinsicHeight
-          timestamp
-        }
-      }
-    }
-  }
-}
-`
-
-class ExtrinsicsInfo {
-  private extrinsicHash: string;
-  private blockHeight: string;
-  private time: string;
-  private active: string;
-
-  constructor(
-      extrinsicHash:string,
-      blockHeight:string,
-      time:string,
-      active:string,
-  ) {
-    this.extrinsicHash = extrinsicHash
-    this.blockHeight = blockHeight
-    this.time = time
-    this.active = active
-  }
-}
-let extrinsic_number_pages = (20 / 20)
-
-function data_list(data: any){
-  if (data.accounts.nodes.length != 0){
-    let times = data.accounts.nodes[0].extrinsicInfosBySignerId.nodes.length;
-    let data_list = [];
-    for (let i = 0;i < times;i++){
-      let result = new ExtrinsicsInfo(
-          data.accounts.nodes[0].extrinsicInfosBySignerId.nodes[i].id,
-          data.accounts.nodes[0].extrinsicInfosBySignerId.nodes[i].extrinsicHeight,
-          GetBlockData(data.accounts.nodes[0].extrinsicInfosBySignerId.nodes[i].timestamp),
-          ""
-      )
-      data_list.push(result)
-    }
-    return data_list
-  }else{
-    let data_list = []
-    let null_data = new ExtrinsicsInfo (
-        "",
-        "",
-        "",
-        ""
-    )
-    data_list.push(null_data)
-    return data_list
-  }
-}
-
 function GetBlockData(blockTime) {
   const start = new Date(blockTime).toUTCString();
   return `${start}`
 }
 
-function insertStr(source, start, newStr){
-  return source.slice(0, start) + newStr + source.slice(start);
-}
+
 const Sort=(props:any)=>{
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
-  const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
+  const [PageNumber,SetPageNumber] = useAtom(PageNumberValue)
   const [select_number,setSelect_number] = useAtom(SelectNumber)
   useEffect(()=>{
     if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
-      }
+
     }
   },[router.isReady])
 
 
 
-  const block_number:number = 2
+  const block_number:number = props.data
 
 
   const Select = (e) =>{
     setSelect_number(Number(e.target.value))
-    SetBlockPageNumber(1)
+    SetPageNumber(1)
   }
 
   let block_number_pages:number = Math.ceil(block_number / select_number)
@@ -160,24 +89,24 @@ const Sort=(props:any)=>{
   }
 
   const addPageCounter = async ()=>{
-    if (BlockPageNumber != block_number_pages){
-      SetBlockPageNumber(BlockPageNumber + 1)
+    if (PageNumber != block_number_pages){
+      SetPageNumber(PageNumber + 1)
     }
 
   }
 
   const decPageCounter = ()=>{
-    if (BlockPageNumber != 1){
-      SetBlockPageNumber(BlockPageNumber - 1)
+    if (PageNumber != 1){
+      SetPageNumber(PageNumber - 1)
     }
   }
 
   const lastPage = ()=>{
-    SetBlockPageNumber(block_number_pages)
+    SetPageNumber(block_number_pages)
   }
 
   const firstPage = ()=>{
-    SetBlockPageNumber(1)
+    SetPageNumber(1)
   }
 
   return(
@@ -215,7 +144,7 @@ const Sort=(props:any)=>{
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
             <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-              Page {BlockPageNumber} of {block_number_pages}
+              Page {PageNumber} of {block_number_pages}
             </div>
             <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
               <span className="sr-only">Next</span>
@@ -233,58 +162,77 @@ const Sort=(props:any)=>{
       </div>
   )
 }
+
+const Extrinsics =
+    [
+      {
+        extrinsicIndex:"",
+        block_hash:"",
+        blockNum:"",
+        extrinsicHash:"",
+        timestamp:"",
+      }
+    ]
+
 const Account=()=>{
   const [account,setAccount] = useAtom(AccountValue)
-
+  const [total,setTotal] = useState(0)
+  const [extrinsics,setExtrinsics] = useState(Extrinsics)
   const [,setAccountInfo] = useAtom(AccountInfo)
+  const [requestState,setRequestState] = useState(false)
+  const [PageNumber,] = useAtom(PageNumberValue)
+  const [selectNumber,] = useAtom(SelectNumber)
   const router = useRouter();
   useEffect(() =>{
     if (router.isReady){
+
       const pid = (router.query);
       setAccount(`${pid.pid}`)
-
+      const Account = `${pid.pid}`;
       const query_balance = async ()=>{
+        let  ret = await client.callApi('extrinsic/GetAll', {
+          signer: Account,
+          pageIndex: (PageNumber - 1) * selectNumber,
+          limit: selectNumber
+        });
+
+        if(ret.res != undefined){
+
+          const data = JSON.parse(ret.res.content)
+          setTotal(data.total)
+          console.log(data)
+          const info = []
+          for (let i = 0 ;i<data.total ;i++){
+            let result= {
+              block_hash:data.items[i].block_hash,
+              extrinsicIndex:data.items[i].extrinsic_num,
+              blockNum:data.items[i].block_num,
+              extrinsicHash:data.items[i].extrinsic_hash,
+              timestamp:data.items[i].timestamp,
+            }
+            info.push(result)
+            setExtrinsics(info)
+          }
+          setRequestState(true)
+        }
+
         const api = await chain_api()
         const balance = await api.query.system.account(pid.pid);
-        const accountInfo = {
-          amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+        if(balance !==undefined){
+          const accountInfo = {
+            amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+          }
+          setAccountInfo(accountInfo)
         }
-        setAccountInfo(accountInfo)
-        console.log(`${balance.data.free}`)
+        // console.log(`${balance.data.free}`)
       }
       query_balance()
-
-
-    }
-  },[router.isReady])
-
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
-  useEffect(()=>{
-    if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
-      }
     }
   },[router.isReady])
 
 
 
-
-
-
-  // if (loading) {
-  //   return (
-  //       <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
-  //         <DetailsSkeleton/>
-  //       </div>
-  //   )
-  // }
-
- const collections = []
-
-
+  if (requestState) {
 
     return (
         <div className="mx-auto bg-gray-50 dark:bg-neutral-900  transition duration-700">
@@ -293,9 +241,12 @@ const Account=()=>{
           <div className="max-w-7xl mx-auto py-16  px-4 ">
             <div className="my-10 mb-14">
               <div>
-                <AccountOverview ></AccountOverview>
+                <AccountOverview></AccountOverview>
               </div>
-              <div className="  rounded-lg mt-2">
+              <div className={total==0?"flex justify-center mt-10":"hidden"}>
+                No Data
+              </div>
+              <div className={total==0?"hidden":"rounded-lg mt-2"}>
                 <div className="mt-5">
                   <div className="shadow overflow-auto bg-white dark:bg-W3GInfoBG rounded-lg border dark:border-W3GInfoBorderBG ">
                     <table className="min-w-full border-b divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
@@ -312,24 +263,32 @@ const Account=()=>{
                         ))}
                       </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
-                      {collections.map(item => (
-                          <tr key={item.id} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
+                      <tbody
+                          className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
+                      {extrinsics.map(item => (
+                          <tr key={item.extrinsicHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
                             <td className="px-6 py-4 whitespace-nowrap text-blue-400 text-sm font-medium  ">
                               <Link href={`/extrinsics/${item.extrinsicHash}`}>
                                 <a>
-                                  {classNames(showAccount(item.extrinsicHash,))}
+                                  {item.blockNum}-{item.extrinsicIndex}
                                 </a></Link>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
+                              <Link href={`/blocksdetails/${item.block_hash}`}>
+                                <a className="">
+                                  {item.blockNum}
+                                </a>
+                              </Link>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
                               <Link href={`/extrinsics/${item.extrinsicHash}`}>
                                 <a className="">
-                                  {item.blockHeight}
+                                  {classNames(showAccount(item.extrinsicHash))}
                                 </a>
                               </Link>
                             </td>
                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                              {item.time}
+                              {GetBlockData(item.timestamp)}
                             </td>
                             {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">*/}
                             {/*  {item.active}*/}
@@ -341,12 +300,11 @@ const Account=()=>{
                             {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">*/}
                             {/*  {item.fee}*/}
                             {/*</td>*/}
-
                           </tr>
                       ))}
                       </tbody>
                     </table>
-                    <Sort></Sort>
+                    <Sort data={total}></Sort>
                   </div>
                 </div>
               </div>
@@ -355,6 +313,15 @@ const Account=()=>{
           <Tail></Tail>
         </div>
     )
+
+  } else {
+    return (
+        <div className="animate-pulse max-w-7xl mx-auto py-16  px-4 my-20">
+          <DetailsSkeleton/>
+        </div>
+    )
+  }
+
 
 }
 export default Account

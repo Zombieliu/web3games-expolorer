@@ -36,13 +36,15 @@ const check_address = (address: string) => {
 const showAccount = (str:string, maxlength = 9) => {
     const length = str.length;
     return str.length > maxlength
-        ? str.slice(0, maxlength - 1) + '...' + str.slice(56, length)
+        ? str.slice(0, maxlength - 1) + '...' + str.slice(60, length)
         : str;
 };
+
+
 const showSmallAccount = (str, maxlength = 9) => {
     const length = str.length;
     return str.length > maxlength
-        ? str.slice(0, maxlength - 1) + '...' + str.slice(34, length)
+        ? str.slice(0, maxlength - 1) + '...' + str.slice(42, length)
         : str;
 };
 export  {check_address,showAccount,showSmallAccount}

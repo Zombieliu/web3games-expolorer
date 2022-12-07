@@ -3,12 +3,13 @@ import Link from "next/link";
 import { Switch } from '@headlessui/react'
 import {MenuIcon, XIcon} from "@heroicons/react/outline";
 import React, {Fragment, useEffect, useState} from "react";
-import { CheckCircleIcon, CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
-import { CopyValue, DarkModeAtom} from '../../jotai'
+import { ChevronDownIcon } from '@heroicons/react/solid';
+import { DarkModeAtom} from '../../jotai'
 import { useAtom } from 'jotai';
 import {useRouter} from "next/router";
 import {use} from "i18next";
 import {log} from "util";
+import {Copy_Pop_up_box} from "../pop_up_box";
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -48,102 +49,25 @@ const publishingOptions = [
     // { img:"/web3g2.png", title: 'Devnet', href: 'http://devnet-explorer.web3games.org/home',  show:"devnet-explorer.web3games"},
 ]
 
-const Copy = () =>{
-    function closeModal() {
-        setIsOpen(false)
-    }
-
-    function openModal() {
-        setIsOpen(true)
-    }
-    const  [isOpen, setIsOpen] = useAtom(CopyValue)
-    return(
-      <>
-          <Transition appear show={isOpen} as={Fragment}>
-              <Dialog
-                as="div"
-                className="fixed inset-0 z-40  -mt-72"
-                onClose={closeModal}
-              >
-                  <div className="min-h-screen px-4 text-center ">
-                      <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                      >
-                          <Dialog.Overlay className="fixed inset-0" />
-                      </Transition.Child>
-
-                      {/* This element is to trick the browser into centering the modal contents. */}
-                      <span
-                        className="inline-block h-screen align-middle"
-                        aria-hidden="true"
-                      >
-              &#8203;
-            </span>
-                      <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0 scale-95"
-                        enterTo="opacity-100 scale-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100 scale-100"
-                        leaveTo="opacity-0 scale-95"
-                      >
-                          <div className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                              <div className="flex justify-center">
-                                  <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
-                              </div>
-                              <Dialog.Title
-                                as="h3"
-                                className="text-lg font-medium leading-6 text-gray-900"
-                              >
-                                  Copy successfully !
-                              </Dialog.Title>
-                          </div>
-                      </Transition.Child>
-                  </div>
-              </Dialog>
-          </Transition>
-
-          </>
-    )
-}
 const Header=()=>{
     const router = useRouter()
-    const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
-
     const [selected, setSelected] = useState(publishingOptions[0])
     const [SwitchState,setSwitchState] = useState(false)
-
-
+    const [NightMode,setNightMode] = useState(false)
+    const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
             if (enabledNightMode == true){
+                setNightMode(true)
                 document.documentElement.classList.add('dark');
             }else{
+                setNightMode(false)
                 document.documentElement.classList.remove('dark');
             }
-            console.log(enabledNightMode)
         }
-    },[router.isReady])
-
-    function dartchange() {
-        if(enabledNightMode){
-            setEnabledNightMode(!enabledNightMode);
-            document.documentElement.classList.remove('dark');
+    },[router.isReady,enabledNightMode])
 
 
-        }else{
-            setEnabledNightMode(!enabledNightMode);
-            document.documentElement.classList.add('dark');
-        }
-    }
 
     let net
 
@@ -163,7 +87,7 @@ const Header=()=>{
                                 <a className="-mt-2">
                                     <img
                                         className=" w-auto h-14  "
-                                        src={classNames(enabledNightMode?"/web3gw1.svg":"/web3gb.svg") }
+                                        src={classNames(NightMode?"/web3gw1.svg":"/web3gb.svg") }
                                         // src="/web3gw1.svg"
                                         alt=""
                                     />
@@ -358,7 +282,7 @@ const Header=()=>{
                                         <div>
                                             <img
                                                 className="h-14 w-auto"
-                                                src={enabledNightMode?"web3gw1.svg":"web3gb.svg"}
+                                                src={NightMode?"web3gw1.svg":"web3gb.svg"}
                                                 alt="Workflow"
                                             />
                                         </div>
@@ -433,7 +357,7 @@ const Header=()=>{
                     </Transition>
                 </div>
             </Popover>
-            <Copy/>
+            <Copy_Pop_up_box/>
         </header>
     )
 }

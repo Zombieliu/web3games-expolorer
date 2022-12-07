@@ -1,5 +1,5 @@
 import {useAtom} from "jotai";
-import {AccountValue, BlockPageNumberValue, DarkModeAtom} from "../../jotai";
+import {AccountValue, PageNumberValue, DarkModeAtom, CopyPopUpBoxState} from "../../jotai";
 import React, {Fragment, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Link from "next/link";
@@ -61,14 +61,9 @@ const  AddressTitle =() => {
     const [account,] = useAtom(AccountValue);
     const [pathname,setPathname] = useState("")
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
     useEffect(()=>{
         if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
+
             const content = router.asPath
             const fetchUserBounty = async () => {
                 setPathname(content)
@@ -104,19 +99,14 @@ const  AddressTitle =() => {
 
 const EVMAddress=()=>{
     const router = useRouter()
-    let [isOpen, setIsOpen] = useState(false)
+    const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
     const [selected, setSelected] = useState(token[0])
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [BlockPageNumber,] = useAtom(BlockPageNumberValue)
+    const [PageNumber,] = useAtom(PageNumberValue)
     const [number,setNumber] = useState("")
 
     useEffect(()=>{
         if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
+
             const number = router.query.pid
             // @ts-ignore
             setNumber(number)
@@ -126,7 +116,7 @@ const EVMAddress=()=>{
 
     const{loading,error,data} = useQuery(Blcok_Info,{
         variables:{
-            first:(BlockPageNumber - 1) * 20
+            first:(PageNumber - 1) * 20
         },
     })
     const Copy=(span)=>{
@@ -141,14 +131,10 @@ const EVMAddress=()=>{
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
         if(oInput){
-            setIsOpen(true)
+            setCopy_Sop_up_boxState(true)
         }
     }
 
-
-    function closeModal() {
-        setIsOpen(false)
-    }
 
     const GetTransactions = () => {
         router.push("/evm_transactions")
@@ -304,58 +290,6 @@ const EVMAddress=()=>{
                     </div>
                 </div>
                 <AddressTitle/>
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="fixed inset-0 z-40  -mt-72"
-                        onClose={closeModal}
-                    >
-                        <div className="min-h-screen px-4 text-center ">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                                <Dialog.Overlay className="fixed inset-0"/>
-                            </Transition.Child>
-
-                            {/* This element is to trick the browser into centering the modal contents. */}
-                            <span
-                                className="inline-block h-screen align-middle"
-                                aria-hidden="true"
-                            >
-              &#8203;
-            </span>
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <div
-                                    className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                                    <div className="flex justify-center">
-                                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                                    </div>
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        Copy successfully !
-                                    </Dialog.Title>
-                                </div>
-                            </Transition.Child>
-                        </div>
-                    </Dialog>
-                </Transition>
             </div>
         )
     }

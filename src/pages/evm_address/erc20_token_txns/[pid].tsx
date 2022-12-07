@@ -1,7 +1,7 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountValue, BlockPageNumberValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../../jotai";
+import {AccountValue, PageNumberValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber, CopyPopUpBoxState} from "../../../jotai";
 import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {Dialog, Transition} from "@headlessui/react";
 import Tail from "../../../components/tail";
@@ -15,31 +15,15 @@ function classNames(...classes) {
 }
 
 const Sort=(props:any)=>{
-
-
-    const router = useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [BlockPageNumber,SetBlockPageNumber] = useAtom(BlockPageNumberValue)
+    const [PageNumber,SetPageNumber] = useAtom(PageNumberValue)
     const [select_number,setSelect_number] = useAtom(SelectNumber)
-    useEffect(()=>{
-        if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
-        }
-    },[router.isReady])
-
-
-
     // const block_number:number = props.data.accounts.totalCount
     const block_number:number = 1
 
 
     const Select = (e) =>{
         setSelect_number(Number(e.target.value))
-        SetBlockPageNumber(1)
+        SetPageNumber(1)
     }
 
     let block_number_pages:number = Math.ceil(block_number / select_number)
@@ -49,24 +33,24 @@ const Sort=(props:any)=>{
     }
 
     const addPageCounter = async ()=>{
-        if (BlockPageNumber != block_number_pages){
-            SetBlockPageNumber(BlockPageNumber + 1)
+        if (PageNumber != block_number_pages){
+            SetPageNumber(PageNumber + 1)
         }
 
     }
 
     const decPageCounter = ()=>{
-        if (BlockPageNumber != 1){
-            SetBlockPageNumber(BlockPageNumber - 1)
+        if (PageNumber != 1){
+            SetPageNumber(PageNumber - 1)
         }
     }
 
     const lastPage = ()=>{
-        SetBlockPageNumber(block_number_pages)
+        SetPageNumber(block_number_pages)
     }
 
     const firstPage = ()=>{
-        SetBlockPageNumber(1)
+        SetPageNumber(1)
     }
 
     return(
@@ -104,7 +88,7 @@ const Sort=(props:any)=>{
                         <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
                     <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-                        Page {BlockPageNumber} of {block_number_pages}
+                        Page {PageNumber} of {block_number_pages}
                     </div>
                     <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
                         <span className="sr-only">Next</span>
@@ -215,19 +199,14 @@ const Erc20TokenTxns = () =>{
 
     ]
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
     const router = useRouter()
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
     const [account,setAccount] = useAtom(AccountValue)
     useEffect(()=>{
         const {pid} = router.query;
         setAccount(`${pid}`)
         if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
+
         }
     },[router.isReady])
 
@@ -244,11 +223,8 @@ const Erc20TokenTxns = () =>{
         oInput.style.display = 'none';
         document.body.removeChild(oInput);
         if(oInput){
-            setIsOpen(true)
+            setCopy_Sop_up_boxState(true)
         }
-    }
-    function closeModal() {
-        setIsOpen(false)
     }
 
     const GetHash = (props) => {
@@ -360,58 +336,6 @@ const Erc20TokenTxns = () =>{
                     </div>
                 </div>
                 <Tail></Tail>
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="fixed inset-0 z-40  -mt-72"
-                        onClose={closeModal}
-                    >
-                        <div className="min-h-screen px-4 text-center ">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                                <Dialog.Overlay className="fixed inset-0"/>
-                            </Transition.Child>
-
-                            {/* This element is to trick the browser into centering the modal contents. */}
-                            <span
-                                className="inline-block h-screen align-middle"
-                                aria-hidden="true"
-                            >
-              &#8203;
-            </span>
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <div
-                                    className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                                    <div className="flex justify-center">
-                                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                                    </div>
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        Copy successfully !
-                                    </Dialog.Title>
-                                </div>
-                            </Transition.Child>
-                        </div>
-                    </Dialog>
-                </Transition>
             </div>
 
 

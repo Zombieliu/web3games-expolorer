@@ -6,7 +6,7 @@ import {Dialog, Transition } from "@headlessui/react";
 import {useQuery} from "graphql-hooks";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {BlockPageNumberValue, DarkModeAtom,  extrinsicPageNumberValue} from "../../jotai";
+import {PageNumberValue, DarkModeAtom,  extrinsicPageNumberValue, CopyPopUpBoxState} from "../../jotai";
 import {DetailsSkeleton} from "../../components/skeleton";
 import Error from "../../components/error";
 import Heads from "../../components/head";
@@ -48,19 +48,12 @@ const overview=
 
 const Blocks=()=>{
     const router = useRouter()
-    let [isOpen, setIsOpen] = useState(false)
-
-    const [enabledNightMode,] = useAtom(DarkModeAtom)
-    const [BlockPageNumber,] = useAtom(BlockPageNumberValue)
+    const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
+    const [PageNumber,] = useAtom(PageNumberValue)
     const [number,setNumber] = useState(0)
 
     useEffect(()=>{
         if (router.isReady){
-            if (enabledNightMode == true){
-                document.documentElement.classList.add('dark');
-            }else{
-                document.documentElement.classList.remove('dark');
-            }
             const number = Number(router.query.pid)
             // @ts-ignore
             setNumber(number)
@@ -69,7 +62,7 @@ const Blocks=()=>{
 
     const{loading,error,data} = useQuery(Blcok_Info,{
         variables:{
-            first:(BlockPageNumber - 1) * 20
+            first:(PageNumber - 1) * 20
         },
     })
 
@@ -79,10 +72,6 @@ const Blocks=()=>{
 
     const decPageCounter = (e)=>{
         setNumber(e)
-    }
-
-    function closeModal() {
-        setIsOpen(false)
     }
 
     const GetTransactions = () => {
@@ -295,58 +284,6 @@ const Blocks=()=>{
                 </div>
                 <Tail></Tail>
 
-                <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog
-                        as="div"
-                        className="fixed inset-0 z-40  -mt-72"
-                        onClose={closeModal}
-                    >
-                        <div className="min-h-screen px-4 text-center ">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0"
-                                enterTo="opacity-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100"
-                                leaveTo="opacity-0"
-                            >
-                                <Dialog.Overlay className="fixed inset-0"/>
-                            </Transition.Child>
-
-                            {/* This element is to trick the browser into centering the modal contents. */}
-                            <span
-                                className="inline-block h-screen align-middle"
-                                aria-hidden="true"
-                            >
-              &#8203;
-            </span>
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <div
-                                    className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                                    <div className="flex justify-center">
-                                        <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                                    </div>
-                                    <Dialog.Title
-                                        as="h3"
-                                        className="text-lg font-medium leading-6 text-gray-900"
-                                    >
-                                        Copy successfully !
-                                    </Dialog.Title>
-                                </div>
-                            </Transition.Child>
-                        </div>
-                    </Dialog>
-                </Transition>
 
             </div>
         )

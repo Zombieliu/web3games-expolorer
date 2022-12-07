@@ -2,7 +2,7 @@ import {Dialog, Transition} from "@headlessui/react";
 import React, {Fragment, useEffect} from "react";
 import {CheckCircleIcon, CheckIcon, XCircleIcon,} from "@heroicons/react/solid";
 import {atom, useAtom} from "jotai";
-import {PopUpBoxState,PopUpBoxInfo} from "../../jotai";
+import {PopUpBoxState, PopUpBoxInfo, CopyPopUpBoxState} from "../../jotai";
 import Link from "next/link";
 
 function classNames(...classes) {
@@ -84,6 +84,56 @@ const Pop_up_box = () =>{
 }
 
 
+const Copy_Pop_up_box = () =>{
+    const [copy_pop_up_boxState,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
+    let time
+    useEffect(()=>{
+        clearTimeout(time)
+        if(copy_pop_up_boxState){
+            time = setTimeout(()=>{
+                setCopy_Sop_up_boxState(false)
+
+            },2000)
+        }
+
+    },[copy_pop_up_boxState])
+    return(
+        <div
+            id="SwapSuccessPop_up_box"
+            aria-live="assertive"
+            className="pointer-events-none fixed inset-0 -right-2 top-14 flex items-end px-4 py-6 sm:items-start "
+        >
+            <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
+                {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
+                <Transition
+                    show={copy_pop_up_boxState}
+                    as={Fragment}
+                    enter="transform ease-out duration-300 transition"
+                    enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+                    enterTo="translate-y-0 opacity-100 sm:translate-x-0"
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    <div className=" max-w-md mx-auto">
+                        <div className="inline-block pointer-events-auto   text-center  p-3  overflow-hidden text-left  dark:opacity-80 transition-all transform bg-green-50 shadow-xl rounded-2xl">
+                            <div className="flex justify-center">
+                                <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
+                            </div>
+                            <div
+                                className="text-lg font-medium leading-6 text-gray-900"
+                            >
+                                Copy successfully !
+                            </div>
+                        </div>
+                    </div>
+                </Transition>
+            </div>
+        </div>
+    )
+}
 
 
-export {Pop_up_box}
+
+
+export {Pop_up_box,Copy_Pop_up_box}

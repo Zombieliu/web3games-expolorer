@@ -88,18 +88,21 @@ const Tail=()=>{
     const router = useRouter()
 
     const [enabledNightMode,setEnabledNightMode] = useAtom(DarkModeAtom)
-
+    const [NightMode,setNightMode] = useState(false)
 
     useEffect(()=>{
         if (router.isReady){
-            setEnabledNightMode(true)
+            // setEnabledNightMode(true)
             if (enabledNightMode == true){
+                setNightMode(true)
                 document.documentElement.classList.add('dark');
             }else{
+                setNightMode(false)
                 document.documentElement.classList.remove('dark');
             }
         }
-    },[router.isReady])
+    },[router.isReady,enabledNightMode])
+
     function dartchange() {
         if(enabledNightMode){
             setEnabledNightMode(!enabledNightMode);
@@ -133,52 +136,52 @@ const Tail=()=>{
                 </div>
                 <div>
                     <div  className="flex justify-center md:justify-end " >
-                    <img className="w-48"    src={classNames(enabledNightMode?"/web3gw1.svg":"/web3gb.svg") } alt=""/>
+                    <img className="w-48"    src={classNames(NightMode?"/web3gw1.svg":"/web3gb.svg") } alt=""/>
                     </div>
                     <div className="my-5 text-gray-500 text-sm text-center">
                         The best block explorer of Web3Games
                     </div>
-                    {/*<div className="flex w-full justify-center md:justify-end  ">*/}
-                    {/*    <div className="flex justify-center mt-3 ">*/}
+                    <div className="flex w-full justify-center md:justify-end  ">
+                        <div className="flex justify-center mt-3 ">
 
-                    {/*        <Switch*/}
-                    {/*            checked={enabledNightMode}*/}
-                    {/*            onChange={dartchange}*/}
-                    {/*            className={classNames(*/}
-                    {/*                enabledNightMode ? 'bg-gray-600' : 'bg-gray-200',*/}
-                    {/*                'relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200   '*/}
-                    {/*            )}*/}
-                    {/*        >*/}
-                    {/*            <span className="sr-only">Use setting</span>*/}
+                            <Switch
+                                checked={enabledNightMode}
+                                onChange={dartchange}
+                                className={classNames(
+                                    NightMode ? 'bg-gray-600' : 'bg-gray-200',
+                                    'relative inline-flex flex-shrink-0 h-7 w-12 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200   '
+                                )}
+                            >
+                                <span className="sr-only">Use setting</span>
 
-                    {/*            <span*/}
-                    {/*                aria-hidden="true"*/}
-                    {/*                className={classNames(*/}
-                    {/*                    enabledNightMode ? 'translate-x-5' : 'translate-x-0',*/}
-                    {/*                    'pointer-events-none inline-block h-5 w-5 rounded-full    transform ring-0 transition ease-in-out duration-200'*/}
-                    {/*                )}*/}
-                    {/*            >*/}
+                                <span
+                                    aria-hidden="true"
+                                    className={classNames(
+                                        NightMode ? 'translate-x-5' : 'translate-x-0',
+                                        'pointer-events-none inline-block h-5 w-5 rounded-full    transform ring-0 transition ease-in-out duration-200'
+                                    )}
+                                >
 
-                    {/*                <div className="flex justify-center text-center ml-0.5 px-2.5 p-0.5 bg-white dark:bg-gray-700 dark:text-yellow-400 rounded-full  text-lg">*/}
+                                    <div className="flex justify-center text-center ml-0.5 px-2.5 p-0.5 bg-white dark:bg-gray-700 dark:text-yellow-400 rounded-full  text-lg">
 
-                    {/*            <i className={enabledNightMode?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>*/}
-                    {/*        </div>*/}
+                                <i className={NightMode?" fa fa-sun-o":"fa fa-moon-o "} aria-hidden="true"></i>
+                            </div>
 
-                    {/*            </span>*/}
-                    {/*        </Switch>*/}
-                    {/*    </div>*/}
+                                </span>
+                            </Switch>
+                        </div>
 
-                    {/*    /!*<select*!/*/}
-                    {/*    /!*    id="location"*!/*/}
-                    {/*    /!*    name="location"*!/*/}
-                    {/*    /!*    className="mt-2 block dark:bg-black h-8 dark:text-gray-200 font-medium  text-base text-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"*!/*/}
-                    {/*    /!*    defaultValue="English"*!/*/}
-                    {/*    /!*>*!/*/}
-                    {/*    /!*    <option>English</option>*!/*/}
+                        {/*<select*/}
+                        {/*    id="location"*/}
+                        {/*    name="location"*/}
+                        {/*    className="mt-2 block dark:bg-black h-8 dark:text-gray-200 font-medium  text-base text-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"*/}
+                        {/*    defaultValue="English"*/}
+                        {/*>*/}
+                        {/*    <option>English</option>*/}
 
-                    {/*    /!*</select>*!/*/}
+                        {/*</select>*/}
 
-                    {/*</div>*/}
+                    </div>
                     <div className="flex justify-center md:justify-end mt-10">
                         {participate.map(item=>(
                     <div key={item.icon} className="mr-5">
@@ -191,7 +194,7 @@ const Tail=()=>{
                 </div>
 
             </div>
-            <div className="max-w-7xl mx-auto md:pl-10 my-5 text-gray-500">
+            <div className="max-w-7xl mx-auto text-center md:text-left md:pl-10 my-5 text-gray-500">
             © 2021 Web3Games</div>
         </div>
     )

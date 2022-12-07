@@ -1,7 +1,14 @@
 import React, {Fragment, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
-import {AccountValue, DarkModeAtom, extrinsicPageNumberValue, SelectNumber} from "../../../jotai";
+import {
+  AccountValue,
+  CopyPopUpBoxState,
+  DarkModeAtom,
+  extrinsicPageNumberValue,
+  PageNumberValue,
+  SelectNumber
+} from "../../../jotai";
 import Header from "../../../components/header";
 import AccountOverview from "../../../components/Account-overview";
 import {CheckCircleIcon, ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
@@ -13,7 +20,104 @@ import Heads from "../../../components/head";
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
+const Sort=(props:any)=>{
+  const router = useRouter()
+  const [PageNumber,SetPageNumber] = useAtom(PageNumberValue)
+  const [select_number,setSelect_number] = useAtom(SelectNumber)
+  useEffect(()=>{
+    if (router.isReady){
 
+    }
+  },[router.isReady])
+
+  const block_number:number =1
+  // props.data
+
+  const Select = (e) =>{
+    setSelect_number(Number(e.target.value))
+    SetPageNumber(1)
+  }
+
+  let block_number_pages:number = Math.ceil(block_number / select_number)
+
+  if (block_number_pages > 500){
+    block_number_pages = 500
+  }
+
+  const addPageCounter = async ()=>{
+    if (PageNumber != block_number_pages){
+      SetPageNumber(PageNumber + 1)
+    }
+
+  }
+
+  const decPageCounter = ()=>{
+    if (PageNumber != 1){
+      SetPageNumber(PageNumber - 1)
+    }
+  }
+
+  const lastPage = ()=>{
+    SetPageNumber(block_number_pages)
+  }
+
+  const firstPage = ()=>{
+    SetPageNumber(1)
+  }
+
+  return(
+      <div>
+        <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
+          <div className="flex text-black dark:text-white items-center">
+            Show
+
+            <select
+                onChange={Select}
+                id="select"
+                className=" block  w-13   p-1 outline-none  text-base  border border-[#7ADFD5] mx-1 sm:text-sm rounded-md text-black bg-white  dark:bg-W3GInfoBG dark:text-white"
+                defaultValue={select_number}
+            >
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+
+            Records
+
+          </div>
+          <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
+            <button
+                onClick={firstPage}
+                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F]  text-sm font-semibold  "
+            >
+              <span className="">First</span>
+            </button>
+            <button
+                onClick={decPageCounter}
+                className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+            >
+              <span className="sr-only">Previous</span>
+              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+              Page {PageNumber} of {block_number_pages}
+            </div>
+            <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
+              <span className="sr-only">Next</span>
+              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <button
+                onClick={lastPage}
+                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
+            >
+              <span className="">Last</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+  )
+}
 const MT_Transfers = () =>{
   const tokenstitle=[
     {
@@ -114,36 +218,17 @@ const MT_Transfers = () =>{
 
 
   ]
-  // const extrinsic_number = props.data.extrinsicInfos.totalCount
-  //
-  let extrinsic_number_pages = (20 / 20)
-  //
-  //
-  // if (extrinsic_number_pages > 500){
-  //     extrinsic_number_pages = 500
-  // }
-  const [isOpen, setIsOpen] = useState(false)
+  const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
   const router = useRouter()
-  const [enabledNightMode,] = useAtom(DarkModeAtom)
-  const [extrinsicPageNumber,SetextrinsicPageNumber] = useAtom(extrinsicPageNumberValue)
-  const [select_number,setSelect_number] = useAtom(SelectNumber)
   const [account,setAccount] = useAtom(AccountValue)
   useEffect(()=>{
     const {pid} = router.query;
     setAccount(`${pid}`)
     if (router.isReady){
-      if (enabledNightMode == true){
-        document.documentElement.classList.add('dark');
-      }else{
-        document.documentElement.classList.remove('dark');
-      }
+
     }
   },[router.isReady])
 
-  const Select = (e) =>{
-    setSelect_number(Number(e.target.value))
-    SetextrinsicPageNumber(1)
-  }
   const Copy=(span)=>{
     console.log(span)
     const spanText = document.getElementById(span).innerText;
@@ -156,31 +241,8 @@ const MT_Transfers = () =>{
     oInput.style.display = 'none';
     document.body.removeChild(oInput);
     if(oInput){
-      setIsOpen(true)
+      setCopy_Sop_up_boxState(true)
     }
-  }
-  const addPageCounter = ()=>{
-    // if (extrinsicPageNumber != extrinsic_number_pages){
-    //     SetextrinsicPageNumber(extrinsicPageNumber + 1)
-    // }
-  }
-
-  const decPageCounter = ()=>{
-    // if (extrinsicPageNumber != 1){
-    //     SetextrinsicPageNumber(extrinsicPageNumber - 1)
-    // }
-  }
-
-  const lastPage = ()=>{
-    // SetextrinsicPageNumber(extrinsic_number_pages)
-  }
-
-  const firstPage = ()=>{
-    SetextrinsicPageNumber(1)
-  }
-
-  function closeModal() {
-    setIsOpen(false)
   }
 
   const GetHash = (props) => {
@@ -295,110 +357,11 @@ const MT_Transfers = () =>{
                         </tbody>
                       </table>
                       <div>
-                        <div className="rounded-md  mx-5 mt-10 flex justify-between  my-5" aria-label="Pagination">
-                          <div className="flex text-black dark:text-white items-center">
-                            Show
-
-                            <select
-                                onChange={Select}
-                                id="select"
-                                className=" block  w-13   p-1 outline-none  text-base  border border-[#7ADFD5] mx-1 sm:text-sm rounded-md text-black bg-white  dark:bg-W3GInfoBG dark:text-white"
-                                defaultValue={select_number}
-                            >
-                              <option value="20">20</option>
-                              <option value="50">50</option>
-                              <option value="100">100</option>
-                            </select>
-
-                            Records
-
-                          </div>
-                          <div className="rounded-md   flex justify-end text-neutral-600 dark:text-white">
-                            <button
-                                onClick={firstPage}
-                                className="relative inline-flex items-center px-2 py-2 mr-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F]  text-sm font-semibold  "
-                            >
-                              <span className="">First</span>
-                            </button>
-                            <button
-                                onClick={decPageCounter}
-                                className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
-                            >
-                              <span className="sr-only">Previous</span>
-                              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                            </button>
-                            <div className="  hidden lg:inline-block rounded-md  relative inline-flex items-center px-4 py-2  bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-                              Page {extrinsicPageNumber} of {extrinsic_number_pages}
-                            </div>
-                            <button onClick={addPageCounter} className="relative inline-flex items-center mx-2 px-2 py-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold ">
-                              <span className="sr-only">Next</span>
-                              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                            </button>
-                            <button
-                                onClick={lastPage}
-                                className="relative inline-flex items-center px-2 py-2 ml-2 rounded-md bg-gray-200 dark:bg-[#3F3F3F] text-sm font-semibold "
-                            >
-                              <span className="">Last</span>
-                            </button>
-                          </div>
-
-                        </div>
+                    <Sort ></Sort>
                       </div>
                     </div>
                   </div>
                 </div>
-                <Transition appear show={isOpen} as={Fragment}>
-                  <Dialog
-                      as="div"
-                      className="fixed inset-0 z-40  -mt-72"
-                      onClose={closeModal}
-                  >
-                    <div className="min-h-screen px-4 text-center ">
-                      <Transition.Child
-                          as={Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0"
-                          enterTo="opacity-100"
-                          leave="ease-in duration-200"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                      >
-                        <Dialog.Overlay className="fixed inset-0"/>
-                      </Transition.Child>
-
-                      {/* This element is to trick the browser into centering the modal contents. */}
-                      <span
-                          className="inline-block h-screen align-middle"
-                          aria-hidden="true"
-                      >
-              &#8203;
-            </span>
-                      <Transition.Child
-                          as={Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0 scale-95"
-                          enterTo="opacity-100 scale-100"
-                          leave="ease-in duration-200"
-                          leaveFrom="opacity-100 scale-100"
-                          leaveTo="opacity-0 scale-95"
-                      >
-                        <div
-                            className="inline-block  text-center max-w-md p-3  overflow-hidden text-left align-middle transition-all transform bg-green-50 shadow-xl rounded-2xl">
-
-                          <div className="flex justify-center">
-                            <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true"/>
-                          </div>
-                          <Dialog.Title
-                              as="h3"
-                              className="text-lg font-medium leading-6 text-gray-900"
-                          >
-                            Copy successfully !
-                          </Dialog.Title>
-                        </div>
-                      </Transition.Child>
-                    </div>
-                  </Dialog>
-                </Transition>
               </div>
             </div>
           </div>
