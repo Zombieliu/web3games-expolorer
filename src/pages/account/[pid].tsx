@@ -6,16 +6,11 @@ import AccountOverview from '../../components/Account-overview';
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {
-  AccountBalanceValue,
   AccountInfo,
   AccountValue,
   PageNumberValue,
-  DarkModeAtom,
   SelectNumber
 } from "../../jotai";
-import {useQuery} from "graphql-hooks";
-import axios from "axios";
-import Error from "../../components/error";
 import {DetailsSkeleton} from "../../components/skeleton";
 import {ChevronLeftIcon, ChevronRightIcon} from "@heroicons/react/solid";
 import {showAccount} from "../../utils";
@@ -23,7 +18,6 @@ import Heads from "../../components/head";
 import {chain_api} from "../../chain/web3games";
 import {cropData} from "../../utils/math";
 import client from "../../post/post";
-
 
 
 function classNames(...classes) {
@@ -43,6 +37,12 @@ const title=[
   {
     title:"Time",
     i:"fa fa-clock-o ml-1"
+  },
+  {
+    title:"Result",
+  },
+  {
+    title:"Action",
   },
   // {
   //   title:"Active"
@@ -166,11 +166,15 @@ const Sort=(props:any)=>{
 const Extrinsics =
     [
       {
-        extrinsicIndex:"",
         block_hash:"",
-        blockNum:"",
-        extrinsicHash:"",
+        extrinsic_num:"",
+        block_num:"",
+        extrinsic_hash:"",
+        success:"",
+        section:"",
+        method:"",
         timestamp:"",
+
       }
     ]
 
@@ -185,37 +189,22 @@ const Account=()=>{
   const router = useRouter();
   useEffect(() =>{
     if (router.isReady){
-
       const pid = (router.query);
       setAccount(`${pid.pid}`)
       const Account = `${pid.pid}`;
       const query_balance = async ()=>{
         let  ret = await client.callApi('extrinsic/GetAll', {
-          signer: Account,
+        signer:Account,
           pageIndex: (PageNumber - 1) * selectNumber,
           limit: selectNumber
         });
 
         if(ret.res != undefined){
-
           const data = JSON.parse(ret.res.content)
           setTotal(data.total)
-          console.log(data)
-          const info = []
-          for (let i = 0 ;i<data.total ;i++){
-            let result= {
-              block_hash:data.items[i].block_hash,
-              extrinsicIndex:data.items[i].extrinsic_num,
-              blockNum:data.items[i].block_num,
-              extrinsicHash:data.items[i].extrinsic_hash,
-              timestamp:data.items[i].timestamp,
-            }
-            info.push(result)
-            setExtrinsics(info)
-          }
-          setRequestState(true)
+          setExtrinsics(data.items)
+          // console.log(`${balance.data.free}`)
         }
-
         const api = await chain_api()
         const balance = await api.query.system.account(pid.pid);
         if(balance !==undefined){
@@ -224,13 +213,11 @@ const Account=()=>{
           }
           setAccountInfo(accountInfo)
         }
-        // console.log(`${balance.data.free}`)
+        setRequestState(true)
       }
       query_balance()
     }
-  },[router.isReady])
-
-
+  },[router.isReady,selectNumber,PageNumber])
 
   if (requestState) {
 
@@ -266,40 +253,39 @@ const Account=()=>{
                       <tbody
                           className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300  divide-y divide-gray-200 dark:divide-W3GInfoBorderBG ">
                       {extrinsics.map(item => (
-                          <tr key={item.extrinsicHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
+                          <tr key={item.extrinsic_hash} className="hover:bg-gray-200 dark:hover:bg-neutral-600">
                             <td className="px-6 py-4 whitespace-nowrap text-blue-400 text-sm font-medium  ">
-                              <Link href={`/extrinsics/${item.extrinsicHash}`}>
+                              <Link href={`/extrinsics/${item.extrinsic_hash}`}>
                                 <a>
-                                  {item.blockNum}-{item.extrinsicIndex}
+                                  {item.block_num}-{item.extrinsic_num}
                                 </a></Link>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
                               <Link href={`/blocksdetails/${item.block_hash}`}>
                                 <a className="">
-                                  {item.blockNum}
+                                  {item.block_num}
                                 </a>
                               </Link>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-400 font-medium ">
-                              <Link href={`/extrinsics/${item.extrinsicHash}`}>
+                              <Link href={`/extrinsics/${item.extrinsic_hash}`}>
                                 <a className="">
-                                  {classNames(showAccount(item.extrinsicHash))}
+                                  {classNames(showAccount(item.extrinsic_hash))}
                                 </a>
                               </Link>
                             </td>
                             <td className="px-6 py-6 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               {GetBlockData(item.timestamp)}
                             </td>
-                            {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">*/}
-                            {/*  {item.active}*/}
-                            {/*</td>*/}
-                            {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">*/}
-                            {/*  {item.by}*/}
-                            {/*</td>*/}
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300 ">
+                              <img className={item.success?"w-6":"hidden"}  src="/successful.svg" alt=""/>
+                              <img className={item.success?"hidden":"w-6"} src="/fail.svg" alt=""/>
 
-                            {/*<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ">*/}
-                            {/*  {item.fee}*/}
-                            {/*</td>*/}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
+                              {item.section}-{item.method}
+                            </td>
+
                           </tr>
                       ))}
                       </tbody>

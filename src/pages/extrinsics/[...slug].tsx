@@ -89,6 +89,7 @@ const Extrinsics=()=>{
 
                     if (ret.res.content != "") {
                         setOverview(JSON.parse(ret.res.content))
+                        console.log(JSON.parse(ret.res.content))
                         console.log(JSON.parse(JSON.parse(ret.res.content).args).now)
                         let length = JSON.parse(JSON.parse(ret.res.content).meta).args.length
                         let data_list = []
@@ -207,10 +208,12 @@ const Extrinsics=()=>{
                                             </div>
                                             <div className="md:flex justify-between lg:justify-start my-3">
                                                 <div className="font-semibold lg:font-medium w-60 mr-32 ">
-                                                    PartialFee
+                                                    Result
                                                 </div>
                                                 <div className="md:flex text-gray-800 dark:text-white">
-                                                    <div className={overview.success?"text-green-400":""}>{overview.success?"Success":"Fail"}</div>
+                                                    <img className={overview.success?"w-6":"hidden"}  src="/successful.svg" alt=""/>
+                                                    <img className={overview.success?"hidden":"w-6"} src="/fail.svg" alt=""/>
+
                                                 </div>
                                             </div>
                                             <div className="md:flex justify-between lg:justify-start my-3">

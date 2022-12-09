@@ -2,6 +2,7 @@ import React, {Fragment, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {useAtom} from "jotai";
 import {
+  AccountInfo,
   AccountValue,
   CopyPopUpBoxState,
   DarkModeAtom,
@@ -16,10 +17,19 @@ import AccountOverview from "../../../components/Account-overview";
 import Tail from "../../../components/tail";
 import {showAccount, showSmallAccount} from "../../../utils";
 import Heads from "../../../components/head";
+import client from "../../../post/post";
+import {chain_api} from "../../../chain/web3games";
+import {cropData} from "../../../utils/math";
+import Link from "next/link";
 
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
+}
+
+function GetBlockData(blockTime) {
+  const start = new Date(blockTime).toUTCString();
+  return `${start}`
 }
 const Sort=(props:any)=>{
   const router = useRouter()
@@ -31,8 +41,8 @@ const Sort=(props:any)=>{
     }
   },[router.isReady])
 
-  const block_number:number =1
-  // props.data
+  const block_number:number =props.data
+
 
   const Select = (e) =>{
     setSelect_number(Number(e.target.value))
@@ -140,91 +150,78 @@ const FT_Transfers = () =>{
       title:"Value"
     },
     {
-      title:"Token"
-    },
-  ]
-
-  const extrinsic = [
-    {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      Value: "99.1803",
-
-      Token:"",
-      TxnFee: "0.00064646"
+      title:"Name"
     },
     {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a3",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      Value: "0",
-      TxnFee: "0.00064646"
+      title:"Token ID"
     },
-    {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a4",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      Value: "0",
-      TxnFee: "0.00064646"
-    },
-    {
-      State:false,
-      TxhHash:"0x0c8ee83b555f0ede1a5",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      Value: "0",
-      TxnFee: "0.00064646"
-    },
-    {
-      State:false,
-      TxhHash:"0x0c8ee83b555f0ede1a7",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      Value: "0",
-      TxnFee: "0.00064646"
-    },
-
-
 
   ]
 
-  const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
-  const router = useRouter()
+  const Transfers = [
+    {
+      extrinsicHash:"",
+      timestamp:"",
+      fromAccount:"",
+      toAccount:"",
+      balance:"",
+      name:"",
+      fungibleTokenId:"",
+
+    },
+
+  ]
+  const router = useRouter();
+  const [transfers,setTransfers] = useState(Transfers)
   const [account,setAccount] = useAtom(AccountValue)
+  const [,setCopy_Sop_up_boxState] = useAtom(CopyPopUpBoxState)
+  const [,setAccountInfo] = useAtom(AccountInfo)
+  const [total,setTotal] = useState(0)
+  const [PageNumber,] = useAtom(PageNumberValue)
+  const [selectNumber,] = useAtom(SelectNumber)
+  const [requestState,setRequestState] = useState(false)
   useEffect(()=>{
     const {pid} = router.query;
     setAccount(`${pid}`)
+    const Account = `${pid}`
     if (router.isReady){
+      const query_balance = async ()=>{
+        let  ret = await client.callApi('tokenFungible/ListTokenFungibleTransfer', {
+          fromAccount: Account,
+          toAccount:Account,
+          pageIndex: (PageNumber - 1) * selectNumber,
+          limit: selectNumber
+        });
+        console.log(ret)
+        if(ret.res != undefined){
+          const data = JSON.parse(ret.res.content)
+          setTotal(data.total)
+          setTransfers(data.items)
 
+          setRequestState(true)
+        }
+
+        const api = await chain_api()
+        const balance = await api.query.system.account(Account);
+        if(balance !==undefined){
+          const accountInfo = {
+            amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+          }
+          setAccountInfo(accountInfo)
+        }
+
+        // console.log(`${balance.data.free}`)
+      }
+      query_balance()
     }
   },[router.isReady])
 
 
+
+
   const Copy=(span)=>{
-    console.log(span)
-    const spanText = document.getElementById(span).innerText;
+
+    const spanText = span;
     const oInput = document.createElement('input');
     oInput.value = spanText;
     document.body.appendChild(oInput);
@@ -258,7 +255,10 @@ const FT_Transfers = () =>{
         <div className="max-w-7xl mx-auto py-16  px-4 ">
           <div className="my-10 mb-14">
             <AccountOverview/>
-            <div className="rounded-lg mt-2">
+            <div className={total==0?"flex justify-center mt-10":"hidden"}>
+              No Data
+            </div>
+            <div className={total==0?"hidden":"rounded-lg mt-2"}>
               <div className="mt-5">
         <div className="my-5 overflow-x-auto  dark:bg-W3GInfoBG rounded-lg ">
           <div className=" min-w-full  ">
@@ -278,67 +278,90 @@ const FT_Transfers = () =>{
                 </tr>
                 </thead>
                 <tbody className="bg-white dark:bg-W3GInfoBG text-gray-500 dark:text-neutral-300 divide-y divide-gray-200 dark:divide-W3GInfoBorderBG text-center">
-                {extrinsic.map(item => (
-                    <tr key={item.TxhHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
-                      <td className="px-4 py-4 whitespace-nowrap   text-blue-400  font-medium">
+                {transfers.map(item => (
+                    <tr key={item.extrinsicHash} className="hover:bg-gray-200 dark:hover:bg-neutral-600 text-xs items-center">
+                      <td className="px-6 py-4 whitespace-nowrap   text-blue-400  font-medium">
                         <div className="flex">
-                          <button id={item.TxhHash} onClick={GetHash}>
-                            {classNames(showAccount(item.TxhHash,))}
+                          <button id={item.extrinsicHash} onClick={GetHash}>
+                            {classNames(showAccount(item.extrinsicHash,))}
                           </button>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
+                        {GetBlockData(item.timestamp)}
+                      </td>
 
-                          <div className={classNames(item.State?"hidden":"text-red-400")}>
-                            <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                      <td className="px-6 py-4 whitespace-nowrap   text-gray-500 dark:text-zinc-300  font-medium">
+                        <div className={item.fromAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"hidden":""}>
+                          <div className={account ==item.fromAccount?"hidden":""}>
+                            <button onClick={() => {
+                              // @ts-ignore
+                              Copy(`${item.fromAccount}`);}} className="text-neutral-600 ">
+                              <img className="w-4 mr-1 -mb-1" src="/copy.svg" alt=""/>
+                            </button>
+                            <Link href={`/account/${item.fromAccount}`} className="text-gray-800 flex">
+                              <a  className="mr-1 text-blue-400 ">
+                                {showSmallAccount(item.fromAccount)}
+                              </a>
+                            </Link>
+                          </div>
+                          <div className={account ==item.fromAccount?"":"hidden"} >
+                            <div  className="mr-1">
+                              {showSmallAccount(item.fromAccount)}
+                            </div>
                           </div>
                         </div>
-
-
+                        <div className={item.fromAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"":"hidden"}>
+                          Zero System Account
+                        </div>
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap  font-medium text-white   font-medium">
+                        <div className={classNames("bg-green-300  rounded-md p-0.5 px-2")}>
+                          {classNames(item.toAccount ==account?"IN":"OUT")}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap  font-medium text-gray-500 dark:text-zinc-300  ">
+                        <div className={item.toAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"hidden":""}>
+                          <div className={account ==item.toAccount?"hidden":""}>
+                            <button onClick={() => {
+                              // @ts-ignore
+                              Copy(`${item.toAccount}`);}} className="text-neutral-600 ">
+                              <img className="w-4 mr-1 -mb-1" src="/copy.svg" alt=""/>
+                            </button>
+                            <Link href={`/account/${item.toAccount}`} className="text-gray-800 flex">
+                              <a  className="mr-1 text-blue-400 ">
+                                {showSmallAccount(item.toAccount)}
+                              </a>
+                            </Link>
+                          </div>
+                          <div className={account ==item.toAccount?"":"hidden"} >
 
-                      <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                        {item.Age} secs ago
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400   font-medium">
-                        <button id={item.From} onClick={GetAddress} >
-                          {classNames(showAccount(item.From))}
-                        </button>
-                        <button onClick={() => {
-                          // @ts-ignore
-                          Copy(`${item.From}`);}} className="text-neutral-600">
-                           <img className="w-4 ml-1" src="/copy.svg" alt=""/>
-                        </button>
-                      </td>
-                      <td className=" py-4 whitespace-nowrap  font-medium text-white   font-medium">
-                        <div className={classNames(item.State?"bg-green-300 ":"bg-red-400","rounded-md p-0.5")}>
-                          {classNames(item.State?"IN":"OUT")}
+                            <button id={item.toAccount} onClick={GetAddress}  >
+                              {showSmallAccount(item.toAccount)}
+                            </button>
+                          </div>
+                        </div>
+                        <div className={item.toAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"":"hidden"}>
+                          Zero System Account
                         </div>
                       </td>
 
-                      <td className="px-6 py-4 whitespace-nowrap  font-medium text-blue-400  ">
-                        <button id={item.To} onClick={GetAddress} >
-                          {classNames(showAccount(item.To))}
-                        </button>
-                        <button onClick={() => {
-                          // @ts-ignore
-                          Copy(`${item.To}`);}} className="text-neutral-600">
-                           <img className="w-4 ml-1" src="/copy.svg" alt=""/>
-                        </button>
+                      <td className="px-6 py-4 whitespace-nowra p  text-gray-500 dark:text-zinc-300">
+                        {item.balance}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                        {item.Value}
+                        {item.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
+                        {item.fungibleTokenId}
                       </td>
 
-                      <td className="px-6 py-4 whitespace-nowrap font-medium text-blue-400 ">
-                        <div className=" flex items-center">
-                          <img className="w-3 mr-1 rounded-full" src="/USDT.png" alt=""/>
-                          Tether USD (USDT)
-                        </div>
 
-                      </td>
                     </tr>
                 ))}
                 </tbody>
               </table>
-              <Sort ></Sort>
+              <Sort data={total} ></Sort>
             </div>
           </div>
         </div>

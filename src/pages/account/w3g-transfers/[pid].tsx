@@ -188,24 +188,9 @@ const W3G_Transfers=()=>{
         if(ret.res != undefined){
           const data = JSON.parse(ret.res.content)
           setTotal(data.total)
-          console.log('--------------',data)
-          const info = []
-          for (let i = 0 ;i<data.total ;i++){
-            let result= {
-              balance:data.items[i].balance,
-              fromAccount:data.items[i].fromAccount,
-              toAccount:data.items[i].toAccount,
-              extrinsicIndex:data.items[i].extrinsicIndex,
-              blockNum:data.items[i].blockNum,
-              extrinsicHash:data.items[i].extrinsicHash,
-              timestamp:data.items[i].timestamp,
-            }
-            info.push(result)
-            setExtrinsics(info)
-          }
-          setRequestState(true)
+          setExtrinsics(data.items)
+          console.log(data.items)
         }
-
         const api = await chain_api()
         const balance = await api.query.system.account(Account);
         if(balance !==undefined){
@@ -214,13 +199,27 @@ const W3G_Transfers=()=>{
           }
           setAccountInfo(accountInfo)
         }
-
+        setRequestState(true)
         // console.log(`${balance.data.free}`)
       }
       query_balance()
     }
   },[router.isReady])
+  const Copy=(span)=>{
 
+    const spanText = span;
+    const oInput = document.createElement('input');
+    oInput.value = spanText;
+    document.body.appendChild(oInput);
+    oInput.select();
+    document.execCommand('Copy');
+    oInput.className = 'oInput';
+    oInput.style.display = 'none';
+    document.body.removeChild(oInput);
+    if(oInput){
+      setCopy_Sop_up_boxState(true)
+    }
+  }
 
 
   // if () {
@@ -276,35 +275,61 @@ const W3G_Transfers=()=>{
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
                               {GetBlockData(item.timestamp)}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-300">
-                              <div className={account ==item.fromAccount?"hidden":""}>
-                              <Link href={`/account/${item.fromAccount}`} className="text-gray-800 flex">
-                                <a  className="mr-1 text-blue-400 ">
-                                  {showSmallAccount(item.fromAccount)}
-                                </a>
-                              </Link>
-                              </div>
-                              <div className={account ==item.fromAccount?"":"hidden"} >
-                                <div  className="mr-1">
-                                  {showSmallAccount(item.fromAccount)}
+
+                            <td className="px-6 py-4 whitespace-nowrap text-sm  text-gray-500 dark:text-zinc-300  font-medium">
+                              <div className={item.fromAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"hidden":""}>
+                                <div className={account ==item.fromAccount?"hidden":""}>
+                                  <button onClick={() => {
+                                    // @ts-ignore
+                                    Copy(`${item.fromAccount}`);}} className="text-neutral-600 ">
+                                    <img className="w-4 mr-1 -mb-1" src="/copy.svg" alt=""/>
+                                  </button>
+                                  <Link href={`/account/${item.fromAccount}`} className="text-gray-800 flex">
+                                    <a  className="mr-1 text-blue-400 ">
+                                      {showSmallAccount(item.fromAccount)}
+                                    </a>
+                                  </Link>
+                                </div>
+                                <div className={account ==item.fromAccount?"":"hidden"} >
+                                  <div  className="mr-1">
+                                    {showSmallAccount(item.fromAccount)}
+                                  </div>
                                 </div>
                               </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-gray-500 dark:text-zinc-300">
-                              <div className={account ==item.toAccount?"hidden":""}>
-                                <Link href={`/account/${item.toAccount}`} className="text-gray-800 flex">
-                                  <a  className="mr-1 text-blue-400 ">
-                                    {showSmallAccount(item.toAccount)}
-                                  </a>
-                                </Link>
+                              <div className={item.fromAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"":"hidden"}>
+                                Zero System Account
                               </div>
-                              <div className={account ==item.toAccount?"":"hidden"} >
-                                <div  className="mr-1   ">
-                                  {showSmallAccount(item.toAccount)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 dark:text-zinc-300  ">
+                              <div className={item.toAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"hidden":""}>
+                                <div className={account ==item.toAccount?"hidden":""}>
+                                  <button onClick={() => {
+                                    // @ts-ignore
+                                    Copy(`${item.toAccount}`);}} className="text-neutral-600 ">
+                                    <img className="w-4 mr-1 -mb-1" src="/copy.svg" alt=""/>
+                                  </button>
+                                  <Link href={`/account/${item.toAccount}`} className="text-gray-800 flex">
+                                    <a  className="mr-1 text-blue-400 ">
+                                      {showSmallAccount(item.toAccount)}
+                                    </a>
+                                  </Link>
+                                </div>
+                                <div className={account ==item.toAccount?"":"hidden"} >
+                                  <Link href={`/account/${item.toAccount}`} className="text-gray-800 flex">
+                                    <a  className="mr-1 text-blue-400 ">
+                                      {showSmallAccount(item.toAccount)}
+                                    </a>
+                                  </Link>
                                 </div>
                               </div>
+                              <div className={item.toAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"":"hidden"}>
+                                Zero System Account
+                              </div>
                             </td>
-                            <td className={classNames( "px-6 py-4 whitespace-nowrap text-sm  -center")}>
+
+
+
+                            <td className={classNames( "px-6 py-4 text-sm whitespace-nowrap text-sm  -center")}>
                               <div className="flex justify-center">
                                 {cropData(Number(item.balance)/Math.pow(10, 18),4)}
                                 <div className="ml-1 bg-clip-text text-transparent bg-gradient-to-r from-W3G1  via-W3G2 to-W3G3">

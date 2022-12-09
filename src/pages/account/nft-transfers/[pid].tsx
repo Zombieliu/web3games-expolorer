@@ -156,78 +156,10 @@ const Transfers =
         toAccount:"",
         nonFungibleTokenId:"",
       }
+
     ]
 const NFT_Transfers = () =>{
 
-  const extrinsic = [
-    {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      Value: "99.1803",
-      TokenID:"4153",
-      Token:"",
-      TxnFee: "0.00064646"
-    },
-    {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a3",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      TokenID:"4153",
-      Value: "0",
-      TxnFee: "0.00064646"
-    },
-    {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a4",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      TokenID:"4153",
-      Value: "0",
-      TxnFee: "0.00064646"
-    },
-    {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a5",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      TokenID:"4153",
-      Value: "0",
-      TxnFee: "0.00064646"
-    },
-    {
-      State:true,
-      TxhHash:"0x0c8ee83b555f0ede1a7",
-      Method:"Mint",
-      Block:"15313963",
-      Age:"9",
-      From: "0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      icon: "fa fa-arrow-right",
-      To:"0x0c8ee83b555f0ede1a0x0c8ee83b555f0ede1a",
-      TokenID:"4153",
-      Value: "0",
-      TxnFee: "0.00064646"
-    },
-
-
-
-  ]
   const router = useRouter();
   const [transfers,setTransfers] = useState(Transfers)
   const [account,setAccount] = useAtom(AccountValue)
@@ -254,20 +186,7 @@ const NFT_Transfers = () =>{
           if(ret.res != undefined){
             const data = JSON.parse(ret.res.content)
             setTotal(data.total)
-            console.log('xxxxx......',data)
-            const info = []
-            for (let i = 0 ;i<data.total ;i++){
-              let result= {
-                fromAccount:data.items[i].fromAccount,
-                toAccount:data.items[i].toAccount,
-                extrinsicHash:data.items[i].extrinsicHash,
-                timestamp:data.items[i].timestamp,
-                nonFungibleTokenId:data.items[i].nonFungibleTokenId,
-              }
-              info.push(result)
-              setTransfers(info)
-            }
-            setRequestState(true)
+            setTransfers(data.items)
           }
 
           const api = await chain_api()
@@ -278,7 +197,7 @@ const NFT_Transfers = () =>{
             }
             setAccountInfo(accountInfo)
           }
-
+          setRequestState(true)
           // console.log(`${balance.data.free}`)
         }
         query_balance()
@@ -383,7 +302,7 @@ const NFT_Transfers = () =>{
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap  font-medium text-white   font-medium">
-                                <div className={classNames(true?"bg-green-300 ":"bg-red-400","rounded-md p-0.5 px-2")}>
+                                <div className={classNames("bg-green-300  rounded-md p-0.5 px-2")}>
                                   {classNames(item.toAccount ==account?"IN":"OUT")}
                                 </div>
                               </td>
