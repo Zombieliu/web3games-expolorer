@@ -21,6 +21,7 @@ import client from "../../../post/post";
 import {chain_api} from "../../../chain/web3games";
 import {cropData} from "../../../utils/math";
 import Link from "next/link";
+import {hexToString} from '@polkadot/util'
 
 
 function classNames(...classes) {
@@ -167,6 +168,10 @@ const FT_Transfers = () =>{
       balance:"",
       name:"",
       fungibleTokenId:"",
+      tokenFungibleCreated:{
+        name:"",
+        decimals:"",
+      }
 
     },
 
@@ -192,13 +197,13 @@ const FT_Transfers = () =>{
           pageIndex: (PageNumber - 1) * selectNumber,
           limit: selectNumber
         });
-        console.log(ret)
         if(ret.res != undefined){
           const data = JSON.parse(ret.res.content)
           setTotal(data.total)
           setTransfers(data.items)
 
           setRequestState(true)
+          console.log(data)
         }
 
         const api = await chain_api()
@@ -347,16 +352,14 @@ const FT_Transfers = () =>{
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowra p  text-gray-500 dark:text-zinc-300">
-                        {item.balance}
+                        {cropData(Number(item.balance)/Math.pow(10,Number(item.tokenFungibleCreated.decimals)),5)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                        {item.name}
+                        {hexToString(item.tokenFungibleCreated.name)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
                         {item.fungibleTokenId}
                       </td>
-
-
                     </tr>
                 ))}
                 </tbody>

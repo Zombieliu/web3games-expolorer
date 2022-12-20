@@ -86,7 +86,6 @@ const Extrinsics=()=>{
                 let ret = await client.callApi('extrinsic/GetByExtHash', {
                     extrinsicHash:extrinsic_hash,
                 });
-
                     if (ret.res.content != "") {
                         setOverview(JSON.parse(ret.res.content))
                         console.log(JSON.parse(ret.res.content))
