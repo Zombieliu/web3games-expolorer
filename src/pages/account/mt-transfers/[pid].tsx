@@ -145,10 +145,10 @@ const MT_Transfers = () =>{
     {
       title:"To"
     },
-    {
-      title:"Value"
-    },
 
+    {
+      title:"Token ID"
+    },
     {
       title:"Details"
     }
@@ -339,14 +339,20 @@ const MT_Transfers = () =>{
                                 </div>
                               </td>
 
-                              <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                                {/*{item.balance}*/}
-                                {/*{item.balance.map(list=>(*/}
-                                {/*    <div>*/}
-                                {/*      {list.tokenId}:{list.balance}*/}
-                                {/*    </div>*/}
-                                {/*))}*/}
-                              </td>
+                              {/*<td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">*/}
+                              {/*  <div>*/}
+                              {/*    1:1*/}
+                              {/*  </div>*/}
+                              {/*  <div>*/}
+                              {/*    1:2*/}
+                              {/*  </div>*/}
+                              {/*  /!*{item.balance}*!/*/}
+                              {/*  /!*{item.balance.map(list=>(*!/*/}
+                              {/*  /!*    <div>*!/*/}
+                              {/*  /!*      {list.tokenId}:{list.balance}*!/*/}
+                              {/*  /!*    </div>*!/*/}
+                              {/*  /!*))}*!/*/}
+                              {/*</td>*/}
                               <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
                                 {item.multiTokenId}
                               </td>
