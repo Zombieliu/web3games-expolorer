@@ -1,7 +1,7 @@
 import {cropData} from "../../utils/math";
 import axios from "axios";
 import {CHAIN_URL,CHAIN_RPC_URL} from "../../constant";
-const { ApiPromise, WsProvider} = require('@polkadot/api');
+import {ApiPromise, WsProvider} from "@polkadot/api";
 
 
 
