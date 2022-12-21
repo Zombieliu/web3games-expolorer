@@ -201,7 +201,7 @@ const MT_Transfers = () =>{
         const balance = await api.query.system.account(Account);
         if(balance !==undefined){
           const accountInfo = {
-            amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+            amount:  cropData((balance['data'].free/Math.pow(10, 18)),4)
           }
           setAccountInfo(accountInfo)
         }

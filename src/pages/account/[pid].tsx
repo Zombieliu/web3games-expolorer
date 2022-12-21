@@ -206,10 +206,11 @@ const Account=()=>{
           // console.log(`${balance.data.free}`)
         }
         const api = await chain_api()
-        const balance = await api.query.system.account(pid.pid);
-        if(balance !==undefined){
+        // @ts-ignore
+        const balance  = await api.query.system.account(pid.pid);
+        if(balance !== undefined){
           const accountInfo = {
-            amount:  cropData((balance.data.free/Math.pow(10, 18)),4)
+            amount:  cropData((balance['data'].free/Math.pow(10, 18)),4)
           }
           setAccountInfo(accountInfo)
         }
