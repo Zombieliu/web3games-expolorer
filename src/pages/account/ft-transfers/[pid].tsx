@@ -169,7 +169,7 @@ const FT_Transfers = () =>{
       name:"",
       fungibleTokenId:"",
       tokenFungibleCreated:{
-        name:"",
+        symbol:"",
         decimals:"",
       }
 
@@ -200,8 +200,9 @@ const FT_Transfers = () =>{
         if(ret.res != undefined){
           const data = JSON.parse(ret.res.content)
           setTotal(data.total)
-          setTransfers(data.items)
+          console.log(data.items,"------------")
 
+          setTransfers(data.items)
           setRequestState(true)
           console.log(data)
         }
@@ -352,10 +353,10 @@ const FT_Transfers = () =>{
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowra p  text-gray-500 dark:text-zinc-300">
-                        {cropData(Number(item.balance)/Math.pow(10,Number(item.tokenFungibleCreated.decimals)),5)}
+                        {item.tokenFungibleCreated==null?"-":cropData(Number(item.balance)/Math.pow(10,Number(item.tokenFungibleCreated.decimals)),5)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
-                        {hexToString(item.tokenFungibleCreated.name)}
+                        {item.tokenFungibleCreated==null?"-":hexToString(item.tokenFungibleCreated.symbol)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap  text-gray-500 dark:text-zinc-300">
                         {item.fungibleTokenId}
