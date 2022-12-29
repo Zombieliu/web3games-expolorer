@@ -243,12 +243,12 @@ const FT_Transfers = () =>{
 
   const GetHash = (props) => {
     const value = props.target.id;
-    router.push(`/evm_transactionsDetail/${value}`)
+    router.push(`/extrinsics/${value}`)
   }
 
   const GetAddress = (props) =>{
     const value = props.target.id;
-    router.push(`/evm_address/${value}`).then(r => {
+    router.push(`/account/${value}`).then(r => {
       location.reload()
     })
   }
