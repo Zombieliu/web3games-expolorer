@@ -315,11 +315,11 @@ const W3G_Transfers=()=>{
                                   </Link>
                                 </div>
                                 <div className={account ==item.toAccount?"":"hidden"} >
-                                  <Link href={`/account/${item.toAccount}`} className="text-gray-800 flex">
-                                    <a  className="mr-1 text-blue-400 ">
+                                  <div  className="text-gray-800 flex">
+                                    <div  className="mr-1  ">
                                       {showSmallAccount(item.toAccount)}
-                                    </a>
-                                  </Link>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                               <div className={item.toAccount == "5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM"?"":"hidden"}>
